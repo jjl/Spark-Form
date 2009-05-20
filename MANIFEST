@@ -33,3 +33,4 @@ t/13-text.t
 t/14-textarea.t
 t/lib/Mockform.pm
 TODO
+Makefile.PL
