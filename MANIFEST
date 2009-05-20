@@ -3,7 +3,6 @@ Changes
 lib/Spark/Form.pm
 lib/Spark/Form/FAQ.pm
 lib/Spark/Form/Field.pm
-lib/Spark/Form/Field/Mandatory.pm
 lib/Spark/Form/Field/Role/Printable.pm
 lib/Spark/Form/Field/Role/Printable/HTML.pm
 lib/Spark/Form/Field/Role/Printable/XHTML.pm
@@ -13,7 +12,6 @@ lib/Spark/Form/Printer/HTML.pm
 lib/Spark/Form/Printer/XHTML.pm
 lib/Spark/Form/Source.pm
 MANIFEST			This list of files
-Printable.pm
 README
 t/00-load.t
 t/01-form-basic.t
