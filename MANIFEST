@@ -25,5 +25,3 @@ t/lib/SX/Test/Field/MaxLength.pm
 t/lib/SX/Test/Field/MinLength.pm
 t/lib/SX/Test/Field/NotEmpty.pm
 t/lib/SX/Test/Field/Regex.pm
-t/pod-coverage.t
-t/pod.t
