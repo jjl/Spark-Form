@@ -1,6 +1,6 @@
 package SparkX::Form::BasicFields;
 
-our $VERSION = '0.01';
+our $VERSION = '0.2';
 
 1;
 __END__
@@ -15,7 +15,7 @@ This file is just explanatory. SEE ALSO for more interesting files.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.2
 
 =head1 SEE ALSO
 

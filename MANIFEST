@@ -14,7 +14,9 @@ lib/SparkX/Form/Field/Select.pm
 lib/SparkX/Form/Field/Submit.pm
 lib/SparkX/Form/Field/Text.pm
 lib/SparkX/Form/Field/Textarea.pm
+Makefile.PL
 MANIFEST
+META.yml
 README
 t/00-load.t
 t/01-pod-coverage.t
@@ -33,4 +35,3 @@ t/13-text.t
 t/14-textarea.t
 t/lib/Mockform.pm
 TODO
-Makefile.PL

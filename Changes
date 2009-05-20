@@ -1,5 +1,6 @@
 Revision history for SparkX-Form-BasicFields
 
-0.01    Date/time
+0.01    2009-06-28
         First version, released on an unsuspecting world.
-
+0.2     ?
+        Fixed Moose compatibility issues.
