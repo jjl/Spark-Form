@@ -25,3 +25,5 @@ t/lib/SX/Test/Field/MaxLength.pm
 t/lib/SX/Test/Field/MinLength.pm
 t/lib/SX/Test/Field/NotEmpty.pm
 t/lib/SX/Test/Field/Regex.pm
+Makefile.PL
+META.yml
