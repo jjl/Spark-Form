@@ -32,6 +32,4 @@ t/12-submit.t
 t/13-text.t
 t/14-textarea.t
 t/lib/Mockform.pm
-t/pod-coverage.t
-t/pod.t
 TODO
