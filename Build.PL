@@ -9,6 +9,11 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/SparkX/Form/BasicValidators.pm',
     build_requires => {
         'Test::More' => 0,
+        'Test::MockObject' => 0,
+    },
+    requires => {
+        'Moose' => 0,
+        'Spark::Form' => 0.1,
     },
     add_to_cleanup      => [ 'SparkX-Form-BasicValidators-*' ],
     create_makefile_pl => 'traditional',
