@@ -2,11 +2,11 @@ package Spark::Form::Field::Mandatory;
 
 use Moose;
 with 'Spark::Form::Field';
-with 'Spark::Form::Field::Role::NotEmpty';
-with 'Spark::Form::Field::Role::Regex';
-with 'Spark::Form::Field::Role::MinLength';
-with 'Spark::Form::Field::Role::MaxLength';
-with 'Spark::Form::Field::Role::Confirm';
+with 'Spark::Form::Field::Validator::NotEmpty';
+with 'Spark::Form::Field::Validator::Regex';
+with 'Spark::Form::Field::Validator::MinLength';
+with 'Spark::Form::Field::Validator::MaxLength';
+with 'Spark::Form::Field::Validator::Confirm';
 
 has '+regex' => (
     required => 0,
