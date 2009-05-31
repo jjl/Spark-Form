@@ -1,6 +1,6 @@
 package Spark::Form::Field::Role::NotEmpty;
 
-use Any::Moose '::Role';
+use Moose::Role;
 
 has errmsg_empty => (
     isa      => 'Str',

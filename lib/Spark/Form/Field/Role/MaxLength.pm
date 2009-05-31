@@ -1,6 +1,6 @@
 package Spark::Form::Field::Role::MaxLength;
 
-use Any::Moose '::Role';
+use Moose::Role;
 
 has max_length => (
     isa      => 'Maybe[Int]',

@@ -9,11 +9,10 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Spark/Form.pm',
     build_requires => {
         'Test::More'        => 0,
-        
     },
     requires       => {
         'Module::Pluggable' => 0,
-        'Any::Moose'        => 0,
+        'Moose::Runtime'    => 0,
     },
     add_to_cleanup      => [ 'Spark-*' ],
     create_makefile_pl => 'traditional',

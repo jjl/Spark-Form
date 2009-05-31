@@ -1,6 +1,6 @@
 package Spark::Form::Field::Role::MinLength;
 
-use Any::Moose '::Role';
+use Moose::Role;
 
 has min_length => (
     isa      => 'Maybe[Int]',

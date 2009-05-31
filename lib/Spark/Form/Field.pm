@@ -1,6 +1,6 @@
 package Spark::Form::Field;
 
-use Any::Moose '::Role';
+use Moose::Role;
 
 requires 'validate';
 

@@ -1,6 +1,6 @@
 package Spark::Form::Field::Role::Regex;
 
-use Any::Moose '::Role';
+use Moose::Role;
 
 has regex => (
     isa      => 'Maybe[Regexp]',

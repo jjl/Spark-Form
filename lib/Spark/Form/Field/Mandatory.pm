@@ -1,6 +1,6 @@
 package Spark::Form::Field::Mandatory;
 
-use Any::Moose;
+use Moose;
 with 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::NotEmpty';
 with 'Spark::Form::Field::Role::Regex';

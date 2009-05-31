@@ -1,6 +1,6 @@
 package Spark::Form::Field::Role::Confirm;
 
-use Any::Moose '::Role';
+use Moose::Role;
 
 has confirm => (
     isa      => 'Maybe[Str]',
