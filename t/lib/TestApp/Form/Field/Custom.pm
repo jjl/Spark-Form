@@ -1,8 +1,8 @@
 package TestApp::Form::Field::Custom;
 
-use Any::Moose;
+use Moose;
 with 'Spark::Form::Field';
-with 'Spark::Form::Field::Role::MinLength';
+with 'Spark::Form::Field::Validator::MinLength';
 
 has '+min_length' => (
     required => 0,

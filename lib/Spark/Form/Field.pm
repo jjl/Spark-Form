@@ -1,6 +1,7 @@
 package Spark::Form::Field;
 
 use Moose::Role;
+use MooseX::AttributeHelpers;
 
 requires 'validate';
 
@@ -23,11 +24,17 @@ has valid => (
     default  => 0,
 );
 
-has errors => (
-    isa      => 'ArrayRef[Str]',
-    is       => 'rw',
-    required => 0,
-    default  => sub{[]},
+has _errors => (
+    metaclass => 'Collection::Array',
+    isa       => 'ArrayRef[Str]',
+    is        => 'ro',
+    required  => 0,
+    default   => sub{[]},
+    provides  => {
+        push     => '_add_error',
+        elements => 'errors',
+        clear    => '_clear_errors',
+    },
 );
 
 has form => (
@@ -45,7 +52,7 @@ sub error {
     my ($self,$error) = @_;
 
     $self->valid(0);
-    push @{$self->errors}, $error;
+    $self->_add_error($error);
 }
 
 sub human_name {
@@ -55,7 +62,8 @@ sub human_name {
 }
 
 before 'validate' => sub {
-    shift->errors([]);
+    my ($self) = @_;
+    $self->_clear_errors;
 };
 
 1;

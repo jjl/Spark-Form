@@ -3,19 +3,33 @@ package Spark::Form;
 our $VERSION = 0.01;
 
 use Moose;
+use MooseX::AttributeHelpers;
 
-has fields_a => (
-    isa      => 'ArrayRef',
-    is       => 'rw',
-    required => 0,
-    default  => sub {[]},
+has _fields_a => (
+    metaclass => 'Collection::Array',
+    isa       => 'ArrayRef',
+    is        => 'rw',
+    required  => 0,
+    default   => sub {[]},
+    provides  => {
+        push     => '_add_fields_a',
+        elements => 'fields_a',
+        clear    => '_clear_fields_a',
+    },    
 );
 
-has fields_h => (
-    isa      => 'HashRef',
-    is       => 'rw',
-    required => 0,
-    default  => sub {+{}},
+has _fields_h => (
+    metaclass => 'Collection::Hash',
+    isa       => 'HashRef',
+    is        => 'rw',
+    required  => 0,
+    default   => sub {+{}},
+    provides  => {
+        set     => '_set_fields_h',
+        get     => '_get_fields_h',
+        delete  => '_delete_fields_h',
+        exists  => '_has_fields_h',
+    },
 );
 
 has plugin_ns => (
@@ -24,12 +38,17 @@ has plugin_ns => (
     required => 0,
 );
 
-has errors   => (
-    isa      => 'ArrayRef',
-    is       => 'rw',
-    required => 0,
-    default  => sub {[]},
-);
+has _errors   => (
+    metaclass => 'Collection::Array',
+    isa       => 'ArrayRef',
+    is        => 'ro',
+    required  => 0,
+    default   => sub {[]},
+    provides  => {
+        push     => '_add_error',
+        elements => 'errors',
+        clear    => '_clear_errors',
+    },);
 
 has valid    => (
     isa      => 'Bool',
@@ -60,6 +79,13 @@ sub BUILD {
     } or die("Spark::Form: Could not instantiate Module::Pluggable, $@");
 }
 
+sub _error {
+    my ($self,$error) = @_;
+    
+    $self->valid(0);
+    $self->_add_error($error);
+}
+
 sub add {
     my ($self,$item,$name,%opts) = @_;
     #Dispatch to the appropriate handler sub
@@ -80,31 +106,30 @@ sub add {
 
 sub get {
     my ($self, $key) = @_;
-    confess unless $key;
-    $self->fields_h->{$key};
+
+    $self->_get_fields_h($key);
 }
 
 sub validate {
     my ($self) = @_;
 
-    my @errors;
-    foreach my $field (@{$self->fields_a}) {
+    $self->valid(1);
+    $self->_clear_errors();
+    foreach my $field ($self->fields_a) {
         $field->validate;
         unless ($field->valid) {
-            push @errors, @{$field->errors};
+            $self->_error($_) foreach $field->errors;
         }
     }
-    $self->errors(\@errors);
-    $self->valid(!@errors);
-    
+
     $self->valid;
 }
 
 sub data {
     my ($self,$fields) = @_;
     while (my ($k,$v) = each %$fields) {
-        if (defined $self->fields_h->{$k}) {
-            $self->fields_h->{$k}->value($v);
+        if ($self->_has_fields_h($k)) {
+            $self->_get_fields_h($k)->value($v);
         }
     }
 
@@ -139,11 +164,11 @@ sub _add_by_type {
 sub _add {
     my ($self,$field,$name) = @_;
     
-    die("Field name $name exists in form.") if defined $self->fields_h->{$name};
+    die("Field name $name exists in form.") if $self->_has_fields_h($name);
     #Add it onto the arrayref
-    push @{$self->fields_a}, $field;
+    $self->_add_fields_a($field);
     #And the hashref
-    $self->fields_h->{$name} = $field;
+    $self->_set_fields_h($name, $field);
     1;
 }
 

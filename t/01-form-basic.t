@@ -46,31 +46,31 @@ my $pass4 = SparkX::Form::Field::Password->new(
 
 
 #First off, verify there are no fields in an empty form
-is_deeply($form->fields_a,[],"Fields are not yet populated");
+is_deeply([$form->fields_a],[],"Fields are not yet populated");
 
 # FORM 1
 $form->add($pass1);
-cmp_ok(scalar @{$form->fields_a},'==',1,"One field");
+cmp_ok(scalar $form->fields_a,'==',1,"One field");
 #Verify validity
 $form->validate;
 cmp_ok($form->valid,'==',1,"Form 1 is valid");
-is_deeply($form->errors,[],"Form 1 has no errors");
+is_deeply([$form->errors],[],"Form 1 has no errors");
 
 # FORM 2
 $form->add($pass2);
-cmp_ok(scalar @{$form->fields_a},'==',2,"Two fields");
+cmp_ok(scalar $form->fields_a,'==',2,"Two fields");
 #Verify validity
 $form->validate;
 cmp_ok($form->valid,'==',1,"Form 2 is valid");
-is_deeply($form->errors,[],"Form 2 has no errors");
+is_deeply([$form->errors],[],"Form 2 has no errors");
 
 # FORM 3
 $form->add($pass3);
-cmp_ok(scalar @{$form->fields_a},'==',3,"Three fields");
+cmp_ok(scalar $form->fields_a,'==',3,"Three fields");
 #Verify validity
 $form->validate;
 cmp_ok($form->valid,'==',0,"Form 3 is invalid");
-cmp_ok(scalar @{$form->errors},'==',1,"Form 3 has 1 error");
+cmp_ok(scalar $form->errors,'==',1,"Form 3 has 1 error");
 
 # FORM 4 - intentional fail
 eval {
