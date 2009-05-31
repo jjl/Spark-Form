@@ -1,4 +1,4 @@
-package Spark::Form::Field::Role::MaxLength;
+package Spark::Form::Field::Validator::MaxLength;
 
 use Moose::Role;
 

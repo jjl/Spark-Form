@@ -1,4 +1,4 @@
-package Spark::Form::Field::Role::NotEmpty;
+package Spark::Form::Field::Validator::NotEmpty;
 
 use Moose::Role;
 

@@ -1,4 +1,4 @@
-package Spark::Form::Field::Role::MinLength;
+package Spark::Form::Field::Validator::MinLength;
 
 use Moose::Role;
 

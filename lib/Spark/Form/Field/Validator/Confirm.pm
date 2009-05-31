@@ -1,4 +1,4 @@
-package Spark::Form::Field::Role::Confirm;
+package Spark::Form::Field::Validator::Confirm;
 
 use Moose::Role;
 

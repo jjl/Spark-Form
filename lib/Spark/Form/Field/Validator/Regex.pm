@@ -1,4 +1,4 @@
-package Spark::Form::Field::Role::Regex;
+package Spark::Form::Field::Validator::Regex;
 
 use Moose::Role;
 
