@@ -4,6 +4,7 @@ our $VERSION = 0.01;
 
 use Moose;
 use MooseX::AttributeHelpers;
+use List::Util 'all';
 
 has _fields_a => (
     metaclass => 'Collection::Array',
@@ -62,8 +63,6 @@ sub BUILD {
     my @search_path = (
         #This will load Email and Password etc.
         'SparkX::Form::Field',
-        #This will load Mandatory, Optional and any specific type plugins
-        'Spark::Form::Field'
     );
     if ($self->plugin_ns) {
         unshift @search_path, ($self->plugin_ns);
@@ -112,17 +111,19 @@ sub get {
 
 sub validate {
     my ($self) = @_;
-
-    $self->valid(1);
-    $self->_clear_errors();
-    foreach my $field ($self->fields_a) {
-        $field->validate;
-        unless ($field->valid) {
-            $self->_error($_) foreach $field->errors;
+    if (all { $_->meta->does_role('Spark::Form::Field::Validateable') } $self->fields_a) {
+        $self->valid(1);
+        $self->_clear_errors();
+        foreach my $field ($self->fields_a) {
+            $field->validate;
+            unless ($field->valid) {
+                $self->_error($_) foreach $field->errors;
+            }
         }
+        $self->valid;
+    } else {
+        die ("Not all fields in this form are validateable.");
     }
-
-    $self->valid;
 }
 
 sub data {
@@ -140,9 +141,9 @@ sub _valid_custom_field {
     my ($self,$thing) = @_;
     eval {
         #Minimum spec for a field:
-        #  implements:
+        #  isa:
         #    - Spark::Form::Field
-        $thing->meta->does_role('Spark::Form::Field')
+        $thing->isa('Spark::Form::Field')
     } or 0;
 }
 
@@ -225,7 +226,7 @@ Spark Form - A simple yet powerful forms validation system that promotes reuse.
 =head1 SYNOPSIS
 
  use Spark::Form;
- use CGI; #Because it makes for a quick and oversimplisticn example
+ use CGI; #Because it makes for a quick and oversimplistic example
  use Third::Party::Field;
  $form = Spark::Form->new(plugin_ns => 'MyApp::Field');
  # Add a couple of inbuilt modules
