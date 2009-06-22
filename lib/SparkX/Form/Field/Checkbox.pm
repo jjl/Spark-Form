@@ -1,4 +1,4 @@
-package SparkX::Form::Field::Text;
+package SparkX::Form::Field::Checkbox;
 
 use Moose;
 use HTML::Tiny;
@@ -22,7 +22,12 @@ sub to_xhtml {
 sub _render {
     my ($self,$html) = @_;
     
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    $html->input({
+        type => 'checkbox',
+        value => 1,
+        ($self->value ? (checked => 'checked') : ()),
+        name => $self->name
+    });
 }
 
 1;
@@ -30,7 +35,7 @@ __END__
 
 =head1 NAME
 
-SparkX::Form::Field::Text - A Text field for SparkX::Form
+SparkX::Form::Field::Checkbox - A Checkbox field for SparkX::Form
 
 =head1 METHODS
 

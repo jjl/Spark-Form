@@ -9,9 +9,12 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/SparkX/Form/BasicFields.pm',
     build_requires => {
         'Test::More' => 0,
+        'Test::MockObject' => 0,
+        'Test::MockObject::Extends' => 0,
     },
-    add_to_cleanup      => [ 'SparkX-Form-BasicFields-*' ],
+    add_to_cleanup      => [ 'SparkX-*' ],
     create_makefile_pl => 'traditional',
 );
 
 $builder->create_build_script();
+

@@ -1,0 +1,3 @@
+1. ::Image ought to support server-side image maps
+3. ::Reset ought not to have a value
+4. Debatable whether ::{File,Image} ought to have a value (not echoed, not validated but read)

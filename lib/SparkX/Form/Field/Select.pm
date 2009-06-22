@@ -1,4 +1,4 @@
-package SparkX::Form::Field::Text;
+package SparkX::Form::Field::Select;
 
 use Moose;
 use HTML::Tiny;
@@ -11,6 +11,14 @@ has '+value' => (
     isa => 'Str',
 );
 
+has options => (
+    isa => 'ArrayRef',
+    is => 'rw',
+    required => 0,
+    lazy => 1,
+    default => sub { shift->value },
+);
+
 sub to_html {
     shift->_render( HTML::Tiny->new( mode => 'html') );
 }
@@ -21,8 +29,14 @@ sub to_xhtml {
  
 sub _render {
     my ($self,$html) = @_;
-    
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    $html->select({name => $self->name},
+        join(' ',map {
+            $html->option({
+                value => $_,
+                (($self->value eq $_) ? (selected => 'selected') : ()),
+            }, $_);
+        } @{$self->options}),
+    );
 }
 
 1;
@@ -30,7 +44,7 @@ __END__
 
 =head1 NAME
 
-SparkX::Form::Field::Text - A Text field for SparkX::Form
+SparkX::Form::Field::Select - A select dropdown field for SparkX::Form
 
 =head1 METHODS
 

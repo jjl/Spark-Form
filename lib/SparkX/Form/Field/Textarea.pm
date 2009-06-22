@@ -1,4 +1,4 @@
-package SparkX::Form::Field::Text;
+package SparkX::Form::Field::Textarea;
 
 use Moose;
 use HTML::Tiny;
@@ -9,6 +9,7 @@ with 'Spark::Form::Field::Role::Printable::HTML',
 
 has '+value' => (
     isa => 'Str',
+    default => '',
 );
 
 sub to_html {
@@ -22,7 +23,7 @@ sub to_xhtml {
 sub _render {
     my ($self,$html) = @_;
     
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    $html->textarea({name => $self->name},$self->value);
 }
 
 1;
@@ -30,7 +31,7 @@ __END__
 
 =head1 NAME
 
-SparkX::Form::Field::Text - A Text field for SparkX::Form
+SparkX::Form::Field::Textarea - A Textarea field for SparkX::Form
 
 =head1 METHODS
 

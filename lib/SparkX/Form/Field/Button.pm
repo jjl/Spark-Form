@@ -1,4 +1,4 @@
-package SparkX::Form::Field::Text;
+package SparkX::Form::Field::Button;
 
 use Moose;
 use HTML::Tiny;
@@ -11,6 +11,14 @@ has '+value' => (
     isa => 'Str',
 );
 
+has 'content' => (
+    isa => 'Str',
+    is => 'rw',
+    required => 0,
+    default => '',
+);
+
+
 sub to_html {
     shift->_render( HTML::Tiny->new( mode => 'html') );
 }
@@ -22,7 +30,7 @@ sub to_xhtml {
 sub _render {
     my ($self,$html) = @_;
     
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    $html->button({value => $self->value, name => $self->name},$self->content);
 }
 
 1;
@@ -30,7 +38,7 @@ __END__
 
 =head1 NAME
 
-SparkX::Form::Field::Text - A Text field for SparkX::Form
+SparkX::Form::Field::Button - A Button for SparkX::Form
 
 =head1 METHODS
 

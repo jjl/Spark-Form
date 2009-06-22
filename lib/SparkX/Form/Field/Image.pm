@@ -1,4 +1,4 @@
-package SparkX::Form::Field::Text;
+package SparkX::Form::Field::Image;
 
 use Moose;
 use HTML::Tiny;
@@ -22,7 +22,7 @@ sub to_xhtml {
 sub _render {
     my ($self,$html) = @_;
     
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    $html->input({type => 'image', name => $self->name});
 }
 
 1;
@@ -30,7 +30,9 @@ __END__
 
 =head1 NAME
 
-SparkX::Form::Field::Text - A Text field for SparkX::Form
+SparkX::Form::Field::Image - An image field for SparkX::Form
+
+Note that this does not support server-side image map functionality but will be treated as a submit. Patches welcome that don't break this (99% of the time desired) behaviour.
 
 =head1 METHODS
 

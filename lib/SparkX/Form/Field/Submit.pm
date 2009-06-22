@@ -1,4 +1,4 @@
-package SparkX::Form::Field::Text;
+package SparkX::Form::Field::Submit;
 
 use Moose;
 use HTML::Tiny;
@@ -22,7 +22,7 @@ sub to_xhtml {
 sub _render {
     my ($self,$html) = @_;
     
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    $html->input({type => 'submit', value => $self->value, name => $self->name});
 }
 
 1;
@@ -30,7 +30,7 @@ __END__
 
 =head1 NAME
 
-SparkX::Form::Field::Text - A Text field for SparkX::Form
+SparkX::Form::Field::Submit - A Submit field for SparkX::Form
 
 =head1 METHODS
 
