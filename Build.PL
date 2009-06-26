@@ -12,6 +12,12 @@ my $builder = Module::Build->new(
         'Test::MockObject' => 0,
         'Test::MockObject::Extends' => 0,
     },
+    requires => {
+        'Moose'          => 0,
+        'HTML::Tiny'     => 0,
+        'List::Util'     => 0,
+        'Spark::Form'    => '0.1',
+    },
     add_to_cleanup      => [ 'SparkX-*' ],
     create_makefile_pl => 'traditional',
 );

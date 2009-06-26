@@ -11,17 +11,17 @@ has '+value' => (
     isa => 'Str',
 );
 
-has '+names' => (
+has 'names' => (
     lazy => 1,
     default => sub {
         my $self = shift;
 
         [$self->name . ".x", $self->name . ".y"]
     },
-)
+);
 
 sub to_html {
-    shift->_render( HTML::Tiny->new( mode => 'html') );
+    shift->_render( HTML::Tiny->new( mode => 'html' ) );
 }
 
 sub to_xhtml {
