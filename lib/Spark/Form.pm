@@ -1,6 +1,6 @@
 package Spark::Form;
 
-our $VERSION = 0.01;
+our $VERSION = 0.1;
 
 use Moose;
 use MooseX::AttributeHelpers;
