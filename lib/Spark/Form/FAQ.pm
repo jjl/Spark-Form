@@ -1,3 +1,6 @@
+1;
+__END__
+
 =head1 Frequently Asked Questions
 
 =head2 Why another forms module?

@@ -4,7 +4,8 @@ our $VERSION = 0.01;
 
 use Moose;
 use MooseX::AttributeHelpers;
-use List::Util 'all';
+use List::MoreUtils 'all';
+use Carp 'croak';
 
 has _fields_a => (
     metaclass => 'Collection::Array',
@@ -16,7 +17,7 @@ has _fields_a => (
         push     => '_add_fields_a',
         elements => 'fields_a',
         clear    => '_clear_fields_a',
-    },    
+    },
 );
 
 has _fields_h => (
@@ -67,7 +68,7 @@ sub BUILD {
     if ($self->plugin_ns) {
         unshift @search_path, ($self->plugin_ns);
     }
-    
+
     eval q{
         use Module::Pluggable (
             search_path => \@search_path,
@@ -80,23 +81,25 @@ sub BUILD {
 
 sub _error {
     my ($self,$error) = @_;
-    
+
     $self->valid(0);
     $self->_add_error($error);
 }
 
 sub add {
-    my ($self,$item,$name,%opts) = @_;
+    my $self = shift;
+    my $item = shift;
+    
     #Dispatch to the appropriate handler sub
 
-    #1. Regular String
-    return do { $self->_add_by_type($item,$name,%opts); $self }
+    #1. Regular String. Should have a name and any optional args
+    return do { die unless scalar @_; $self->_add_by_type($item,@_); $self }
       unless ref $item;
-    #2. Array - loop.
-    return do { $self->add($_,$name,%opts) for @$item; $self }
+    #2. Array - loop. This will spectacularly fall over if you are using string-based creation as there's no way to pass multiple names yet
+    return do { $self->add($_,@_) for @$item; $self }
       if ref $item eq 'ARRAY';
-    #3. Custom field
-    return do { $self->_add_custom_field($item,%opts); $self }
+    #3. Custom field. Just takes any optional args
+    return do { $self->_add_custom_field($item,@_); $self }
       if $self->_valid_custom_field($item);
 
     #Unknown thing
@@ -111,9 +114,10 @@ sub get {
 
 sub validate {
     my ($self) = @_;
-    if (all { $_->meta->does_role('Spark::Form::Field::Validateable') } $self->fields_a) {
-        $self->valid(1);
-        $self->_clear_errors();
+    #Clear out
+    $self->valid(1);
+    $self->_clear_errors();
+    if (all { $_->meta->does_role('Spark::Form::Field::Role::Validateable') } $self->fields_a) {
         foreach my $field ($self->fields_a) {
             $field->validate;
             unless ($field->valid) {
@@ -148,6 +152,7 @@ sub _valid_custom_field {
 }
 
 sub _add_custom_field {
+
     my ($self,$item,%opts) = @_;
 
     #And add it.
@@ -164,7 +169,7 @@ sub _add_by_type {
 
 sub _add {
     my ($self,$field,$name) = @_;
-    
+
     die("Field name $name exists in form.") if $self->_has_fields_h($name);
     #Add it onto the arrayref
     $self->_add_fields_a($field);
@@ -199,7 +204,7 @@ sub _find_matching_mod {
     foreach my $mod ($self->field_mods) {
         return $mod if $self->_mangle_modname($mod) eq $wanted;
     }
-    
+
     if ($self->plugin_ns) {
         use Data::Dumper 'Dumper';
         die Dumper $self->_mangle_modname('TestApp::Form::Field::Custom');
@@ -266,8 +271,7 @@ and over in MyApp/Field/Username.pm...
 
 =head1 DEPENDENCIES
 
-This module uses L<Any::Moose>. If you don't want to install L<Moose>
-(it can take a while to install all the deps), install L<Mouse> instead.
+Moose. I've dropped using Any::Moose. If you need the performance increase, perhaps it's time to start thinking about shifting off CGI.
 
 =head1 METHODS
 

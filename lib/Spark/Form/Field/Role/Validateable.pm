@@ -35,6 +35,7 @@ sub error {
 before 'validate' => sub {
     my ($self) = @_;
     $self->_clear_errors;
+    $self->valid(1);
 };
 
 1;
