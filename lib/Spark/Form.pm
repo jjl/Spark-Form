@@ -62,7 +62,7 @@ has valid    => (
 sub BUILD {
     my ($self) = @_;
     my @search_path = (
-        #This will load Email and Password etc.
+        #This will load anything from SparkX::Form::Field
         'SparkX::Form::Field',
     );
     if ($self->plugin_ns) {
@@ -144,15 +144,11 @@ sub data {
 sub _valid_custom_field {
     my ($self,$thing) = @_;
     eval {
-        #Minimum spec for a field:
-        #  isa:
-        #    - Spark::Form::Field
         $thing->isa('Spark::Form::Field')
     } or 0;
 }
 
 sub _add_custom_field {
-
     my ($self,$item,%opts) = @_;
 
     #And add it.
@@ -161,8 +157,10 @@ sub _add_custom_field {
 
 sub _add_by_type {
     my ($self,$type,$name,%opts) = @_;
+
     #Default name is type itself
     $name ||= $type;
+
     #Create and add it
     $self->_add($self->_create_type($type,$name,%opts),$name);
 }
@@ -170,9 +168,12 @@ sub _add_by_type {
 sub _add {
     my ($self,$field,$name) = @_;
 
+    #
     die("Field name $name exists in form.") if $self->_has_fields_h($name);
+
     #Add it onto the arrayref
     $self->_add_fields_a($field);
+
     #And the hashref
     $self->_set_fields_h($name, $field);
     1;
@@ -180,16 +181,20 @@ sub _add {
 
 sub _mangle_modname {
     my ($self, $mod) = @_;
+
     #Strip one or the other. This is the cleanest way.
     #It also doesn't matter that class may be null
     my @namespaces = (
         "SparkX::Form::Field",
         "Spark::Form::Field",
     );
+
     push @namespaces,$self->plugin_ns if $self->plugin_ns;
+
     foreach my $ns (@namespaces) {
         last if $mod =~ s/^${ns}:://;
     }
+
     #Regulate.
     $mod =~ s/::/-/g;
     $mod = lc $mod;
@@ -295,13 +300,13 @@ If unspecified, you will need to call $form->data(\%data);
 
 =back
 
-=head2 add ($thing,$field_name,%opts)
+=head2 add ($thing,@rest)
 
 If $thing is a string, attempts to instantiate a plugin of that type and add it
-to the form.
-If it is an arrayref, it loops over the contents (Useful for custom fields).
+to the form. Requires the second argument to be a string name for the field to identify it in the form. Rest will become %kwargs
+If it is an arrayref, it loops over the contents (Useful for custom fields, will probably result in bugs for string field names).@rest will be passed in each iteration.
 If it looks sufficiently like a field (implements Spark::Form::Field),
-then it will add it to the list of fields.
+then it will add it to the list of fields. @rest will just become %kwargs
 
 Uses 'field name' to locate it from the data passed in.
 
