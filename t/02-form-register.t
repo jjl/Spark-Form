@@ -1,85 +1,65 @@
 # Something looking a bit more real-world
 use Test::More;
-eval q{
-     use SparkX::Form::Field::Email;
-     use SparkX::Form::Field::Password;
-};
-if ($@) {
-    plan skip_all =>
-        "SparkX::Form::Field::{Email,Password} are required for this test";
-} else {
-    plan tests => 13;
-}
+plan tests => 11;
+
 use Spark::Form;
+use Data::Dumper 'Dumper';
+#Local lib
+use lib 't/lib';
+use TestApp::Form::Field::Email;
+use TestApp::Form::Field::Password;
 
 #Create a form
 my $form = Spark::Form->new;
+
+my $email = TestApp::Form::Field::Email->new(name => 'email', form => $form);
+my $pass1 = TestApp::Form::Field::Password->new(name => 'password', form => $form);
+my $pass2 = TestApp::Form::Field::Password->new(name => 'confirm_password', confirm=>'password', form => $form);
 
 #First off, verify there are no fields in an empty form
 is_deeply([$form->fields_a],[],"Fields are not yet populated");
 
 #Add an email
-$form->add('email','email');
+$form->add($email);
 cmp_ok(scalar $form->fields_a,'==',1,"Email field added");
 
-#Add a username
-$form->add('mandatory','username',
-    min_length => 6, max_length => 12, regex => qr/^[a-zA-Z_-]+$/
-);
-cmp_ok(scalar $form->fields_a,'==',2,"Username field added");
+#Validate
+$form->data({email => 'blah'});
+$form->validate;
+#die Dumper $email;
+is(scalar $form->errors, 1, 'One error');
+
+#Revalidate
+$form->data({email => 'blah@blah.com'});
+$form->validate;
+is(scalar $form->errors, 0, 'No error');
 
 #Add a password
-$form->add('password','password',min_length=>8);
-cmp_ok(scalar $form->fields_a,'==',3,"Password field added");
+$form->add($pass1);
+cmp_ok(scalar $form->fields_a,'==',2,"Password field added");
+
+#Validate
+$form->data({email => 'blah',password => 'foo'});
+$form->validate;
+is(scalar $form->errors, 2, 'Two errors');
+
+#Revalidate
+$form->data({email => 'blah@blah.com',password => 'password'});
+$form->validate;
+is(scalar $form->errors, 0, 'No error');
 
 #And a confirm password
-$form->add('password','password_confirm',min_length=>1,confirm=>'password');
-cmp_ok(scalar $form->fields_a,'==',4,"Password confirm field added");
+$form->add($pass2,confirm=>'password');
+cmp_ok(scalar $form->fields_a,'==',3,"Password confirm field added");
 
-#DATA SET 1 - 4 errory fields, some tripping multiple conditions
-my %data = (
-    email => 'blah',
-    username => '12345',
-    password => 'abc',
-    password_confirm => 'def',
-);
-$form->data(\%data);
+#Validate
+$form->data({email => 'blah',password=>'password',confirm_password=>'foo'});
 $form->validate;
-cmp_ok($form->valid,'==',0,"Dataset 1 is invalid");
-cmp_ok(scalar $form->errors,'==',5,"Dataset 1 has 5 errors");
+is(scalar $form->errors, 3, 'Three errors');
 
-#DATA SET 2 - 4 errory fields, each tripping one condition
-%data = (
-    email => 'blah',
-    username => '12345678',
-    password => 'abc',
-    password_confirm => 'ijk',
-);
-$form->data(\%data);
+#Revalidate
+$form->data({email => 'blah@blah.com',password=>'password',confirm_password=>'password'});
 $form->validate;
-cmp_ok($form->valid,'==',0,"Dataset 2 is invalid");
-cmp_ok(scalar $form->errors,'==',4,"Dataset 2 has 4 errors");
+is(scalar $form->errors, 0, 'No error');
 
-#DATA SET 3 - 1 errory field, tripping multiple conditions
-%data = (
-    email => 'test@example.org',
-    username => '123',
-    password => 'abcdefgh',
-    password_confirm => 'abcdefgh',
-);
-$form->data(\%data);
-$form->validate;
-cmp_ok($form->valid,'==',0,"Dataset 3 is invalid");
-cmp_ok(scalar $form->errors,'==',2,"Dataset 3 has 2 errors");
-
-#DATA SET 4 - No errors
-%data = (
-    email => 'test@example.org',
-    username => 'abcdefgh',
-    password => 'abcdefgh',
-    password_confirm => 'abcdefgh',
-);
-$form->data(\%data);
-$form->validate;
-cmp_ok($form->valid,'==',1,"Dataset 4 is valid");
-is_deeply([$form->errors],[],"Dataset 4 has no errors");
+is($form->valid,1,"Form is valid");

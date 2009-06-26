@@ -1,80 +1,72 @@
 # Ensures basic form validation, including inter-field stuff works
 # This tests with manually created fields only
 use Test::More;
-eval q{
-     use SparkX::Form::Field::Password;
-};
-if ($@) {
-    plan skip_all => "SparkX::Form::Field::Password is required for this test";
-} else {
-    plan tests => 11;
-}
+plan tests => 9;
+
 use Spark::Form;
+
+use Test::MockObject::Extends;
 
 #Create a form
 my $form = Spark::Form->new;
 
-#Create a base password with no confirm
-my $pass1 = SparkX::Form::Field::Password->new(
-    value => 'test123',
-    form  => $form,
-    name  => 'password',
-);
+#Field 1, foo => bar
+my $f1 = Test::MockObject::Extends->new('Spark::Form::Field');
+$f1->set_always('foo','bar');
+$f1->set_always('name','foo');
 
-#One that confirms with the previous
-my $pass2 = SparkX::Form::Field::Password->new(
-    value   => 'test123',
-    form    => $form,
-    name    => 'password_confirm',
-    confirm => 'password'
-);
+#Field 2, bar => baz
+my $f2 = Test::MockObject::Extends->new('Spark::Form::Field');
+$f2->set_always('bar','baz');
+$f2->set_always('name','bar');
 
-#One that will fail it's confirm
-my $pass3 = SparkX::Form::Field::Password->new(
-    value   => 'test1234',
-    form    => $form,
-    name    => 'password_testfail',
-    confirm => 'password'
-);
+#Field 3, baz => quux
+my $f3 = Test::MockObject::Extends->new('Spark::Form::Field');
+$f3->set_always('baz','quux');
+$f3->set_always('name','baz');
 
-#One that clashes with the first field's name
-my $pass4 = SparkX::Form::Field::Password->new(
-    value => 'test123',
-    form  => $form,
-    name  => 'password',
-);
+#Field 4, baz => quux -- Clash!
+my $f4 = Test::MockObject::Extends->new('Spark::Form::Field');
+$f4->set_always('baz','quux');
+$f4->set_always('name','baz');
 
 
 #First off, verify there are no fields in an empty form
 is_deeply([$form->fields_a],[],"Fields are not yet populated");
 
-# FORM 1
-$form->add($pass1);
+        
+#Form 1
+$form->add($f1,'foo');
 cmp_ok(scalar $form->fields_a,'==',1,"One field");
-#Verify validity
-$form->validate;
-cmp_ok($form->valid,'==',1,"Form 1 is valid");
-is_deeply([$form->errors],[],"Form 1 has no errors");
 
-# FORM 2
-$form->add($pass2);
+#Pull it back out again
+$f5 = $form->get('foo');
+#Same thing, right?
+is($f5->foo,'bar',"Has not changed");
+
+#Form 2
+$form->add($f2);
 cmp_ok(scalar $form->fields_a,'==',2,"Two fields");
-#Verify validity
-$form->validate;
-cmp_ok($form->valid,'==',1,"Form 2 is valid");
-is_deeply([$form->errors],[],"Form 2 has no errors");
 
-# FORM 3
-$form->add($pass3);
+#Pull it back out again
+$f6 = $form->get('bar');
+#Same thing, right?
+is($f6->bar,'baz',"Has not changed");
+
+#Form 3
+$form->add($f3);
 cmp_ok(scalar $form->fields_a,'==',3,"Three fields");
-#Verify validity
-$form->validate;
-cmp_ok($form->valid,'==',0,"Form 3 is invalid");
-cmp_ok(scalar $form->errors,'==',1,"Form 3 has 1 error");
 
-# FORM 4 - intentional fail
+#Pull it back out again
+$f7 = $form->get('baz');
+#Same thing, right?
+is($f7->baz,'quux',"Has not changed");
+
+#If field doesn't exist, undef is returned
+is($form->get('quux'),undef,"Undef eq nonexistent");
+
 eval {
-    $form->add($pass4);
+    $form->add($f4);
 };
 
 ok(!!$@,"Adding a duplicate field name errors");
