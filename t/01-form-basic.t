@@ -36,7 +36,7 @@ is_deeply([$form->fields_a],[],"Fields are not yet populated");
 
         
 #Form 1
-$form->add($f1,'foo');
+$form->add($f1);
 cmp_ok(scalar $form->fields_a,'==',1,"One field");
 
 #Pull it back out again

@@ -1,8 +1,7 @@
 # Test custom fields
 use Test::More tests => 9;
 
-use FindBin qw($Bin);
-use lib "$Bin/lib";
+use lib 't/lib';
 use Spark::Form;
 
 #Create a form

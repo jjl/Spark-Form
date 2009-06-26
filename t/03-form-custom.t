@@ -4,6 +4,7 @@ use Test::More tests => 9;
 use lib 't/lib';
 use TestApp::Form::Field::Custom;
 use Spark::Form;
+use Data::Dumper 'Dumper';
 
 #Create a form
 my $form = Spark::Form->new;
