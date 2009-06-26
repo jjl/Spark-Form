@@ -5,7 +5,6 @@ our $VERSION = 0.01;
 use Moose;
 use MooseX::AttributeHelpers;
 use List::MoreUtils 'all';
-use Carp 'croak';
 
 has _fields_a => (
     metaclass => 'Collection::Array',
@@ -210,11 +209,6 @@ sub _find_matching_mod {
         return $mod if $self->_mangle_modname($mod) eq $wanted;
     }
 
-    if ($self->plugin_ns) {
-        use Data::Dumper 'Dumper';
-        die Dumper $self->_mangle_modname('TestApp::Form::Field::Custom');
-        die Dumper $self->field_mods;
-    }
     #Cannot find
     0;
 }

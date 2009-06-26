@@ -13,7 +13,9 @@ my $builder = Module::Build->new(
     requires       => {
         'Module::Pluggable'        => 0,
         'Moose'                    => 0,
+        'HTML::Tiny'               => 0,
         'MooseX::AttributeHelpers' => 0,
+        'List::MoreUtils'          => 0,
     },
     add_to_cleanup      => [ 'Spark-*' ],
     create_makefile_pl => 'traditional',
