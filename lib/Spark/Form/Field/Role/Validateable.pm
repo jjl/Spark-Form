@@ -36,6 +36,8 @@ before 'validate' => sub {
     my ($self) = @_;
     $self->_clear_errors;
     $self->valid(1);
+    #Set a default of the empty string, suppresses a warning
+    $self->value($self->value||'');
 };
 
 1;
