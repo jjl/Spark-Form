@@ -23,4 +23,13 @@ sub validate {
     }
 }
 
+sub to_html {
+    q{<input type="password">};
+}
+
+sub to_xhtml {
+    q{<input type="password" />};
+}
+
+
 1;

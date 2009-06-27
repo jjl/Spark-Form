@@ -11,4 +11,12 @@ sub validate {
     $self->error("That does not look like an email!") unless $valid;
 }
 
+sub to_html {
+    q{<input type="text" value="} . (shift->value||'') . q{" >}
+}
+
+sub to_xhtml {
+    q{<input type="text" value="} . (shift->value||'') . q{" />}
+}
+
 1;
