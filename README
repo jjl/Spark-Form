@@ -1,52 +1,38 @@
-SparkX-Form-BasicValidators
+NAME
+    SparkX::Form::BasicValidators - A selection of validators to make
+    writing custom fields easier.
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+VERSION
+    Version 0.01
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+SEE ALSO
+    Spark::Form - The forms module that started it all Spark::Form::Manual -
+    Walkthrough
 
+AUTHOR
+    James Laver, "<printf(qw[%s at %s.%s cpan jameslaver com])>"
 
-INSTALLATION
+BUGS
+    Please report any bugs or feature requests to
+    "bug-sparkx-form-basicvalidators at rt.cpan.org", or through the web
+    interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SparkX-Form-BasicValidat
+    ors>. I will be notified, and then you'll automatically be notified of
+    progress on your bug as I make changes.
 
-To install this module, run the following commands:
+SUPPORT
+    *   RT: CPAN's request tracker
 
-	perl Build.PL
-	./Build
-	./Build test
-	./Build install
+        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=SparkX-Form-BasicValidator
+        s>
 
-SUPPORT AND DOCUMENTATION
+    *   AnnoCPAN: Annotated CPAN documentation
 
-After installing, you can find documentation for this module with the
-perldoc command.
+        <http://annocpan.org/dist/SparkX-Form-BasicValidators>
 
-    perldoc SparkX::Form::BasicValidators
+COPYRIGHT & LICENSE
+    Copyright 2009 James Laver, all rights reserved.
 
-You can also look for information at:
-
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=SparkX-Form-BasicValidators
-
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/SparkX-Form-BasicValidators
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/SparkX-Form-BasicValidators
-
-    Search CPAN
-        http://search.cpan.org/dist/SparkX-Form-BasicValidators/
-
-
-COPYRIGHT AND LICENCE
-
-Copyright (C) 2009 James Laver
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 
