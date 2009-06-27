@@ -58,6 +58,13 @@ has valid    => (
     default  => 0,
 );
 
+has '_printer'  => (
+    isa      => 'Maybe[Str]',
+    required => 0,
+    is       => 'ro',
+    init_arg => 'printer',
+);
+
 sub BUILD {
     my ($self) = @_;
     my @search_path = (
@@ -76,6 +83,12 @@ sub BUILD {
         );
         1
     } or die("Spark::Form: Could not instantiate Module::Pluggable, $@");
+
+    if (defined $self->_printer) {
+        eval {
+            $self->_printer->meta->apply($self); 1
+        } or die("Could not apply printer " . $self->printer);
+    }
 }
 
 sub _error {
