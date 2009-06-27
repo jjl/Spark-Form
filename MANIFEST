@@ -20,8 +20,11 @@ t/01-form-basic.t
 t/02-form-register.t
 t/03-form-custom.t
 t/04-form-custom-lazy.t
+t/05-printer.t
+t/lib/TestApp/Form/Custom.pm
 t/lib/TestApp/Form/Field/Custom.pm
 t/lib/TestApp/Form/Field/Email.pm
 t/lib/TestApp/Form/Field/Password.pm
+t/lib/TestApp/Form/Printer/Join.pm
 t/pod-coverage.t
 t/pod.t
