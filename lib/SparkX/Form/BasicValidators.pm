@@ -3,50 +3,23 @@ package SparkX::Form::BasicValidators;
 use warnings;
 use strict;
 
+our $VERSION = '0.01';
+
+1;
+__END__
+
 =head1 NAME
 
-SparkX::Form::BasicValidators - The great new SparkX::Form::BasicValidators!
+SparkX::Form::BasicValidators - A selection of validators to make writing custom fields easier.
 
 =head1 VERSION
 
 Version 0.01
 
-=cut
+=head1 SEE ALSO
 
-our $VERSION = '0.01';
-
-
-=head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use SparkX::Form::BasicValidators;
-
-    my $foo = SparkX::Form::BasicValidators->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 FUNCTIONS
-
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
+L<Spark::Form> - The forms module that started it all
+L<Spark::Form::Manual> - Walkthrough
 
 =head1 AUTHOR
 
@@ -58,17 +31,7 @@ Please report any bugs or feature requests to C<bug-sparkx-form-basicvalidators 
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SparkX-Form-BasicValidators>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-
-
-
 =head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc SparkX::Form::BasicValidators
-
-
-You can also look for information at:
 
 =over 4
 
@@ -80,19 +43,7 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=SparkX-Form-BasicValidators>
 
 L<http://annocpan.org/dist/SparkX-Form-BasicValidators>
 
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/SparkX-Form-BasicValidators>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/SparkX-Form-BasicValidators/>
-
 =back
-
-
-=head1 ACKNOWLEDGEMENTS
-
 
 =head1 COPYRIGHT & LICENSE
 
@@ -103,5 +54,3 @@ under the same terms as Perl itself.
 
 
 =cut
-
-1; # End of SparkX::Form::BasicValidators
