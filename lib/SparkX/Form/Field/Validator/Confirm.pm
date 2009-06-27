@@ -2,6 +2,7 @@ package SparkX::Form::Field::Validator::Confirm;
 
 use Moose::Role;
 with 'Spark::Form::Field::Role::Validateable';
+
 has confirm => (
     isa      => 'Maybe[Str]',
     is       => 'ro',

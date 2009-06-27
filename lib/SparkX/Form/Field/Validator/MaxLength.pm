@@ -1,6 +1,7 @@
 package SparkX::Form::Field::Validator::MaxLength;
 
 use Moose::Role;
+with 'Spark::Form::Field::Role::Validateable';
 
 has max_length => (
     isa      => 'Maybe[Int]',

@@ -1,9 +1,10 @@
 package SparkX::Form::Field::Validator::Regex;
 
 use Moose::Role;
+with 'Spark::Form::Field::Role::Validateable';
 
 has regex => (
-    isa      => 'Maybe[Regexp]',
+    isa      => 'Maybe[RegexpRef]',
     is       => 'ro',
     required => 0,
     default  => sub {undef},
