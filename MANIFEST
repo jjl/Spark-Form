@@ -8,6 +8,9 @@ lib/Spark/Form/Field/Role/Printable.pm
 lib/Spark/Form/Field/Role/Printable/HTML.pm
 lib/Spark/Form/Field/Role/Printable/XHTML.pm
 lib/Spark/Form/Field/Role/Validateable.pm
+lib/Spark/Form/Printer.pm
+lib/Spark/Form/Printer/HTML.pm
+lib/Spark/Form/Printer/XHTML.pm
 lib/Spark/Form/Source.pm
 MANIFEST			This list of files
 Printable.pm
