@@ -52,7 +52,7 @@ Field superclass. Must subclass this to be considered a field.
  }
  
 Note that you might want to look into HTML::Tiny.
-Or better still, L<SparkX::Form::Field::Printable::StarTML>.
+Or better still, L<SparkX::Form::Field::Plugin::StarML>.
 
 There are a bunch of prebuilt fields you can actually use in
 L<SparkX::Form::BasicFields>.
