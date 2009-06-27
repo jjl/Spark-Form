@@ -1,9 +1,32 @@
 package SparkX::Form::Printer::List;
 
-use warnings;
-use strict;
+use Moose::Role;
+with 'Spark::Form::Printer';
+
+use HTML::Tiny;
 
 our $VERSION = '0.01';
+
+sub to_xhtml {
+    shift->_render('to_xhtml',HTML::Tiny->new( mode => 'xml' ),@_);    
+}
+
+sub to_html {
+    shift->_render('to_html',HTML::Tiny->new( mode => 'html' ),@_);    
+}
+
+sub _render {
+    my ($self,$func,$html,@params) = @_;
+    $html->ul(join(' ',$self->_get_lis($func,$html)));
+}
+
+sub _get_lis {
+    my ($self,$func,$html) = @_;
+    map {
+        $html->li($html->label($_->human_name)) =>
+        $html->li($_->$func)
+    } $self->fields_a;
+}
 
 1;
 __END__
@@ -23,6 +46,14 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
+=head2 to_html
+
+Prints the form to html
+
+=head2 to_xhtml
+
+Prints the form to xhtml
+
 =head1 AUTHOR
 
 James Laver, C<< <printf(qw[%s at %s.%s cpan jameslaver com])> >>
@@ -33,17 +64,7 @@ Please report any bugs or feature requests to C<bug-sparkx-form-printer-list at 
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SparkX-Form-Printer-List>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-
-
-
 =head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
- perldoc SparkX::Form::Printer::List
-
-
-You can also look for information at:
 
 =over 4
 
@@ -65,6 +86,5 @@ Copyright 2009 James Laver, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-
 
 =cut
