@@ -1,40 +1,113 @@
-Spark Form - A simple yet powerful forms validation system that promotes reuse.
+NAME
+    Spark Form - A simple yet powerful forms validation system that promotes
+    reuse.
 
-INSTALLATION
+SYNOPSIS
+     use Spark::Form;
+     use CGI; #Because it makes for a quick and oversimplistic example
+     use Third::Party::Field;
+     $form = Spark::Form->new(plugin_ns => 'MyApp::Field');
+     # Add a couple of inbuilt modules
+     $form->add('email','email',confirm_field => 'email-confirm')
+          ->add('email','email-confirm')
+          ->add('password','password',regex => qr/^\S{6,}$/),
+          #This one will be autoloaded from MyApp::Field::Username
+          ->add('username','username')
+          # And this shows how you can use a third party field of any class name
+          ->add(Third::Party::Field->new(name => 'blah'));
+     #Pass in a hashref of params to populate the virtual form with data
+     $form->data(CGI->new->params);
+     #And do the actual validation
+     if ($form->validate) {
+         print "You are now registered";
+     } else {
+         print join "\n", $form->errors;
+     }
 
-To install this module, run the following commands:
+    and over in MyApp/Field/Username.pm...
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+     package MyApp::Form::Field::Username;
+     use base Spark::Form::Field;
+     
+ sub validate {
+       my ($self,$v) = @_;
 
-SUPPORT AND DOCUMENTATION
+       if (length $v < 6 or length $v > 12) {
+         $self->error("Usernames must be 6-12 characters long");
+       } elsif ($v =~ /[^a-zA-Z0-9_-]/) {
+         $self->error("Usernames may contain only a-z,A-Z,0-9, _ and -");
+       } else {
+         $self->error(undef);
+       }
+       $self->valid(!!$self->error());
+     }
 
-After installing, you can find documentation for this module with the
-perldoc command.
+DEPENDENCIES
+    Moose. I've dropped using Any::Moose. If you need the performance
+    increase, perhaps it's time to start thinking about shifting off CGI.
 
-    perldoc Spark::Form
+METHODS
+  import (%options)
+    Allows you to set some options for the forms class.
 
-You can also look for information at:
+    class => String
+        Optional, gives the basename for searching for form plugins.
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Spark-Form
+        Given 'MyApp', it will try to load form plugins from
+        MyApp::Form::Field::*
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Spark-Form
+    source => String
+        Optional, names a plugin to try and extract form data from.
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Spark-Form
+        If unspecified, you will need to call $form->data(\%data);
 
-    Search CPAN
-        http://search.cpan.org/dist/Spark-Form/
+  add ($thing,@rest)
+    If $thing is a string, attempts to instantiate a plugin of that type and
+    add it to the form. Requires the second argument to be a string name for
+    the field to identify it in the form. Rest will become %kwargs If it is
+    an arrayref, it loops over the contents (Useful for custom fields, will
+    probably result in bugs for string field names).@rest will be passed in
+    each iteration. If it looks sufficiently like a field (implements
+    Spark::Form::Field), then it will add it to the list of fields. @rest
+    will just become %kwargs
 
+    Uses 'field name' to locate it from the data passed in.
 
-COPYRIGHT AND LICENCE
+    This is a streaming interface, it returns the form itself.
 
-Copyright (C) 2009 James Laver
+  validate
+    Validates the form. Sets "valid" and then also returns the value.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+  data
+    Allows you to pass in a hashref of data to populate the fields with
+    before validation. Useful if you don't use a plugin to automatically
+    populate the data.
+
+    This is a streaming interface, it returns the form itself.
+
+  BUILD
+    Moose constructor. Test::Pod::Coverage made me do it. Adds "class" to
+    the search path for field modules.
+
+  get (Str)
+    Returns the form field of that name
+
+Docs?
+    <http://sparkengine.org/docs/forms/>
+
+  Source?
+    <http://github.com/jjl/Spark-Form/>
+
+AUTHOR
+    James Laver. <http://jameslaver.com/>.
+
+    Thanks to the Django Project, whose forms module gave some inspiration.
+
+SEE ALSO
+    The FAQ: Spark::Form::FAQ =head1 LICENSE
+
+    Copyright (C) 2009 James Laver
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 
