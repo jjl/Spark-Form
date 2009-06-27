@@ -3,29 +3,18 @@ package SparkX::Form::Printer::List;
 use warnings;
 use strict;
 
+our $VERSION = '0.01';
+
+1;
+__END__
+
 =head1 NAME
 
-SparkX::Form::Printer::List - The great new SparkX::Form::Printer::List!
+SparkX::Form::Printer::List - A list-printer for SparkX::Form. Spouts out form elements in a (X)HTML list.
 
 =head1 VERSION
 
 Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
-
-
-=head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use SparkX::Form::Printer::List;
-
-    my $foo = SparkX::Form::Printer::List->new();
-    ...
 
 =head1 EXPORT
 
@@ -33,20 +22,6 @@ A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
-
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
 
 =head1 AUTHOR
 
@@ -65,7 +40,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc SparkX::Form::Printer::List
+ perldoc SparkX::Form::Printer::List
 
 
 You can also look for information at:
@@ -80,19 +55,9 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=SparkX-Form-Printer-List>
 
 L<http://annocpan.org/dist/SparkX-Form-Printer-List>
 
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/SparkX-Form-Printer-List>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/SparkX-Form-Printer-List/>
-
 =back
 
-
 =head1 ACKNOWLEDGEMENTS
-
 
 =head1 COPYRIGHT & LICENSE
 
@@ -103,5 +68,3 @@ under the same terms as Perl itself.
 
 
 =cut
-
-1; # End of SparkX::Form::Printer::List

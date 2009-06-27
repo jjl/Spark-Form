@@ -5,3 +5,4 @@ _build
 META.yml
 Build
 Makefile.PL
+*.bak
