@@ -1,52 +1,46 @@
-SparkX-Form-BasicFields
+NAME
+    SparkX::Form::BasicFields - A collection of basic fields for Spark::Form
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+    Spark::Form is a way to define your own forms with validation and
+    auto-printing. See that module for more information.
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+    This file is just explanatory. SEE ALSO for more interesting files.
 
+VERSION
+    Version 0.01
 
-INSTALLATION
+SEE ALSO
+    Spark::Form - The forms handling system itself SparkX::BasicValidators -
+    If you want to have validation of these fields SparkX::Form::Field::Text
+    - A text field SparkX::Form::Field::Checkbox - A checkbox field
+    SparkX::Form::Field::Radio - A radio button set
+    SparkX::Form::Field::Select - A select button set
+    SparkX::Form::Field::TextArea - A textarea field
 
-To install this module, run the following commands:
+AUTHOR
+    James Laver, "<printf(qw[%s@%s.%s cpan jameslaver com])>"
 
-	perl Build.PL
-	./Build
-	./Build test
-	./Build install
+BUGS
+    Please report any bugs or feature requests to
+    "bug-sparkx-form-basicfields at rt.cpan.org", or through the web
+    interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SparkX-Form-BasicFields>
+    . I will be notified, and then you'll automatically be notified of
+    progress on your bug as I make changes.
 
-SUPPORT AND DOCUMENTATION
+SUPPORT
+    *   RT: CPAN's request tracker
 
-After installing, you can find documentation for this module with the
-perldoc command.
+        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=SparkX-Form-BasicFields>
 
-    perldoc SparkX::Form::BasicFields
+    *   AnnoCPAN: Annotated CPAN documentation
 
-You can also look for information at:
+        <http://annocpan.org/dist/SparkX-Form-BasicFields>
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=SparkX-Form-BasicFields
+ACKNOWLEDGEMENTS
+COPYRIGHT & LICENSE
+    Copyright 2009 James Laver, all rights reserved.
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/SparkX-Form-BasicFields
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/SparkX-Form-BasicFields
-
-    Search CPAN
-        http://search.cpan.org/dist/SparkX-Form-BasicFields/
-
-
-COPYRIGHT AND LICENCE
-
-Copyright (C) 2009 James Laver
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 
