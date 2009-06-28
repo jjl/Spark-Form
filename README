@@ -28,8 +28,8 @@ SYNOPSIS
 
      package MyApp::Form::Field::Username;
      use base Spark::Form::Field;
-     
- sub validate {
+ 
+     sub validate {
        my ($self,$v) = @_;
 
        if (length $v < 6 or length $v > 12) {
@@ -104,8 +104,9 @@ AUTHOR
     Thanks to the Django Project, whose forms module gave some inspiration.
 
 SEE ALSO
-    The FAQ: Spark::Form::FAQ =head1 LICENSE
+    The FAQ: Spark::Form::FAQ
 
+LICENSE
     Copyright (C) 2009 James Laver
 
     This program is free software; you can redistribute it and/or modify it

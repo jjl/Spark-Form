@@ -355,6 +355,7 @@ Thanks to the Django Project, whose forms module gave some inspiration.
 =head1 SEE ALSO
 
 The FAQ: L<Spark::Form::FAQ>
+
 =head1 LICENSE
 
 Copyright (C) 2009 James Laver
