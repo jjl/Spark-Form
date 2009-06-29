@@ -13,6 +13,7 @@ has '+value' => (
 
 has 'names' => (
     lazy => 1,
+    is => 'rw',
     default => sub {
         my $self = shift;
 
