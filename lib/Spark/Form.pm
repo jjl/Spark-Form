@@ -86,11 +86,11 @@ sub BUILD {
 
     if (defined $self->_printer) {
         eval {
-            #Load the module, else short circuit
-            eval qq{require $self->_printer; 1} or die();
+            #Load the module, else short circuit. There were strange antics with qq{} and this is tidier than the alternative
+            eval sprintf("require %s; 1",$self->_printer) or die();
             #Apply the role (failure will short circuit). Return 1 so the 'or' won't trigger
             $self->_printer->meta->apply($self); 1
-        } or die("Could not apply printer " . $self->_printer);
+        } or die("Could not apply printer " . $self->_printer . " $@");
     }
 }
 
