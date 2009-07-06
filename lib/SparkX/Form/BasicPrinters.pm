@@ -1,6 +1,6 @@
 package SparkX::Form::BasicPrinters;
 
-our $VERSION="0.1";
+our $VERSION="0.2";
 
 
 1;
