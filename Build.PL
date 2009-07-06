@@ -8,7 +8,8 @@ my $builder = Module::Build->new(
     dist_author         => 'James Laver <sprintf qw(%s@%s.%s cpan jameslaver com)>',
     dist_version_from   => 'lib/Spark/Form.pm',
     build_requires => {
-        'Test::More'        => 0,
+        'Test::More'                => 0,
+        'Test::MockObject::Extends' => 0,
     },
     requires       => {
         'Module::Pluggable'        => 0,
