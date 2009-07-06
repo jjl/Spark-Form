@@ -1,6 +1,8 @@
 Revision history for Spark-Form
 
-0.01    2009-05-31
+0.1    2009-05-31
         First version, released on an unsuspecting world.
         Module currently deals purely with validation from user input.
-
+0.2    2009-07-21
+        Added testing deps.
+        Auto-requires printer modules for you (and fixes related bug)
