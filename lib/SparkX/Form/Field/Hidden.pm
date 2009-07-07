@@ -5,7 +5,8 @@ use HTML::Tiny;
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML';
+     'Spark::Form::Field::Role::Printable::XHTML',
+     'Spark::Form::Field::Role::Validateable';
 
 has '+value' => (
     isa => 'Str',
@@ -25,6 +26,8 @@ sub _render {
     $html->input({type => 'hidden', value => $self->value, name => $self->name});
 }
 
+sub validate { 1 }
+
 1;
 __END__
 
@@ -41,6 +44,10 @@ Renders the field to html
 =head2 to_xhtml() => Str
 
 Renders the field to xhtml
+
+=head2 validate() => Bool
+
+Validates the field. Before composition with validators, always returns 1.
 
 =head1 SEE ALSO
 
