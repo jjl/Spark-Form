@@ -87,7 +87,7 @@ sub BUILD {
     if (defined $self->_printer) {
         eval {
             $self->_printer->meta->apply($self); 1
-        } or die("Could not apply printer " . $self->printer);
+        } or die("Could not apply printer " . $self->_printer);
     }
 }
 
