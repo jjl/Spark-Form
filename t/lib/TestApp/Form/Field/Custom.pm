@@ -4,8 +4,8 @@ use Moose;
 extends 'Spark::Form::Field';
 
 has 'min_length' => (
-    isa => 'Int',
-    is => 'rw',
+    isa      => 'Int',
+    is       => 'rw',
     required => 0,
     default  => 6,
 );
