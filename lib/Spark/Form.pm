@@ -12,7 +12,7 @@ has _fields => (
     is        => 'ro',
     required  => 0,
     default   => sub { Data::Couplet->new },
-);
+  );
 
 has plugin_ns => (
     isa      => 'Str',
@@ -20,12 +20,12 @@ has plugin_ns => (
     required => 0,
 );
 
-has _errors   => (
+has _errors => (
     metaclass => 'Collection::Array',
     isa       => 'ArrayRef',
     is        => 'ro',
     required  => 0,
-    default   => sub {[]},
+    default   => sub { [] },
     provides  => {
         push     => '_add_error',
         elements => 'errors',
@@ -33,14 +33,14 @@ has _errors   => (
     },
 );
 
-has valid    => (
+has valid => (
     isa      => 'Bool',
     is       => 'rw',
     required => 0,
     default  => 0,
 );
 
-has '_printer'  => (
+has '_printer' => (
     isa      => 'Maybe[Str]',
     required => 0,
     is       => 'ro',
@@ -50,6 +50,7 @@ has '_printer'  => (
 sub BUILD {
     my ($self) = @_;
     my @search_path = (
+
         #This will load anything from SparkX::Form::Field
         'SparkX::Form::Field',
     );
@@ -68,8 +69,10 @@ sub BUILD {
 
     if (defined $self->_printer) {
         eval {
+
             #Load the module, else short circuit. There were strange antics with qq{} and this is tidier than the alternative
-            eval sprintf("require %s; 1",$self->_printer) or die();
+            eval sprintf("require %s; 1", $self->_printer) or die();
+
             #Apply the role (failure will short circuit). Return 1 so the 'or' won't trigger
             $self->_printer->meta->apply($self); 1
         } or die("Could not apply printer " . $self->_printer . " $@");
@@ -77,7 +80,7 @@ sub BUILD {
 }
 
 sub _error {
-    my ($self,$error) = @_;
+    my ($self, $error) = @_;
 
     $self->valid(0);
     $self->_add_error($error);
@@ -90,13 +93,15 @@ sub add {
     #Dispatch to the appropriate handler sub
 
     #1. Regular String. Should have a name and any optional args
-    return do { die unless scalar @_; $self->_add_by_type($item,@_); $self }
+    return do { die unless scalar @_; $self->_add_by_type($item, @_); $self }
       unless ref $item;
+
     #2. Array - loop. This will spectacularly fall over if you are using string-based creation as there's no way to pass multiple names yet
-    return do { $self->add($_,@_) for @$item; $self }
+    return do { $self->add($_, @_) for @$item; $self }
       if ref $item eq 'ARRAY';
+
     #3. Custom field. Just takes any optional args
-    return do { $self->_add_custom_field($item,@_); $self }
+    return do { $self->_add_custom_field($item, @_); $self }
       if $self->_valid_custom_field($item);
 
     #Unknown thing
@@ -119,6 +124,7 @@ sub fields {
 
 sub validate {
     my ($self) = @_;
+
     #Clear out
     $self->valid(1);
     $self->_clear_errors();
@@ -143,31 +149,31 @@ sub data {
 }
 
 sub _valid_custom_field {
-    my ($self,$thing) = @_;
+    my ($self, $thing) = @_;
     eval {
         $thing->isa('Spark::Form::Field')
     } or 0;
 }
 
 sub _add_custom_field {
-    my ($self,$item,%opts) = @_;
+    my ($self, $item, %opts) = @_;
 
     #And add it.
-    $self->_add($item,$item->name,%opts);
+    $self->_add($item, $item->name, %opts);
 }
 
 sub _add_by_type {
-    my ($self,$type,$name,%opts) = @_;
+    my ($self, $type, $name, %opts) = @_;
 
     #Default name is type itself
     $name ||= $type;
 
     #Create and add it
-    $self->_add($self->_create_type($type,$name,%opts),$name);
+    $self->_add($self->_create_type($type, $name, %opts), $name);
 }
 
 sub _add {
-    my ($self,$field,$name) = @_;
+    my ($self, $field, $name) = @_;
 
     die("Field name $name exists in form.") if $self->_fields->value($name);
 
@@ -186,7 +192,7 @@ sub _mangle_modname {
         "Spark::Form::Field",
     );
 
-    push @namespaces,$self->plugin_ns if $self->plugin_ns;
+    push @namespaces, $self->plugin_ns if $self->plugin_ns;
 
     foreach my $ns (@namespaces) {
         last if $mod =~ s/^${ns}:://;
@@ -200,7 +206,7 @@ sub _mangle_modname {
 }
 
 sub _find_matching_mod {
-    my ($self,$wanted) = @_;
+    my ($self, $wanted) = @_;
 
     #Just try and find something that, when mangled, eq $wanted
     foreach my $mod ($self->field_mods) {
@@ -212,10 +218,10 @@ sub _find_matching_mod {
 }
 
 sub _create_type {
-    my ($self,$type,$name,%opts) = @_;
+    my ($self, $type, $name, %opts) = @_;
     my $mod = $self->_find_matching_mod($type) or die("Could not find field mod: $type");
     eval qq{ use $mod; 1 } or die("Could not load $mod, $@");
-    $mod->new(name => $name, form => $self,%opts);
+    $mod->new(name => $name, form => $self, %opts);
 }
 
 1;
