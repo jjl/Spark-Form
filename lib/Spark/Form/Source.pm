@@ -1,14 +1,13 @@
 package Spark::Form::Source;
+
+# ABSTRACT: Base class for population plugins
+
 use Moose::Role;
 
 requires 'populate';
 
 1;
 __END__
-
-=head1 NAME
-
-Spark::Form::Source - Base class for population plugins
 
 =head1 SEE ALSO
 

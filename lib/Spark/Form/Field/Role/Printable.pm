@@ -1,5 +1,7 @@
 package Spark::Form::Field::Role::Printable;
 
+# ABSTRACT: Printability for form fields
+
 use Moose::Role;
 
 has label => (
@@ -10,10 +12,6 @@ has label => (
 
 1;
 __END__
-
-=head1 NAME
-
-Spark::Form::Field::Role::Printable - Printability for form fields
 
 =head1 DESCRIPTION
 
@@ -26,7 +24,7 @@ You probably want one of the roles under this hierarchy, but not just this one.
  use Moose;
  extends 'Spark::Form::Field';
  with 'Spark::Form::Field::Role::Printable';
- 
+
  sub to_string {
      my $self = shift;
      sprintf("%s: %s",$self->label, $self->value);

@@ -1,5 +1,7 @@
 package Spark::Form::Printer::XHTML;
 
+# ABSTRACT: the interface an XHTML-printing form printer needs to implement
+
 use Moose::Role;
 with 'Spark::Form::Printer';
 
@@ -7,10 +9,6 @@ requires 'to_xhtml';
 
 1;
 __END__
-
-=head1 NAME
-
-Spark::Form::Printer::HTML - the interface an XHTML-printing form printer needs to implement
 
 =head1 SEE ALSO
 

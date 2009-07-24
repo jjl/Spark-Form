@@ -1,13 +1,10 @@
 package Spark::Form::Printer;
 
+# ABSTRACT: interface for form printers for C<Spark::Form>
 use Moose::Role;
 
 1;
 __END__
-
-=head1 NAME
-
-Spark::Form::Printer - interface for form printers for C<Spark::Form>
 
 =head1 SEE ALSO
 

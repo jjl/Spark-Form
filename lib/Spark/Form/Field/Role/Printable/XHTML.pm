@@ -1,5 +1,7 @@
 package Spark::Form::Field::Role::Printable::XHTML;
 
+# ABSTRACT: a xhtml1-printable form field role
+
 use Moose::Role;
 with "Spark::Form::Field::Role::Printable";
 
@@ -8,10 +10,6 @@ requires 'to_xhtml';
 1;
 __END__
 
-=head1 NAME
-
-Spark::Form::Field::Role::Printable::XHTML - a xhtml1-printable form field role
-
 =head1 SYNOPSIS
 
  package MyApp::Form::Field::CustomText;
@@ -19,7 +17,7 @@ Spark::Form::Field::Role::Printable::XHTML - a xhtml1-printable form field role
  extends 'Spark::Form::Field';
  with 'Spark::Form::Field::Role::Printable::XHTML';
  use HTML::Tiny;
- 
+
  sub to_xhtml {
      my ($self) = @_;
      my $html = HTML::Tiny->new( mode => 'xml' );

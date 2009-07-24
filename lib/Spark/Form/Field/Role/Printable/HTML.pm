@@ -1,5 +1,7 @@
 package Spark::Form::Field::Role::Printable::HTML;
 
+# ABSTRACT: a html4-printable form field role
+
 use Moose::Role;
 with "Spark::Form::Field::Role::Printable";
 
@@ -8,10 +10,6 @@ requires 'to_html';
 1;
 __END__
 
-=head1 NAME
-
-Spark::Form::Field::Role::Printable::HTML - a html4-printable form field role
-
 =head1 SYNOPSIS
 
  package MyApp::Form::Field::CustomText;
@@ -19,7 +17,7 @@ Spark::Form::Field::Role::Printable::HTML - a html4-printable form field role
  extends 'Spark::Form::Field';
  with 'Spark::Form::Field::Role::Printable::HTML';
  use HTML::Tiny;
- 
+
  sub to_html {
      my ($self) = @_;
      my $html = HTML::Tiny->new( mode => 'html' );

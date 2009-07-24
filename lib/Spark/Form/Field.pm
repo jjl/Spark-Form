@@ -1,5 +1,7 @@
 package Spark::Form::Field;
 
+# ABSTRACT: Superclass for all Form Fields
+
 use Moose;
 use MooseX::AttributeHelpers;
 
@@ -58,7 +60,7 @@ sub validate {
     $self->_clear_errors;
     $self->valid(1);
     #Set a default of the empty string, suppresses a warning
-    $self->value($self->value||'');        
+    $self->value($self->value||'');
     $self->_validate;
 }
 
@@ -78,10 +80,10 @@ Field superclass. Must subclass this to be considered a field.
  extends 'Spark::Form::Field';
  with 'Spark::Form::Field::Role::Validateable';
  with 'Spark::Form::Field::Role::Printable::XHTML';
- 
+
  sub _validate {
      my $self = shift;
-     
+
      #validate existence of data
      if ($self->value) {
          #If we're valid, we should say so
@@ -90,16 +92,16 @@ Field superclass. Must subclass this to be considered a field.
          #error will call $self->valid(0) and also set an error.
          $self->error('no value')
      }
-     
+
      #And we should return boolean validity
      $self->valid
  }
- 
+
  sub to_xhtml {
      #Rather poorly construct an XHTML tag
      '<input type="checkbox" value="' . shift-value . '">';
  }
- 
+
 Note that you might want to look into HTML::Tiny.
 Or better still, L<SparkX::Form::Field::Plugin::StarML>.
 
