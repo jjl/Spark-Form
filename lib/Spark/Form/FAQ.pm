@@ -1,3 +1,7 @@
+package Spark::Form::FAQ;
+
+# ABSTRACT: Frequently Asked Questions about Spark::Form
+
 1;
 __END__
 
@@ -8,7 +12,7 @@ __END__
 None of the others met my needs. This is CPAN, people reinvent wheels
 properly so you don't have to.
 
-Essentially the only real viable alternative I've come across is HTML::FormFu 
+Essentially the only real viable alternative I've come across is HTML::FormFu
 and I wanted a pure-perl solution, no YAML.
 
 =head2 Why Spark::Form?
@@ -47,7 +51,7 @@ Easy to read and built with L<Moose> and L<Module::Pluggable>.
 
 =head2 Why do you depend on Moose?
 
-It made writing this module a lot quicker and the code a lot cleaner. And it 
+It made writing this module a lot quicker and the code a lot cleaner. And it
 will make maintenance a lot easier.
 
 =head2 Will there be a non-Moose version?
