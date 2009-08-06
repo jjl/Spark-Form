@@ -6,3 +6,6 @@ Revision history for Spark-Form
 0.2    2009-07-21
         Added testing deps.
         Auto-requires printer modules for you (and fixes related bug)
+
+0.3    
+       Merged in SparkX::Form::BasicFields

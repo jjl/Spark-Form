@@ -9,6 +9,7 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Spark/Form.pm',
     build_requires => {
         'Test::More'                => 0,
+        'Test::MockObject'          => 0,
         'Test::MockObject::Extends' => 0,
     },
     requires       => {
@@ -17,6 +18,7 @@ my $builder = Module::Build->new(
         'HTML::Tiny'               => 0,
         'MooseX::AttributeHelpers' => 0,
         'List::MoreUtils'          => 0,
+        'List::Util'               => 0,
     },
     add_to_cleanup      => [ 'Spark-*' ],
     create_makefile_pl => 'traditional',
