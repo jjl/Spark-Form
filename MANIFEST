@@ -25,15 +25,20 @@ lib/SparkX/Form/Field/Select.pm
 lib/SparkX/Form/Field/Submit.pm
 lib/SparkX/Form/Field/Text.pm
 lib/SparkX/Form/Field/Textarea.pm
+lib/SparkX/Form/BasicPrinters.pm
+lib/SparkX/Form/Printer/List.pm
 MANIFEST			This list of files
 README
 t/00-load.t
+t/01-pod.t
 t/01-form-basic.t
 t/01-pod-coverage.t
+t/02-pod-coverage.t
 t/02-form-register.t
 t/02-button.t
 t/03-form-custom.t
 t/03-checkbox.t
+t/03-list.t
 t/04-form-custom-lazy.t
 t/04-file.t
 t/05-printer.t

@@ -9,3 +9,4 @@ Revision history for Spark-Form
 
 0.3    
        Merged in SparkX::Form::BasicFields
+       Merged in SparkX::Form::BasicPrinters
