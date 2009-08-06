@@ -1,14 +1,9 @@
 package SparkX::Form::BasicPrinters;
 
-our $VERSION="0.2";
-
+# ABSTRACT: A selection of basic form printers for printing a C<SparkX::Form>.
 
 1;
 __END__
-
-=head1 NAME
-
-SparkX::Form::BasicPrinters - A selection of basic form printers for printing a C<SparkX::Form>.
 
 =head1 SEE ALSO
 
