@@ -9,7 +9,7 @@ my @fields = qw(
 );
 
 BEGIN {
-    plan tests => ( 4 + scalar @fields );
+    plan tests => ( 5 + scalar @fields );
 
 	use_ok($_) foreach (qw[
         Spark::Form
@@ -18,6 +18,7 @@ BEGIN {
     use_ok( "SparkX::Form::Field::$_" ) foreach @fields;
 	use_ok( 'SparkX::Form::BasicFields' );
 	use_ok( 'SparkX::Form::Printer::List' );
+    use_ok( 'SparkX::Form::BasicValidators' );
 }
 
 diag( "Testing Spark::Form $Spark::Form::VERSION, Perl $], $^X" );
