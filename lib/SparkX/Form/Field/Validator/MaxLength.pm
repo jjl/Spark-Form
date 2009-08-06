@@ -1,6 +1,9 @@
 package SparkX::Form::Field::Validator::MaxLength;
 
+# ABSTRACT: Validates a variable does not exceed a given size
+
 use Moose::Role;
+
 
 has max_length => (
     isa      => 'Maybe[Int]',
@@ -8,7 +11,7 @@ has max_length => (
     required => 0,
     default  => 0,
 );
-    
+
 has errmsg_too_long => (
     isa      => 'Str',
     is       => 'rw',

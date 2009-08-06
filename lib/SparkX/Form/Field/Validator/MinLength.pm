@@ -1,5 +1,7 @@
 package SparkX::Form::Field::Validator::MinLength;
 
+# ABSTRACT: Validates a field is at least a given size
+
 use Moose::Role;
 
 has min_length => (
@@ -8,7 +10,7 @@ has min_length => (
     required => 0,
     default  => 0,
 );
-    
+
 has errmsg_too_short => (
     isa      => 'Str',
     is       => 'rw',

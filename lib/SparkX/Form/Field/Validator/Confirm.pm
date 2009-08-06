@@ -1,5 +1,7 @@
 package SparkX::Form::Field::Validator::Confirm;
 
+# ABSTRACT: Validates whether or not the user confirmed some choice.
+
 use Moose::Role;
 
 has confirm => (
@@ -25,13 +27,13 @@ has errmsg_confirm => (
 
 sub _confirm_field {
     my ($self) = @_;
-    
+
     $self->form->get($self->confirm);
 }
 
 sub _confirm_human_name {
     my ($self) = @_;
-    
+
     $self->_confirm_field->human_name;
 }
 

@@ -1,5 +1,7 @@
 package SparkX::Form::Field::Validator::NotEmpty;
 
+# ABSTRACT: Validates a field has some value
+
 use Moose::Role;
 
 has errmsg_empty => (
