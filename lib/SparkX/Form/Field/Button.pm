@@ -7,32 +7,31 @@ use HTML::Tiny;
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML';
+  'Spark::Form::Field::Role::Printable::XHTML';
 
 has '+value' => (
     isa => 'Str',
 );
 
 has 'content' => (
-    isa => 'Str',
-    is => 'rw',
+    isa      => 'Str',
+    is       => 'rw',
     required => 0,
-    default => '',
+    default  => '',
 );
 
-
 sub to_html {
-    shift->_render( HTML::Tiny->new( mode => 'html') );
+    shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render( HTML::Tiny->new( mode => 'xml') );
+    shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _render {
-    my ($self,$html) = @_;
+    my ($self, $html) = @_;
 
-    $html->button({value => $self->value, name => $self->name},$self->content);
+    $html->button({value => $self->value, name => $self->name}, $self->content);
 }
 
 1;

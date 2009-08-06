@@ -8,7 +8,7 @@ has regex => (
     isa      => 'Maybe[RegexpRef]',
     is       => 'rw',
     required => 0,
-    default  => sub {undef},
+    default  => sub { undef },
 );
 
 has errmsg_regex => (
@@ -32,7 +32,7 @@ sub _regex {
     }
 }
 
-after '_validate' => sub {shift->_regex};
+after '_validate' => sub { shift->_regex };
 
 1;
 __END__

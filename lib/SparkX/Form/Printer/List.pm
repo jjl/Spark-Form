@@ -8,23 +8,23 @@ with 'Spark::Form::Printer';
 use HTML::Tiny;
 
 sub to_xhtml {
-    shift->_render('to_xhtml',HTML::Tiny->new( mode => 'xml' ),@_);
+    shift->_render('to_xhtml', HTML::Tiny->new(mode => 'xml'), @_);
 }
 
 sub to_html {
-    shift->_render('to_html',HTML::Tiny->new( mode => 'html' ),@_);
+    shift->_render('to_html', HTML::Tiny->new(mode => 'html'), @_);
 }
 
 sub _render {
-    my ($self,$func,$html,@params) = @_;
-    $html->ul(join(' ',$self->_get_lis($func,$html)));
+    my ($self, $func, $html, @params) = @_;
+    $html->ul(join(' ', $self->_get_lis($func, $html)));
 }
 
 sub _get_lis {
-    my ($self,$func,$html) = @_;
+    my ($self, $func, $html) = @_;
     map {
         $html->li($html->label($_->human_name)) =>
-        $html->li($_->$func)
+          $html->li($_->$func)
     } $self->fields;
 }
 

@@ -7,40 +7,40 @@ use HTML::Tiny;
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML';
+  'Spark::Form::Field::Role::Printable::XHTML';
 
 has '+value' => (
     isa => 'Str',
 );
 
 has options => (
-    isa => 'ArrayRef',
-    is => 'rw',
+    isa      => 'ArrayRef',
+    is       => 'rw',
     required => 0,
-    lazy => 1,
-    default => sub { shift->value },
+    lazy     => 1,
+    default  => sub { shift->value },
 );
 
 sub to_html {
-    shift->_render( HTML::Tiny->new( mode => 'html') );
+    shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render( HTML::Tiny->new( mode => 'xml') );
+    shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _render {
-    my ($self,$html) = @_;
+    my ($self, $html) = @_;
     join(
         " ",
         map {
             $html->input({
-                type => 'radio',
-                value => $_,
-                ($self->value eq $_ ? (checked => 'checked') : ()),
-                name => $self->name,
-            })
-        } @{$self->options}
+                    type  => 'radio',
+                    value => $_,
+                    ($self->value eq $_ ? (checked => 'checked') : ()),
+                    name => $self->name,
+                })
+          } @{$self->options}
     );
 }
 

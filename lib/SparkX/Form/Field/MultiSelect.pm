@@ -8,46 +8,46 @@ use List::Util 'first';
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML';
+  'Spark::Form::Field::Role::Printable::XHTML';
 
 has '+value' => (
     isa => 'ArrayRef[Str]',
 );
 
 has options => (
-    isa => 'ArrayRef',
-    is => 'rw',
+    isa      => 'ArrayRef',
+    is       => 'rw',
     required => 0,
-    lazy => 1,
-    default => sub { shift->value },
+    lazy     => 1,
+    default  => sub { shift->value },
 );
 
 sub to_html {
-    shift->_render( HTML::Tiny->new( mode => 'html') );
+    shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render( HTML::Tiny->new( mode => 'xml') );
+    shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _is_selected {
-    my ($self,$value) = @_;
+    my ($self, $value) = @_;
 
-    first {$value eq $_} @{$self->value};
+    first { $value eq $_ } @{$self->value};
 }
 
 sub _render {
-    my ($self,$html) = @_;
-    $html->select({name => $self->name, multiple=>'multiple'},
+    my ($self, $html) = @_;
+    $html->select({name => $self->name, multiple => 'multiple'},
         join(' ',
             map {
                 my $__ = $_;
                 $html->option({
-                    value => $_,
-                    ($self->_is_selected($_) ? (selected => 'selected') : ()),
-                })
-            } @{$self->options}
-        )
+                        value => $_,
+                        ($self->_is_selected($_) ? (selected => 'selected') : ()),
+                    })
+              } @{$self->options}
+          )
     );
 }
 

@@ -20,8 +20,8 @@ has errmsg_confirm => (
     default  => sub {
         my $self = shift;
         $self->human_name .
-        " must match " .
-        $self->_confirm_human_name
+          " must match " .
+          $self->_confirm_human_name
     },
 );
 
@@ -47,7 +47,7 @@ sub _confirm {
     }
 }
 
-after '_validate' => sub {shift->_confirm};
+after '_validate' => sub { shift->_confirm };
 
 1;
 __END__

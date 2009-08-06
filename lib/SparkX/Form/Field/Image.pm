@@ -7,7 +7,7 @@ use HTML::Tiny;
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML';
+  'Spark::Form::Field::Role::Printable::XHTML';
 
 has '+value' => (
     isa => 'Str',
@@ -15,7 +15,7 @@ has '+value' => (
 
 has 'names' => (
     lazy => 1,
-    (Moose->VERSION >= 0.84 ) ? (is => 'bare') : (),
+    (Moose->VERSION >= 0.84) ? (is => 'bare') : (),
     default => sub {
         my $self = shift;
 
@@ -24,15 +24,15 @@ has 'names' => (
 );
 
 sub to_html {
-    shift->_render( HTML::Tiny->new( mode => 'html' ) );
+    shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render( HTML::Tiny->new( mode => 'xml') );
+    shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _render {
-    my ($self,$html) = @_;
+    my ($self, $html) = @_;
 
     $html->input({type => 'image', name => $self->name});
 }

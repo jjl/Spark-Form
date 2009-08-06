@@ -19,9 +19,9 @@ has errmsg_too_short => (
     default  => sub {
         my $self = shift;
         $self->human_name .
-        " must be at least " .
-        $self->min_length .
-        " characters long";
+          " must be at least " .
+          $self->min_length .
+          " characters long";
     },
 );
 
@@ -35,7 +35,7 @@ sub _min_length {
     }
 }
 
-after '_validate' => sub {shift->_min_length};
+after '_validate' => sub { shift->_min_length };
 
 1;
 __END__

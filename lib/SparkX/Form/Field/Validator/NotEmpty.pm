@@ -11,7 +11,7 @@ has errmsg_empty => (
     default  => sub {
         my $self = shift;
         $self->human_name .
-        " must be provided."
+          " must be provided."
     },
 );
 
@@ -23,7 +23,7 @@ sub _not_empty {
     }
 }
 
-after '_validate' => sub {shift->_not_empty};
+after '_validate' => sub { shift->_not_empty };
 
 1;
 __END__

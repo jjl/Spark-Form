@@ -4,7 +4,6 @@ package SparkX::Form::Field::Validator::MaxLength;
 
 use Moose::Role;
 
-
 has max_length => (
     isa      => 'Maybe[Int]',
     is       => 'rw',
@@ -20,9 +19,9 @@ has errmsg_too_long => (
     default  => sub {
         my $self = shift;
         $self->human_name .
-        " must be no more than " .
-        $self->max_length .
-        " characters long";
+          " must be no more than " .
+          $self->max_length .
+          " characters long";
     },
 );
 
@@ -36,7 +35,7 @@ sub _max_length {
     }
 }
 
-after '_validate' => sub {shift->_max_length};
+after '_validate' => sub { shift->_max_length };
 
 1;
 __END__
