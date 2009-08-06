@@ -1,5 +1,7 @@
 package SparkX::Form::Field::Radio;
 
+# ABSTRACT: A set of radio buttons for SparkX::Form
+
 use Moose;
 use HTML::Tiny;
 
@@ -26,7 +28,7 @@ sub to_html {
 sub to_xhtml {
     shift->_render( HTML::Tiny->new( mode => 'xml') );
 }
- 
+
 sub _render {
     my ($self,$html) = @_;
     join(
@@ -44,10 +46,6 @@ sub _render {
 
 1;
 __END__
-
-=head1 NAME
-
-SparkX::Form::Field::Radio - A set of radio buttons for SparkX::Form
 
 =head1 METHODS
 

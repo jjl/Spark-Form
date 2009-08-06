@@ -1,5 +1,7 @@
 package SparkX::Form::Field::Reset;
 
+# ABSTRACT: A reset button for SparkX::Form
+
 use Moose;
 use HTML::Tiny;
 
@@ -18,19 +20,15 @@ sub to_html {
 sub to_xhtml {
     shift->_render( HTML::Tiny->new( mode => 'xml') );
 }
- 
+
 sub _render {
     my ($self,$html) = @_;
-    
+
     $html->input({type => 'reset', name => $self->name});
 }
 
 1;
 __END__
-
-=head1 NAME
-
-SparkX::Form::Field::Reset - A reset button for SparkX::Form
 
 =head1 METHODS
 

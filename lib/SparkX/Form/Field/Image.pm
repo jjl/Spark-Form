@@ -1,5 +1,7 @@
 package SparkX::Form::Field::Image;
 
+# ABSTRACT: An image field for SparkX::Form
+
 use Moose;
 use HTML::Tiny;
 
@@ -28,19 +30,17 @@ sub to_html {
 sub to_xhtml {
     shift->_render( HTML::Tiny->new( mode => 'xml') );
 }
- 
+
 sub _render {
     my ($self,$html) = @_;
-    
+
     $html->input({type => 'image', name => $self->name});
 }
 
 1;
 __END__
 
-=head1 NAME
-
-SparkX::Form::Field::Image - An image field for SparkX::Form
+=head1 DESCRIPTION
 
 Note that this does not support server-side image map functionality but will be treated as a submit. Patches welcome that don't break this (99% of the time desired) behaviour.
 

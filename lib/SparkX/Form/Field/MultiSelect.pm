@@ -1,5 +1,7 @@
 package SparkX::Form::Field::MultiSelect;
 
+# ABSTRACT: A multiple select dropdown field for SparkX::Form
+
 use Moose;
 use HTML::Tiny;
 use List::Util 'first';
@@ -51,10 +53,6 @@ sub _render {
 
 1;
 __END__
-
-=head1 NAME
-
-SparkX::Form::Field::MultiSelect - A multiple select dropdown field for SparkX::Form
 
 =head1 METHODS
 
