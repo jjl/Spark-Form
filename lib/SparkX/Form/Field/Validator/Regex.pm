@@ -5,7 +5,7 @@ with 'Spark::Form::Field::Role::Validateable';
 
 has regex => (
     isa      => 'Maybe[RegexpRef]',
-    is       => 'ro',
+    is       => 'rw',
     required => 0,
     default  => sub {undef},
 );
