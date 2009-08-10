@@ -12,7 +12,7 @@ has regex => (
 
 has errmsg_regex => (
     isa      => 'Str',
-    is       => 'ro',
+    is       => 'rw',
     required => 0,
     lazy     => 1,
     default  => sub {
