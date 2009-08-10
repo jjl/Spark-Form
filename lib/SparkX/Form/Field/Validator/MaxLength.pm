@@ -6,7 +6,8 @@ with 'Spark::Form::Field::Role::Validateable';
 has max_length => (
     isa      => 'Maybe[Int]',
     is       => 'rw',
-    required => 1,
+    required => 0,
+    default  => 0,
 );
     
 has errmsg_too_long => (
