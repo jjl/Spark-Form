@@ -5,7 +5,7 @@ with 'Spark::Form::Field::Role::Validateable';
 
 has confirm => (
     isa      => 'Maybe[Str]',
-    is       => 'ro',
+    is       => 'rw',
     required => 0,
     lazy     => 1,
     default  => sub { undef },
@@ -13,7 +13,7 @@ has confirm => (
 
 has errmsg_confirm => (
     isa      => 'Str',
-    is       => 'ro',
+    is       => 'rw',
     required => 0,
     lazy     => 1,
     default  => sub {

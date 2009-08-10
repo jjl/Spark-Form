@@ -5,13 +5,13 @@ with 'Spark::Form::Field::Role::Validateable';
 
 has min_length => (
     isa      => 'Maybe[Int]',
-    is       => 'ro',
+    is       => 'rw',
     required => 1,
 );
     
 has errmsg_too_short => (
     isa      => 'Str',
-    is       => 'ro',
+    is       => 'rw',
     required => 0,
     lazy     => 1,
     default  => sub {

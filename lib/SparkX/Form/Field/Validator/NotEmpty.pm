@@ -5,7 +5,7 @@ with 'Spark::Form::Field::Role::Validateable';
 
 has errmsg_empty => (
     isa      => 'Str',
-    is       => 'ro',
+    is       => 'rw',
     required => 0,
     default  => sub {
         my $self = shift;
