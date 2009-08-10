@@ -4,18 +4,30 @@ use Spark::Form;
 use Test::More tests => 4;
 use lib 't/lib';
 
-use SX::Test::Field::Combinatorics;
+use Spark::Form::Field;
+use Spark::Form::Field::Role::Validateable;
+use SparkX::Form::Field::Validator::Regex;
+use SparkX::Form::Field::Validator::MinLength;
+use SparkX::Form::Field::Validator::MaxLength;
+#use SparkX::Form::Field::Validator::Confirm;
 
 my $f = Spark::Form->new();
 
-my $test = SX::Test::Field::Combinatorics->new(
+my $test = Spark::Form::Field->new(
     form => $f,
-    name => 'test',
-    regex => qr/^[A-Z]+[0-9]$/,
-    min_length => 6,
-    max_length => 6,
-    confirm => 'test',
+    name => 'test'
 );
+
+Spark::Form::Field::Role::Validateable->meta->apply($test);
+SparkX::Form::Field::Validator::Regex->meta->apply($test);
+SparkX::Form::Field::Validator::MinLength->meta->apply($test);
+SparkX::Form::Field::Validator::MaxLength->meta->apply($test);
+#SparkX::Form::Field::Validator::Confirm->meta->apply($test);
+$test->regex(qr/^[A-Z]+[0-9]$/);
+$test->min_length(6);
+$test->max_length(6);
+#$test->confirm('test');
+
 $f->add($test);
 $f->data({test => ''});
 $f->validate;
