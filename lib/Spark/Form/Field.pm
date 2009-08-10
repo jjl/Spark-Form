@@ -25,6 +25,8 @@ sub human_name {
     $self->can('label') && $self->label or $self->name or '';
 }
 
+sub validate {1}
+
 1;
 __END__
 
@@ -77,6 +79,10 @@ Value in the field.
 =head2 human_name
 
 Returns the label if present, else the field name.
+
+=head2 validate
+
+Returns true always. Subclass to do proper validation.
 
 =head1 SEE ALSO
 
