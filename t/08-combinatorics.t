@@ -31,7 +31,7 @@ $test->max_length(6);
 $f->add($test);
 $f->data({test => ''});
 $f->validate;
-is(scalar $f->errors,3,"Three errors, unset");
+is(scalar $f->errors,2,"Two errors, unset");
 $f->data({test => 'ABCDE'});
 $f->validate;
 is(scalar $f->errors,2,"Two errors");
