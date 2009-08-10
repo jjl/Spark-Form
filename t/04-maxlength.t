@@ -4,15 +4,15 @@ use Spark::Form;
 use Test::More tests => 3;
 use lib 't/lib';
 
-use SX::Test::Field::MaxLength;
+use Spark::Form::Field;
+use SparkX::Form::Field::Validator::MaxLength;
 
 my $f = Spark::Form->new();
 
-my $test = SX::Test::Field::MaxLength->new(
-    form => $f,
-    name => 'test',
-    max_length => 3,
-);
+my $test = Spark::Form::Field->new(form => $f, name => 'test');
+SparkX::Form::Field::Validator::MaxLength->meta->apply($test);
+$test->max_length(3);
+
 $f->add($test);
 $f->data({test => 'qu'});
 $f->validate;

@@ -4,17 +4,23 @@ use Spark::Form;
 use Test::More tests => 2;
 use lib 't/lib';
 
-use SX::Test::Field::Confirm;
-use SX::Test::Field::Basic;
+use Spark::Form::Field;
+use Spark::Form::Field::Role::Validateable;
+use SparkX::Form::Field::Validator::Confirm;
 
 my $f = Spark::Form->new();
 
-my $basic = SX::Test::Field::Basic->new(form => $f, name => 'basic');
-my $confirm = SX::Test::Field::Confirm->new(form => $f, confirm => 'basic', name => 'confirm');
-$f->add($basic)->add($confirm);
-$f->data({basic => 'foo', confirm => 'bar'});
+my $t1 = Spark::Form::Field->new(form => $f, name => 't1');
+my $t2 = Spark::Form::Field->new(form => $f, name => 't2');
+Spark::Form::Field::Role::Validateable->meta->apply($t1);
+Spark::Form::Field::Role::Validateable->meta->apply($t2);
+SparkX::Form::Field::Validator::Confirm->meta->apply($t1);
+$t1->confirm('t2');
+
+$f->add($t1)->add($t2);
+$f->data({t1 => 'foo', t2 => 'bar'});
 $f->validate;
 is(scalar $f->errors,1,"One error");
-$f->data({basic => 'foo', confirm => 'foo'});
+$f->data({t1 => 'foo', t2 => 'foo'});
 $f->validate;
 is(scalar @{$f->errors},0,"No errors");
