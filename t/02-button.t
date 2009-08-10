@@ -2,10 +2,10 @@
 
 use Test::More tests => 2;
 use lib 't/lib';
-use Mockform;
+use Spark::Form;
 use SparkX::Form::Field::Button;
 
-my $form = Mockform->new;
+my $form = Spark::Form->new;
 my $b = SparkX::Form::Field::Button->new(name => 'test', form => $form);
 my $b2 = SparkX::Form::Field::Button->new(
     name => 'test', form => $form,

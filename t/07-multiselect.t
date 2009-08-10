@@ -2,10 +2,10 @@
 
 use Test::More tests => 1;
 use lib 't/lib';
-use Mockform;
+use Spark::Form;
 use SparkX::Form::Field::MultiSelect;
 
-my $form = Mockform->new;
+my $form = Spark::Form->new;
 my $b = SparkX::Form::Field::MultiSelect->new(
     name => 'test', form => $form,
     value => ['1','3'],
