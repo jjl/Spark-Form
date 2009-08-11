@@ -280,6 +280,12 @@ and over in MyApp/Field/Username.pm...
    $self->valid(!!$self->error());
  }
 
+=head1 INSTABILITY
+
+Periodically the API may break. I'll try to make sure it's obvious so it doesn't silently malfunction.
+
+By 0.5, we shouldn't have to do this.
+
 =head1 DEPENDENCIES
 
 Moose. I've dropped using Any::Moose. If you need the performance increase, perhaps it's time to start thinking about shifting off CGI.

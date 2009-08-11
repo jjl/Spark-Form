@@ -79,7 +79,7 @@ Field superclass. Must subclass this to be considered a field.
  with 'Spark::Form::Field::Role::Validateable';
  with 'Spark::Form::Field::Role::Printable::XHTML';
  
- sub validate {
+ sub _validate {
      my $self = shift;
      
      #validate existence of data
@@ -137,7 +137,7 @@ Returns the label if present, else the field name.
 
 =head2 validate
 
-Returns true always. Subclass to do proper validation.
+Returns true always. Subclass and fill in C<_validate> to do proper validation. See the synopsis.
 
 =head2 error (Str)
 
