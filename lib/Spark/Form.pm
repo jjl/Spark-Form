@@ -132,17 +132,13 @@ sub validate {
     #Clear out
     $self->valid(1);
     $self->_clear_errors();
-    if (all { $_->meta->does_role('Spark::Form::Field::Role::Validateable') } $self->fields_a) {
-        foreach my $field ($self->fields_a) {
-            $field->validate;
-            unless ($field->valid) {
-                $self->_error($_) foreach $field->errors;
-            }
+    foreach my $field ($self->fields_a) {
+        $field->validate;
+        unless ($field->valid) {
+            $self->_error($_) foreach $field->errors;
         }
-        $self->valid;
-    } else {
-        die ("Not all fields in this form are validateable.");
     }
+    $self->valid;
 }
 
 sub data {
