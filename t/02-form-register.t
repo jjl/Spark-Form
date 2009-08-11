@@ -26,7 +26,6 @@ cmp_ok(scalar $form->fields_a,'==',1,"Email field added");
 #Validate
 $form->data({email => 'blah'});
 $form->validate;
-#die Dumper $email;
 is(scalar $form->errors, 1, 'One error');
 
 #Revalidate

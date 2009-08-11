@@ -2,7 +2,7 @@ package TestApp::Form::Field::Password;
 
 use Moose;
 extends 'Spark::Form::Field';
-with 'Spark::Form::Field::Role::Validateable';
+#with 'Spark::Form::Field::Role::Validateable';
 
 has confirm => (
     isa => 'Maybe[Str]',
