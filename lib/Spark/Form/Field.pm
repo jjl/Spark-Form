@@ -1,6 +1,7 @@
 package Spark::Form::Field;
 
 use Moose;
+use MooseX::AttributeHelpers;
 
 has name  => (
     isa      => 'Str',
@@ -18,6 +19,43 @@ has value => (
     is       => 'rw',
     required => 0,
 );
+
+has valid => (
+    isa      => 'Bool',
+    is       => 'rw',
+    required => 0,
+    default  => 0,
+);
+
+has _errors => (
+    metaclass => 'Collection::Array',
+    isa       => 'ArrayRef[Str]',
+    is        => 'ro',
+    required  => 0,
+    default   => sub{[]},
+    provides  => {
+        push     => '_add_error',
+        elements => 'errors',
+        clear    => '_clear_errors',
+    },
+);
+
+sub BUILD {
+    shift->meta->add_before_method_modifier('validate',sub {
+        my ($self) = @_;
+         $self->_clear_errors;
+         $self->valid(1);
+         #Set a default of the empty string, suppresses a warning
+         $self->value($self->value||'');        
+    });
+}
+
+sub error {
+    my ($self,$error) = @_;
+
+    $self->valid(0);
+    $self->_add_error($error);
+}
 
 sub human_name {
     my ($self) = @_;
@@ -44,8 +82,19 @@ Field superclass. Must subclass this to be considered a field.
  with 'Spark::Form::Field::Role::Printable::XHTML';
  
  sub validate {
+     my $self = shift;
+     
      #validate existence of data
-     !!shift->value;
+     if ($self->value) {
+         #If we're valid, we should say so
+         $self->valid(1);
+     } else {
+         #error will call $self->valid(0) and also set an error.
+         $self->error('no value')
+     }
+     
+     #And we should return boolean validity
+     $self->valid
  }
  
  sub to_xhtml {
@@ -74,6 +123,14 @@ Reference to the form it is a member of.
 
 Value in the field.
 
+=head2 valid => Bool
+
+Treat as readonly. Whether the field is valid.
+
+=head2 errors => ArrayRef
+
+Treat as readonly. The list of errors generated in validation.
+
 =head1 METHODS
 
 =head2 human_name
@@ -83,6 +140,10 @@ Returns the label if present, else the field name.
 =head2 validate
 
 Returns true always. Subclass to do proper validation.
+
+=head2 error (Str)
+
+Adds an error to the current field's list.
 
 =head1 SEE ALSO
 
