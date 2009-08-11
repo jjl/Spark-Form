@@ -1,7 +1,6 @@
 package SparkX::Form::Field::Validator::Confirm;
 
 use Moose::Role;
-with 'Spark::Form::Field::Role::Validateable';
 
 has confirm => (
     isa      => 'Maybe[Str]',
@@ -46,7 +45,7 @@ sub _confirm {
     }
 }
 
-after 'validate' => sub {shift->_confirm};
+after '_validate' => sub {shift->_confirm};
 
 1;
 __END__

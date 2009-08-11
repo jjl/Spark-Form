@@ -2,6 +2,8 @@ package Spark::Form::Field::Role::Validateable;
 
 use Moose::Role;
 
+warn "Spark::Form::Field::Role::Validateable is a no-op. Please remove it from your code";
+
 1;
 __END__
 

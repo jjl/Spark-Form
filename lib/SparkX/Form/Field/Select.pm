@@ -5,8 +5,7 @@ use HTML::Tiny;
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML',
-     'Spark::Form::Field::Role::Validateable';
+     'Spark::Form::Field::Role::Printable::XHTML';
 
 has '+value' => (
     isa => 'Str',
@@ -39,8 +38,6 @@ sub _render {
         } @{$self->options}),
     );
 }
-
-sub validate { 1 }
 
 1;
 __END__

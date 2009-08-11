@@ -5,7 +5,6 @@ use Test::More tests => 4;
 use lib 't/lib';
 
 use Spark::Form::Field;
-use Spark::Form::Field::Role::Validateable;
 use SparkX::Form::Field::Validator::Regex;
 use SparkX::Form::Field::Validator::MinLength;
 use SparkX::Form::Field::Validator::MaxLength;
@@ -18,7 +17,6 @@ my $test = Spark::Form::Field->new(
     name => 'test'
 );
 
-Spark::Form::Field::Role::Validateable->meta->apply($test);
 SparkX::Form::Field::Validator::Regex->meta->apply($test);
 SparkX::Form::Field::Validator::MinLength->meta->apply($test);
 SparkX::Form::Field::Validator::MaxLength->meta->apply($test);

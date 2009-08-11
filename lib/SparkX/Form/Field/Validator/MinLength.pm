@@ -1,7 +1,6 @@
 package SparkX::Form::Field::Validator::MinLength;
 
 use Moose::Role;
-with 'Spark::Form::Field::Role::Validateable';
 
 has min_length => (
     isa      => 'Maybe[Int]',
@@ -34,7 +33,7 @@ sub _min_length {
     }
 }
 
-after 'validate' => sub {shift->_min_length};
+after '_validate' => sub {shift->_min_length};
 
 1;
 __END__

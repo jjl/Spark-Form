@@ -2,14 +2,13 @@ package TestApp::Form::Field::Password;
 
 use Moose;
 extends 'Spark::Form::Field';
-#with 'Spark::Form::Field::Role::Validateable';
 
 has confirm => (
     isa => 'Maybe[Str]',
     is => 'ro',
 );
 
-sub validate {
+sub _validate {
     my ($self) = @_;
 
     if (length ($self->value||'') < 6) {

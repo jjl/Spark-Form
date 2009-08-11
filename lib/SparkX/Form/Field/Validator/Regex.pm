@@ -1,7 +1,6 @@
 package SparkX::Form::Field::Validator::Regex;
 
 use Moose::Role;
-with 'Spark::Form::Field::Role::Validateable';
 
 has regex => (
     isa      => 'Maybe[RegexpRef]',
@@ -31,7 +30,7 @@ sub _regex {
     }
 }
 
-after 'validate' => sub {shift->_regex};
+after '_validate' => sub {shift->_regex};
 
 1;
 __END__

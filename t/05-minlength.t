@@ -4,7 +4,6 @@ use Spark::Form;
 use Test::More tests => 3;
 use lib 't/lib';
 
-
 use Spark::Form::Field;
 use SparkX::Form::Field::Validator::MinLength;
 

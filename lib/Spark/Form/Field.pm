@@ -40,16 +40,6 @@ has _errors => (
     },
 );
 
-sub BUILD {
-    shift->meta->add_before_method_modifier('validate',sub {
-        my ($self) = @_;
-         $self->_clear_errors;
-         $self->valid(1);
-         #Set a default of the empty string, suppresses a warning
-         $self->value($self->value||'');        
-    });
-}
-
 sub error {
     my ($self,$error) = @_;
 
@@ -63,8 +53,16 @@ sub human_name {
     $self->can('label') && $self->label or $self->name or '';
 }
 
-sub validate {1}
+sub validate {
+    my ($self) = @_;
+    $self->_clear_errors;
+    $self->valid(1);
+    #Set a default of the empty string, suppresses a warning
+    $self->value($self->value||'');        
+    $self->_validate;
+}
 
+sub _validate { 1 }
 1;
 __END__
 

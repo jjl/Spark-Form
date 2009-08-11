@@ -5,15 +5,12 @@ use Test::More tests => 2;
 use lib 't/lib';
 
 use Spark::Form::Field;
-use Spark::Form::Field::Role::Validateable;
 use SparkX::Form::Field::Validator::Confirm;
 
 my $f = Spark::Form->new();
 
 my $t1 = Spark::Form::Field->new(form => $f, name => 't1');
 my $t2 = Spark::Form::Field->new(form => $f, name => 't2');
-Spark::Form::Field::Role::Validateable->meta->apply($t1);
-Spark::Form::Field::Role::Validateable->meta->apply($t2);
 SparkX::Form::Field::Validator::Confirm->meta->apply($t1);
 $t1->confirm('t2');
 

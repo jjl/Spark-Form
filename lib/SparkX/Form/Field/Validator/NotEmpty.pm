@@ -1,7 +1,6 @@
 package SparkX::Form::Field::Validator::NotEmpty;
 
 use Moose::Role;
-with 'Spark::Form::Field::Role::Validateable';
 
 has errmsg_empty => (
     isa      => 'Str',
@@ -22,7 +21,7 @@ sub _not_empty {
     }
 }
 
-after 'validate' => sub {shift->_not_empty};
+after '_validate' => sub {shift->_not_empty};
 
 1;
 __END__

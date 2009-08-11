@@ -6,8 +6,7 @@ use List::Util 'first';
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
-     'Spark::Form::Field::Role::Printable::XHTML',
-     'Spark::Form::Field::Role::Validateable';
+     'Spark::Form::Field::Role::Printable::XHTML';
 
 has '+value' => (
     isa => 'ArrayRef[Str]',
@@ -49,8 +48,6 @@ sub _render {
         )
     );
 }
-
-sub validate { 1 }
 
 1;
 __END__
