@@ -8,13 +8,13 @@ use Spark::Form;
 my $form = Spark::Form->new( plugin_ns => 'TestApp::Form::Field' );
 
 #First off, verify there are no fields in an empty form
-is_deeply([$form->fields_a],[],"Fields are not yet populated");
+is_deeply([$form->fields],[],"Fields are not yet populated");
 
 #Add two custom fields
 $form->add('custom','gt6', min_length => 6);
-cmp_ok(scalar $form->fields_a,'==',1,"Custom field 1 added");
+cmp_ok(scalar $form->fields,'==',1,"Custom field 1 added");
 $form->add('custom','gt2', min_length => 2);
-cmp_ok(scalar $form->fields_a,'==',2,"Custom field 2 added");
+cmp_ok(scalar $form->fields,'==',2,"Custom field 2 added");
 
 #DATASET 1 - two fail
 my %data = (
