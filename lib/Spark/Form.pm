@@ -5,32 +5,13 @@ our $VERSION = 0.2;
 use Moose;
 use MooseX::AttributeHelpers;
 use List::MoreUtils 'all';
+use Data::Couplet;
 
-has _fields_a => (
-    metaclass => 'Collection::Array',
-    isa       => 'ArrayRef',
-    is        => 'rw',
+has _fields => (
+    isa       => 'Data::Couplet',
+    is        => 'ro',
     required  => 0,
-    default   => sub {[]},
-    provides  => {
-        push     => '_add_fields_a',
-        elements => 'fields_a',
-        clear    => '_clear_fields_a',
-    },
-);
-
-has _fields_h => (
-    metaclass => 'Collection::Hash',
-    isa       => 'HashRef',
-    is        => 'rw',
-    required  => 0,
-    default   => sub {+{}},
-    provides  => {
-        set     => '_set_fields_h',
-        get     => '_get_fields_h',
-        delete  => '_delete_fields_h',
-        exists  => '_has_fields_h',
-    },
+    default   => sub { Data::Couplet->new },
 );
 
 has plugin_ns => (
@@ -49,7 +30,8 @@ has _errors   => (
         push     => '_add_error',
         elements => 'errors',
         clear    => '_clear_errors',
-    },);
+    },
+);
 
 has valid    => (
     isa      => 'Bool',
@@ -123,8 +105,16 @@ sub add {
 
 sub get {
     my ($self, $key) = @_;
+    $self->_fields->value($key);
+}
 
-    $self->_get_fields_h($key);
+sub get_at {
+    my ($self, $index) = @_;
+    $self->_fields->value_at($index);
+}
+
+sub fields {
+    shift->_fields->values;
 }
 
 sub validate {
@@ -132,7 +122,7 @@ sub validate {
     #Clear out
     $self->valid(1);
     $self->_clear_errors();
-    foreach my $field ($self->fields_a) {
+    foreach my $field ($self->fields) {
         $field->validate;
         unless ($field->valid) {
             $self->_error($_) foreach $field->errors;
@@ -144,8 +134,8 @@ sub validate {
 sub data {
     my ($self,$fields) = @_;
     while (my ($k,$v) = each %$fields) {
-        if ($self->_has_fields_h($k)) {
-            $self->_get_fields_h($k)->value($v);
+        if ($self->_fields->value($k)) {
+            $self->_fields->value($k)->value($v);
         }
     }
 
@@ -179,14 +169,10 @@ sub _add_by_type {
 sub _add {
     my ($self,$field,$name) = @_;
 
-    #
-    die("Field name $name exists in form.") if $self->_has_fields_h($name);
+    die("Field name $name exists in form.") if $self->_fields->value($name);
 
     #Add it onto the arrayref
-    $self->_add_fields_a($field);
-
-    #And the hashref
-    $self->_set_fields_h($name, $field);
+    $self->_fields->set($name, $field);
     1;
 }
 
@@ -267,7 +253,7 @@ and over in MyApp/Field/Username.pm...
  package MyApp::Form::Field::Username;
  use base Spark::Form::Field;
  
- sub validate {
+ sub _validate {
    my ($self,$v) = @_;
 
    if (length $v < 6 or length $v > 12) {
@@ -334,6 +320,10 @@ Allows you to pass in a hashref of data to populate the fields with before valid
 
 This is a B<streaming interface>, it returns the form itself.
 
+=head2 fields () => Fields
+
+Returns a list of Fields in the form in their current order
+
 =head2 BUILD
 
 Moose constructor. Test::Pod::Coverage made me do it.
@@ -342,6 +332,10 @@ Adds C<class> to the search path for field modules.
 =head2 get (Str)
 
 Returns the form field of that name
+
+=head2 get_at (Int)
+
+Returns the form field at that index (counting from 0)
 
 =head1 Docs?
 

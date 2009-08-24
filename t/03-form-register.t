@@ -17,11 +17,11 @@ my $pass1 = TestApp::Form::Field::Password->new(name => 'password', form => $for
 my $pass2 = TestApp::Form::Field::Password->new(name => 'confirm_password', confirm=>'password', form => $form);
 
 #First off, verify there are no fields in an empty form
-is_deeply([$form->fields_a],[],"Fields are not yet populated");
+is_deeply([$form->fields],[],"Fields are not yet populated");
 
 #Add an email
 $form->add($email);
-cmp_ok(scalar $form->fields_a,'==',1,"Email field added");
+cmp_ok(scalar $form->fields,'==',1,"Email field added");
 
 #Validate
 $form->data({email => 'blah'});
@@ -35,7 +35,7 @@ is(scalar $form->errors, 0, 'No error');
 
 #Add a password
 $form->add($pass1);
-cmp_ok(scalar $form->fields_a,'==',2,"Password field added");
+cmp_ok(scalar $form->fields,'==',2,"Password field added");
 
 #Validate
 $form->data({email => 'blah',password => 'foo'});
@@ -49,7 +49,7 @@ is(scalar $form->errors, 0, 'No error');
 
 #And a confirm password
 $form->add($pass2,confirm=>'password');
-cmp_ok(scalar $form->fields_a,'==',3,"Password confirm field added");
+cmp_ok(scalar $form->fields,'==',3,"Password confirm field added");
 
 #Validate
 $form->data({email => 'blah',password=>'password',confirm_password=>'foo'});

@@ -25,7 +25,7 @@ sub _get_lis {
     map {
         $html->li($html->label($_->human_name)) =>
         $html->li($_->$func)
-    } $self->fields_a;
+    } $self->fields;
 }
 
 1;
