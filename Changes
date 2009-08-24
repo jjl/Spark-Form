@@ -12,3 +12,5 @@ Revision history for Spark-Form
        Merged in SparkX::Form::BasicFields
        Merged in SparkX::Form::BasicPrinters
        Merged in SparkX::Form::BasicValidators
+       Replaced fields_[ah] with 'fields' accessor and get{,_at} methods
+
