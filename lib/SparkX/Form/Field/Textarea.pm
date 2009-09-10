@@ -11,7 +11,7 @@ with 'Spark::Form::Field::Role::Printable::HTML',
 
 has '+value' => (
     isa     => 'Str',
-    default => '',
+    default => q{},
 );
 
 sub to_html {
@@ -35,11 +35,11 @@ __END__
 
 =head2 to_html() => Str
 
-Renders the field to html
+Renders the field to HTML
 
 =head2 to_xhtml() => Str
 
-Renders the field to xhtml
+Renders the field to XHTML
 
 =head2 validate() => Bool
 

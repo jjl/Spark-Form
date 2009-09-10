@@ -1,6 +1,6 @@
 package SparkX::Form::Field::Select;
 
-# ABSTRACT:  A select dropdown field for SparkX::Form
+# ABSTRACT:  A select drop-down field for SparkX::Form
 
 use Moose;
 use HTML::Tiny;
@@ -29,15 +29,20 @@ sub to_xhtml {
     return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
+sub _render_element {
+    my ($self, $html, $option) = @_;
+    return $html->option({
+            value => $option,
+            (($self->value eq $option) ? (selected => 'selected') : ()),
+    }, $option);
+}
+
 sub _render {
     my ($self, $html) = @_;
-    return $html->select({name => $self->name},
-        join(' ', map {
-                $html->option({
-                        value => $_,
-                        (($self->value eq $_) ? (selected => 'selected') : ()),
-                }, $_);
-              } @{$self->options}),
+    my @options = map { $self->_render_element($html, $_) } @{$self->options};
+
+    return $html->select(
+        {name => $self->name}, join q{ }, @options
     );
 }
 __PACKAGE__->meta->make_immutable;
@@ -48,11 +53,11 @@ __END__
 
 =head2 to_html() => Str
 
-Renders the field to html
+Renders the field to HTML
 
 =head2 to_xhtml() => Str
 
-Renders the field to xhtml
+Renders the field to XHTML
 
 =head2 validate() => Bool
 

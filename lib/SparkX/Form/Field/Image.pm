@@ -13,15 +13,17 @@ has '+value' => (
     isa => 'Str',
 );
 
+## no critic (ProhibitMagicNumbers)
 has 'names' => (
     lazy => 1,
     (Moose->VERSION >= 0.84) ? (is => 'bare') : (),
     default => sub {
         my $self = shift;
 
-        return [$self->name . ".x", $self->name . ".y"];
+        return [$self->name . '.x', $self->name . '.y'];
     },
 );
+## use critic
 
 sub to_html {
     return shift->_render(HTML::Tiny->new(mode => 'html'));

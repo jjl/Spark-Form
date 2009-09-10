@@ -29,19 +29,20 @@ sub to_xhtml {
     return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
+sub _render_element {
+    my ($self, $html, $option) = @_;
+    return $html->input({
+            type  => 'radio',
+            value => $option,
+            ($self->value eq $option ? (checked => 'checked') : ()),
+            name => $self->name,
+    });
+
+}
+
 sub _render {
     my ($self, $html) = @_;
-    return join(
-        " ",
-        map {
-            $html->input({
-                    type  => 'radio',
-                    value => $_,
-                    ($self->value eq $_ ? (checked => 'checked') : ()),
-                    name => $self->name,
-                })
-          } @{$self->options}
-    );
+    return join q{ }, map { $self->_render_element($html, $_) } @{$self->options};
 }
 __PACKAGE__->meta->make_immutable;
 1;
@@ -51,11 +52,11 @@ __END__
 
 =head2 to_html() => Str
 
-Renders the field(s) to html
+Renders the field(s) to HTML
 
 =head2 to_xhtml() => Str
 
-Renders the field(s) to xhtml
+Renders the field(s) to XHTML
 
 =head2 validate() => Bool
 
