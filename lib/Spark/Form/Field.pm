@@ -47,12 +47,20 @@ sub error {
 
     $self->valid(0);
     $self->_add_error($error);
+
+    return $self;
 }
 
 sub human_name {
     my ($self) = @_;
 
-    $self->can('label') && $self->label or $self->name or '';
+    if ($self->can('label')) {
+        return $self->label if $self->label;
+    }
+    if ($self->can('name')) {
+        return $self->name if $self->name;
+    }
+    return q();
 }
 
 sub validate {
@@ -61,11 +69,13 @@ sub validate {
     $self->valid(1);
 
     #Set a default of the empty string, suppresses a warning
-    $self->value($self->value || '');
-    $self->_validate;
+    $self->value($self->value || q());
+    return $self->_validate;
 }
 
-sub _validate { 1 }
+sub _validate { return 1 }
+
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 
@@ -106,7 +116,7 @@ Field superclass. Must subclass this to be considered a field.
 Note that you might want to look into HTML::Tiny.
 Or better still, L<SparkX::Form::Field::Plugin::StarML>.
 
-There are a bunch of prebuilt fields you can actually use in
+There are a bunch of pre-built fields you can actually use in
 L<SparkX::Form::BasicFields>.
 
 =head1 ACCESSORS
@@ -126,11 +136,11 @@ Value in the field.
 
 =head2 valid => Bool
 
-Treat as readonly. Whether the field is valid.
+Treat as read-only. Whether the field is valid.
 
 =head2 errors => ArrayRef
 
-Treat as readonly. The list of errors generated in validation.
+Treat as read-only. The list of errors generated in validation.
 
 =head1 METHODS
 
@@ -148,7 +158,6 @@ Adds an error to the current field's list.
 
 =head1 SEE ALSO
 
-L<Spark::Form::Field::Role::Validateable> - Fields that can be validated
 L<Spark::Form::Field::Role::Printable> - Fields that can be printed
 L<SparkX::Form::BasicValidators> - Set of validators to use creating fields
 L<SparkX::Form::BasicFields> - Ready to use fields

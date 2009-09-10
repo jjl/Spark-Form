@@ -11,6 +11,6 @@ __END__
 =head1 SEE ALSO
 
 L<Spark::Form> - The forms module that started it all
-L<Spark::Form::Manual> - Walkthrough
+L<Spark::Form::Manual> - Walk-through
 
 =cut
