@@ -5,7 +5,7 @@ package Spark::Form::Field;
 use Moose;
 use MooseX::AttributeHelpers;
 
-has name  => (
+has name => (
     isa      => 'Str',
     is       => 'ro',
     required => 1,
@@ -34,7 +34,7 @@ has _errors => (
     isa       => 'ArrayRef[Str]',
     is        => 'ro',
     required  => 0,
-    default   => sub{[]},
+    default   => sub { [] },
     provides  => {
         push     => '_add_error',
         elements => 'errors',
@@ -43,7 +43,7 @@ has _errors => (
 );
 
 sub error {
-    my ($self,$error) = @_;
+    my ($self, $error) = @_;
 
     $self->valid(0);
     $self->_add_error($error);
@@ -59,8 +59,9 @@ sub validate {
     my ($self) = @_;
     $self->_clear_errors;
     $self->valid(1);
+
     #Set a default of the empty string, suppresses a warning
-    $self->value($self->value||'');
+    $self->value($self->value || '');
     $self->_validate;
 }
 
