@@ -1,6 +1,6 @@
 severity = 1
 
-exclude = RequireTidyCode RequirePodSections ProhibitPostfixControls RequireRcsKeywords RequireExplicitPackage ProhibitUnlessBlocks ProhibitBuiltinHomonyms RequireCleanNamespace RequireUseStrict RequireUseWarnings Variables::ProhibitPunctuationVars
+exclude = RequireTidyCode RequirePodSections ProhibitPostfixControls RequireRcsKeywords RequireExplicitPackage ProhibitUnlessBlocks ProhibitBuiltinHomonyms RequireCleanNamespace RequireUseStrict RequireUseWarnings Variables::ProhibitPunctuationVars RegularExpressions::RequireDotMatchAnything RegularExpressions::RequireExtendedFormatting RegularExpressions::RequireLineBoundaryMatching RequirePodAtEnd
 
 include = Moose::ProhibitMultipleWiths Moose::ProhibitNewMethod Moose::RequireMakeImmutable CodeLayout::ProhibitTrailingWhitespace
 

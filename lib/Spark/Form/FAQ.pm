@@ -13,7 +13,7 @@ None of the others met my needs. This is CPAN, people reinvent wheels
 properly so you don't have to.
 
 Essentially the only real viable alternative I've come across is HTML::FormFu
-and I wanted a pure-perl solution, no YAML.
+and I wanted a Pure-Perl solution, no YAML.
 
 =head2 Why Spark::Form?
 

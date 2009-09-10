@@ -7,6 +7,7 @@ use MooseX::AttributeHelpers;
 use List::MoreUtils 'all';
 use Data::Couplet ();
 use Carp          ();
+use Scalar::Util qw( blessed );
 
 has _fields => (
     isa      => 'Data::Couplet',
@@ -92,42 +93,50 @@ sub _error {
 
     $self->valid(0);
     $self->_add_error($error);
+
+    return $self;
 }
 
 sub add {
-    my $self = shift;
-    my $item = shift;
+    my ($self, $item, @args) = @_;
 
     #Dispatch to the appropriate handler sub
 
     #1. Regular String. Should have a name and any optional args
-    return do { die unless scalar @_; $self->_add_by_type($item, @_); $self }
-      unless ref $item;
+    unless (ref $item) {
+        Carp::croak('->add expects [Scalar, List where { items > 0 }] or [Ref].') unless (scalar @args);
+        $self->_add_by_type($item, @args);
+        return $self;
+    }
 
     #2. Array - loop. This will spectacularly fall over if you are using string-based creation as there's no way to pass multiple names yet
-    return do { $self->add($_, @_) for @$item; $self }
-      if ref $item eq 'ARRAY';
+    if (ref $item eq 'ARRAY') {
+        $self->add($_, @args) for @{$item};
+        return $self;
+    }
 
     #3. Custom field. Just takes any optional args
-    return do { $self->_add_custom_field($item, @_); $self }
-      if $self->_valid_custom_field($item);
+    if ($self->_valid_custom_field($item)) {
+        $self->_add_custom_field($item, @args);
+        return $self;
+    }
 
     #Unknown thing
-    die("Spark::Form: Don't know what to do with a " . ref $item);
+    Carp::croak(q(Spark::Form: Don\'t know what to do with a ) . ref $item . q(/) . (blessed $item|| q()));
 }
 
 sub get {
     my ($self, $key) = @_;
-    $self->_fields->value($key);
+    return $self->_fields->value($key);
 }
 
 sub get_at {
     my ($self, $index) = @_;
-    $self->_fields->value_at($index);
+    return $self->_fields->value_at($index);
 }
 
 sub fields {
-    shift->_fields->values;
+    return shift->_fields->values;
 }
 
 sub validate {
@@ -142,23 +151,23 @@ sub validate {
             $self->_error($_) foreach $field->errors;
         }
     }
-    $self->valid;
+    return $self->valid;
 }
 
 sub data {
     my ($self, $fields) = @_;
-    while (my ($k, $v) = each %$fields) {
+    while (my ($k, $v) = each %{$fields}) {
         if ($self->_fields->value($k)) {
             $self->_fields->value($k)->value($v);
         }
     }
 
-    $self;
+    return $self;
 }
 
 sub _valid_custom_field {
     my ($self, $thing) = @_;
-    eval {
+    return eval {
         $thing->isa('Spark::Form::Field')
     } or 0;
 }
@@ -168,6 +177,8 @@ sub _add_custom_field {
 
     #And add it.
     $self->_add($item, $item->name, %opts);
+
+    return $self;
 }
 
 sub _add_by_type {
@@ -178,16 +189,19 @@ sub _add_by_type {
 
     #Create and add it
     $self->_add($self->_create_type($type, $name, %opts), $name);
+
+    return $self;
 }
 
 sub _add {
     my ($self, $field, $name) = @_;
 
-    die("Field name $name exists in form.") if $self->_fields->value($name);
+    Carp::croak("Field name $name exists in form.") if $self->_fields->value($name);
 
     #Add it onto the ArrayRef
     $self->_fields->set($name, $field);
-    1;
+
+    return 1;
 }
 
 sub _mangle_modname {
@@ -196,8 +210,8 @@ sub _mangle_modname {
     #Strip one or the other. This is the cleanest way.
     #It also doesn't matter that class may be null
     my @namespaces = (
-        "SparkX::Form::Field",
-        "Spark::Form::Field",
+        'SparkX::Form::Field',
+        'Spark::Form::Field',
     );
 
     push @namespaces, $self->plugin_ns if $self->plugin_ns;
@@ -210,7 +224,7 @@ sub _mangle_modname {
     $mod =~ s/::/-/g;
     $mod = lc $mod;
 
-    $mod;
+    return $mod;
 }
 
 sub _find_matching_mod {
@@ -222,19 +236,21 @@ sub _find_matching_mod {
     }
 
     #Cannot find
-    0;
+    return 0;
 }
 
 sub _create_type {
     my ($self, $type, $name, %opts) = @_;
-    my $mod = $self->_find_matching_mod($type) or die("Could not find field mod: $type");
-    eval qq{ use $mod; 1 } or die("Could not load $mod, $@");
-    $mod->new(name => $name, form => $self, %opts);
+    my $mod = $self->_find_matching_mod($type) or Carp::croak("Could not find field mod: $type");
+    eval qq{ use $mod; 1 } or Carp::croak("Could not load $mod, $@");
+    return $mod->new(name => $name, form => $self, %opts);
+
 }
 
 __PACKAGE__->meta->make_immutable;
 
 1;
+
 __END__
 
 =head1 SYNOPSIS
