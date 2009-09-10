@@ -5,14 +5,15 @@ package Spark::Form;
 use Moose;
 use MooseX::AttributeHelpers;
 use List::MoreUtils 'all';
-use Data::Couplet;
+use Data::Couplet ();
+use Carp          ();
 
 has _fields => (
-    isa       => 'Data::Couplet',
-    is        => 'ro',
-    required  => 0,
-    default   => sub { Data::Couplet->new },
-  );
+    isa      => 'Data::Couplet',
+    is       => 'ro',
+    required => 0,
+    default  => sub { Data::Couplet->new },
+);
 
 has plugin_ns => (
     isa      => 'Str',
@@ -58,25 +59,32 @@ sub BUILD {
         unshift @search_path, ($self->plugin_ns);
     }
 
-    eval q{
-        use Module::Pluggable (
+    require Module::Pluggable;
+    eval {
+        Module::Pluggable->import(
             search_path => \@search_path,
             sub_name    => 'field_mods',
             required    => 1,
         );
-        1
-    } or die("Spark::Form: Could not instantiate Module::Pluggable, $@");
+    } or Carp::croak("Spark::Form: Could not instantiate Module::Pluggable, $@");
 
     if (defined $self->_printer) {
+
+        my $printer = $self->_printer;
+
         eval {
 
-            #Load the module, else short circuit. There were strange antics with qq{} and this is tidier than the alternative
-            eval sprintf("require %s; 1", $self->_printer) or die();
+            #Load the module, else short circuit.
+            #There were strange antics with qq{} and this is tidier than the alternative
+            eval "require $printer; 1" or Carp::croak("Require of $printer failed, $@");
 
             #Apply the role (failure will short circuit). Return 1 so the 'or' won't trigger
-            $self->_printer->meta->apply($self); 1
-        } or die("Could not apply printer " . $self->_printer . " $@");
+            $self->_printer->meta->apply($self);
+
+            1
+        } or Carp::croak("Could not apply printer $printer, $@");
     }
+    return;
 }
 
 sub _error {
@@ -138,8 +146,8 @@ sub validate {
 }
 
 sub data {
-    my ($self,$fields) = @_;
-    while (my ($k,$v) = each %$fields) {
+    my ($self, $fields) = @_;
+    while (my ($k, $v) = each %$fields) {
         if ($self->_fields->value($k)) {
             $self->_fields->value($k)->value($v);
         }
@@ -177,7 +185,7 @@ sub _add {
 
     die("Field name $name exists in form.") if $self->_fields->value($name);
 
-    #Add it onto the arrayref
+    #Add it onto the ArrayRef
     $self->_fields->set($name, $field);
     1;
 }
@@ -224,6 +232,8 @@ sub _create_type {
     $mod->new(name => $name, form => $self, %opts);
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 __END__
 
@@ -241,7 +251,7 @@ __END__
       ->add('username','username')
       # And this shows how you can use a third party field of any class name
       ->add(Third::Party::Field->new(name => 'blah'));
- #Pass in a hashref of params to populate the virtual form with data
+ #Pass in a HashRef of params to populate the virtual form with data
  $form->data(CGI->new->params);
  #And do the actual validation
  if ($form->validate) {
@@ -305,7 +315,7 @@ If unspecified, you will need to call $form->data(\%data);
 
 If $thing is a string, attempts to instantiate a plugin of that type and add it
 to the form. Requires the second argument to be a string name for the field to identify it in the form. Rest will become %kwargs
-If it is an arrayref, it loops over the contents (Useful for custom fields, will probably result in bugs for string field names).@rest will be passed in each iteration.
+If it is an ArrayRef, it loops over the contents (Useful for custom fields, will probably result in bugs for string field names).@rest will be passed in each iteration.
 If it looks sufficiently like a field (implements Spark::Form::Field),
 then it will add it to the list of fields. @rest will just become %kwargs
 
@@ -319,7 +329,7 @@ Validates the form. Sets C<valid> and then also returns the value.
 
 =head2 data
 
-Allows you to pass in a hashref of data to populate the fields with before validation. Useful if you don't use a plugin to automatically populate the data.
+Allows you to pass in a HashRef of data to populate the fields with before validation. Useful if you don't use a plugin to automatically populate the data.
 
 This is a B<streaming interface>, it returns the form itself.
 
