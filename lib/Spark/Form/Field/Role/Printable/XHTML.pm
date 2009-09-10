@@ -3,7 +3,7 @@ package Spark::Form::Field::Role::Printable::XHTML;
 # ABSTRACT: a XHTML1-printable form field role
 
 use Moose::Role;
-with "Spark::Form::Field::Role::Printable";
+with 'Spark::Form::Field::Role::Printable';
 
 requires 'to_xhtml';
 

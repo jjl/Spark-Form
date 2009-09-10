@@ -45,7 +45,7 @@ Makes sure that C<value> matches the expression.
 
 =head1 ACCESSORS
 
-=head2 regex => Str
+=head2 C<regex> => Str
 
 RegexRef to match.
 Required, no default.
