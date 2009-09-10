@@ -1,6 +1,6 @@
 package Spark::Form::Field::Role::Printable::HTML;
 
-# ABSTRACT: a html4-printable form field role
+# ABSTRACT: a HTML4-printable form field role
 
 use Moose::Role;
 with "Spark::Form::Field::Role::Printable";
@@ -28,7 +28,7 @@ __END__
 
 =head2 to_html :: Undef => Str
 
-This function should return a html string representing your control
+This function should return a HTML string representing your control
 
 =head1 SEE ALSO
 

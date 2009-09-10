@@ -18,10 +18,10 @@ has errmsg_too_short => (
     lazy     => 1,
     default  => sub {
         my $self = shift;
-        $self->human_name .
-          " must be at least " .
+        return $self->human_name .
+          ' must be at least ' .
           $self->min_length .
-          " characters long";
+          ' characters long';
     },
 );
 
@@ -33,16 +33,17 @@ sub _min_length {
     if (length $self->value < $self->min_length) {
         $self->error($self->errmsg_too_short);
     }
+    return $self;
 }
 
-after '_validate' => sub { shift->_min_length };
+after '_validate' => sub { return shift->_min_length };
 
 1;
 __END__
 
 =head1 DESCRIPTION
 
-A minimum length enforcement mixin. Adds two fields plus action.
+A minimum length enforcement mix-in. Adds two fields plus action.
 Makes sure that C<value> is at least C<min_length> characters long.
 
 =head1 ACCESSORS
