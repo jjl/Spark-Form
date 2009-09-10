@@ -15,19 +15,19 @@ has '+value' => (
 );
 
 sub to_html {
-    shift->_render(HTML::Tiny->new(mode => 'html'));
+    return shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render(HTML::Tiny->new(mode => 'xml'));
+    return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _render {
     my ($self, $html) = @_;
 
-    $html->textarea({name => $self->name}, $self->value);
+    return $html->textarea({name => $self->name}, $self->value);
 }
-
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 

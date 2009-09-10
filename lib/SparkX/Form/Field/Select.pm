@@ -18,20 +18,20 @@ has options => (
     is       => 'rw',
     required => 0,
     lazy     => 1,
-    default  => sub { shift->value },
+    default  => sub { return shift->value },
 );
 
 sub to_html {
-    shift->_render(HTML::Tiny->new(mode => 'html'));
+    return shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render(HTML::Tiny->new(mode => 'xml'));
+    return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _render {
     my ($self, $html) = @_;
-    $html->select({name => $self->name},
+    return $html->select({name => $self->name},
         join(' ', map {
                 $html->option({
                         value => $_,
@@ -40,7 +40,7 @@ sub _render {
               } @{$self->options}),
     );
 }
-
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 

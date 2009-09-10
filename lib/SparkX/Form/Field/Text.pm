@@ -14,18 +14,20 @@ has '+value' => (
 );
 
 sub to_html {
-    shift->_render(HTML::Tiny->new(mode => 'html'));
+    return shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render(HTML::Tiny->new(mode => 'xml'));
+    return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _render {
     my ($self, $html) = @_;
 
-    $html->input({type => 'text', value => $self->value, name => $self->name});
+    return $html->input({type => 'text', value => $self->value, name => $self->name});
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 __END__

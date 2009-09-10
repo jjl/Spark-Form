@@ -19,26 +19,26 @@ has options => (
     is       => 'rw',
     required => 0,
     lazy     => 1,
-    default  => sub { shift->value },
+    default  => sub { return shift->value },
 );
 
 sub to_html {
-    shift->_render(HTML::Tiny->new(mode => 'html'));
+    return shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render(HTML::Tiny->new(mode => 'xml'));
+    return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _is_selected {
     my ($self, $value) = @_;
 
-    first { $value eq $_ } @{$self->value};
+    return first { $value eq $_ } @{$self->value};
 }
 
 sub _render {
     my ($self, $html) = @_;
-    $html->select({name => $self->name, multiple => 'multiple'},
+    return $html->select({name => $self->name, multiple => 'multiple'},
         join(' ',
             map {
                 my $__ = $_;
@@ -50,7 +50,7 @@ sub _render {
           )
     );
 }
-
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 
