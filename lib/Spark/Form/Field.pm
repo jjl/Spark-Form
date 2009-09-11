@@ -15,6 +15,7 @@ has form => (
     isa      => 'Spark::Form',
     is       => 'rw',
     required => 1,
+    weak_ref => 1, #De-circular-ref
 );
 
 has value => (
