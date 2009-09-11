@@ -1,2 +1,22 @@
-3. ::Reset ought not to have a value
-4. Debatable whether ::{File,Image} ought to have a value (not echoed, not validated but read)
+AIMS
+
+To be simply the best forms handling module on CPAN. To cope with the oddest situations
+
+COMING SOON
+
+1. Cloning of forms
+2. Composition of forms (adding fields from one form to another)
+3. Splitting of forms (Partial cloning of forms)
+
+IDEAS
+
+We need ideas for the following:
+
+1. TT integration.
+2. Autogeneration from DBIx::Class , particularly in how to cleanly apply constraints on top of generated forms.
+3. Inter-field validation
+4. Conditional validation
+
+Minors:
+1. ::Reset ought not to have a value
+2. Debatable whether ::{File,Image} ought to have a value (not echoed, not validated but read)
