@@ -9,11 +9,14 @@ use Data::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
 
+with qw(MooseX::Clone);
+
 has _fields => (
     isa      => 'Data::Couplet',
     is       => 'ro',
     required => 0,
     default  => sub { Data::Couplet->new },
+    traits   => [qw(Clone)],
 );
 
 has plugin_ns => (
