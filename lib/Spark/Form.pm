@@ -140,8 +140,14 @@ sub get_at {
     return $self->_fields->value_at($index);
 }
 
+sub keys {
+    my ($self) = @_;
+    return $self->_fields->keys();
+}
+
 sub fields {
-    return shift->_fields->values;
+    my ($self) = @_;
+    return $self->_fields->values;
 }
 
 sub validate {
