@@ -1,9 +1,9 @@
 package Spark::Form::Field::Role::Printable::XHTML;
 
-# ABSTRACT: a xhtml1-printable form field role
+# ABSTRACT: a XHTML1-printable form field role
 
 use Moose::Role;
-with "Spark::Form::Field::Role::Printable";
+with 'Spark::Form::Field::Role::Printable';
 
 requires 'to_xhtml';
 
@@ -28,7 +28,7 @@ __END__
 
 =head2 to_xhtml :: Undef => Str
 
-This function should return a html string representing your control
+This function should return a XHTML string representing your control
 
 =head1 SEE ALSO
 

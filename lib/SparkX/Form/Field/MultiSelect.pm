@@ -1,6 +1,6 @@
 package SparkX::Form::Field::MultiSelect;
 
-# ABSTRACT: A multiple select dropdown field for SparkX::Form
+# ABSTRACT: A multiple select drop-down field for SparkX::Form
 
 use Moose;
 use HTML::Tiny;
@@ -19,38 +19,40 @@ has options => (
     is       => 'rw',
     required => 0,
     lazy     => 1,
-    default  => sub { shift->value },
+    default  => sub { return shift->value },
 );
 
 sub to_html {
-    shift->_render(HTML::Tiny->new(mode => 'html'));
+    return shift->_render(HTML::Tiny->new(mode => 'html'));
 }
 
 sub to_xhtml {
-    shift->_render(HTML::Tiny->new(mode => 'xml'));
+    return shift->_render(HTML::Tiny->new(mode => 'xml'));
 }
 
 sub _is_selected {
     my ($self, $value) = @_;
 
-    first { $value eq $_ } @{$self->value};
+    return first { $value eq $_ } @{$self->value};
+}
+
+sub _render_option {
+    my ($self, $html, $option) = @_;
+    return $html->option({
+            value => $option,
+            ($self->_is_selected($option) ? (selected => 'selected') : ()),
+    });
 }
 
 sub _render {
     my ($self, $html) = @_;
-    $html->select({name => $self->name, multiple => 'multiple'},
-        join(' ',
-            map {
-                my $__ = $_;
-                $html->option({
-                        value => $_,
-                        ($self->_is_selected($_) ? (selected => 'selected') : ()),
-                    })
-              } @{$self->options}
-          )
+    my @options = map { $self->_render_option($html, $_) } @{$self->options};
+
+    return $html->select(
+        {name => $self->name, multiple => 'multiple'}, join q{ }, @options
     );
 }
-
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 
@@ -58,11 +60,11 @@ __END__
 
 =head2 to_html() => Str
 
-Renders the field to html
+Renders the field to HTML
 
 =head2 to_xhtml() => Str
 
-Renders the field to xhtml
+Renders the field to XHTML
 
 =head2 validate() => Bool
 

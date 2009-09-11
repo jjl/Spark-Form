@@ -10,8 +10,8 @@ has errmsg_empty => (
     required => 0,
     default  => sub {
         my $self = shift;
-        $self->human_name .
-          " must be provided."
+        return $self->human_name .
+          ' must be provided.'
     },
 );
 
@@ -21,16 +21,17 @@ sub _not_empty {
     unless ($self->value) {
         $self->error($self->errmsg_empty);
     }
+    return $self;
 }
 
-after '_validate' => sub { shift->_not_empty };
+after '_validate' => sub { return shift->_not_empty };
 
 1;
 __END__
 
 =head1 DESCRIPTION
 
-A not empty enforcement mixin. Adds one field plus action.
+A not empty enforcement mix-in. Adds one field plus action.
 Makes sure that C<value> is not empty.
 
 =head1 ACCESSORS
