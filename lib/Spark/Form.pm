@@ -97,6 +97,11 @@ sub _error {
     return $self;
 }
 
+sub data {
+    my ($self) = @_;
+    return $self->_fields;
+}
+
 sub add {
     my ($self, $item, @args) = @_;
 
