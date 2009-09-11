@@ -4,9 +4,8 @@ To be simply the best forms handling module on CPAN. To cope with the oddest sit
 
 COMING SOON
 
-1. Cloning of forms
-2. Composition of forms (adding fields from one form to another)
-3. Splitting of forms (Partial cloning of forms)
+1. Composition of forms (adding fields from one form to another)
+2. Splitting of forms (Partial cloning of forms)
 
 IDEAS
 
