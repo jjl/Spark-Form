@@ -100,7 +100,7 @@ sub _error {
     return $self;
 }
 
-sub data {
+sub field_couplet {
     my ($self) = @_;
     return $self->_fields;
 }
