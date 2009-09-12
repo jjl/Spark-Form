@@ -488,6 +488,34 @@ WARNING: Things will get re-ordered when you do this. If you have a form with
 IDs 0..3 and you remove (1, 3), then (0, 2) will remain but they will now be
 (0, 1) as L<Data::Couplet> will move them to keep a consistent array.
 
+=head2 clone_all () :: Spark::Form
+
+Returns a new copy of the form with freshly instantiated fields.
+
+=head2 clone_except_names (Array[Str]) :: Spark::Form
+
+Clones, removing the fields with the specified names.
+
+=head2 clone_only_names (Array[Str]) :: Spark::Form
+
+Clones, removing the fields without the specified names.
+
+=head2 clone_except_ids (Array[Int]) :: Spark::Form
+
+Clones, removing the fields with the specified IDs.
+
+=head2 clone_only_ids (Array[Int]) :: Spark::Form
+
+Clones, removing the fields without the specified IDs.
+
+=head2 clone_if (SubRef[(Int, Str, Any) -> Bool]) :: Spark::Form
+
+Clones, removing items for which the sub returns false. Sub is passed (Id, Key, Value).
+
+=head2 clone_unless (SubRef[(Int, Str, Any) -> Bool]) :: Spark::Form
+
+Clones, removing items for which the sub returns true. Sub is passed (Id, Key, Value).
+
 =head1 Docs?
 
 L<http://sparkengine.org/docs/forms/>
