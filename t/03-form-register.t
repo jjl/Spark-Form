@@ -1,6 +1,6 @@
 # Something looking a bit more real-world
 use Test::More;
-plan tests => 11;
+plan tests => 15;
 
 use Spark::Form;
 use Data::Dumper 'Dumper';
@@ -64,3 +64,10 @@ $form->validate;
 is(scalar $form->errors, 0, 'No error');
 
 is($form->valid, 1, "Form is valid");
+
+#Remove a field
+$form->remove('email');
+cmp_ok(scalar $form->fields,'==',2,"Removed a field");
+is_deeply([sort $form->keys],['confirm_password','password'],"Correct field removed");
+is($form->get_at(0),$pass1,"Keys were renumbered appropriately 1");
+is($form->get_at(1),$pass2,"Keys were renumbered appropriately 2");
