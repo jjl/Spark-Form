@@ -1,5 +1,5 @@
 use Test::More;
-plan tests => 7;
+plan tests => 9;
 
 use Spark::Form;
 
@@ -37,18 +37,22 @@ my $form2 = $form->clone_except_names('email');
 is_deeply([sort $form2->keys],[qw(confirm_password email2 password)],"Email field removed in clone");
 
 my $form3 = $form->clone_only_names(qw(email email2));
-is_deeply([sort $form3->keys],[qw(email email2)],"Two password fields removed in clone");
+is_deeply([sort $form3->keys],[qw(email email2)],"Two password fields removed in clone") || diag explain [[ $form3->keys], [$form->keys] ];
+
 
 my $form4 = $form->clone_except_ids(1,2);
 is_deeply([sort $form4->keys],[qw(email email2)],"Two email fields remain alone in clone");
 
 my $form5 = $form->clone_only_ids(1,2);
-is_deeply([sort $form5->keys],[qw(confirm_password password)],"Two password fields remain alone in clone");
+is_deeply([sort $form5->keys],[qw(confirm_password password)],"Two password fields remain alone in clone") || diag explain [[ $form5->keys ], [$form->keys ]];
 
 my $form6 = $form->clone_if(sub {
     $_[1] !~ /_/
 });
-is_deeply([sort $form6->keys],[qw(password email email2)],"Two password fields remain alone in clone");
+is_deeply([sort $form6->keys],[qw(email email2 password)],"Two password fields remain alone in clone") ||
+  diag explain [[ $form6->keys ], [ $form->keys] ];
+
+
 
 my $form7 = $form->clone_unless(sub {
     $_[1] =~ /2$/

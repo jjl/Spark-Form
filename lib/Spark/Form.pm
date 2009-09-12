@@ -291,21 +291,25 @@ sub clone_except_names {
     return $new;
 }
 
+#
+# ->_except( \@superset , \@things_to_get_rid_of )
+#
+
 sub _except {
     my ($self, $input_list, $exclusion_list) = @_;
     my %d;
-    @d{@{$input_list}} = ();
+    @d{@{$exclusion_list}} = ();
 
     return grep {
-        !defined $d{$_}
-    } @{$exclusion_list};
+        !exists $d{$_}
+    } @{$input_list};
 }
 
 sub clone_only_names {
     my ($self, @fields) = @_;
     my @all = $self->keys;
-
-    return $self->clone_except_names($self->_except(\@all, \@fields));
+    my @excepted = $self->_except(\@all, \@fields);
+    return $self->clone_except_names(@excepted);
 }
 
 sub clone_except_ids {
@@ -325,27 +329,38 @@ sub clone_only_ids {
 
 sub clone_if {
     my ($self, $sub) = @_;
-    my @all = $self->_fields->key_values_paired;
-    my $i   = 0 - 1;
+    my (@all) = ($self->_fields->key_values_paired);
+    my $i = 0 - 1;
 
-    @all = grep { $i++; !$sub->($i, @{$_}) } @all;
+    # Filter out items that match
+    # coderef->( $current_index, $key, $value );
+    @all = grep {
+        $i++;
+        !$sub->($i, @{$_});
+    } @all;
 
-    return $self->clone_except_ids(map { $_->[0] } @all);
+    return $self->clone_except_names(map { $_->[0] } @all);
 }
 
 sub clone_unless {
     my ($self, $sub) = @_;
-    my @all = $self->_fields->key_values_paired;
-    my $i   = 0 - 1;
+    my (@all) = $self->_fields->key_values_paired;
+    my $i = 0 - 1;
 
-    @all = grep { $i++; !$sub->($i, @{$_}) } @all;
+    # Filter out items that match
+    # coderef->( $current_index, $key, $value );
 
-    return $self->clone_except_ids(map { $_->[0] } @all);
+    @all = grep {
+        $i++;
+        $sub->($i, @{$_});
+    } @all;
+
+    return $self->clone_except_names(map { $_->[0] } @all);
 }
 
 sub compose {
     my ($self, $other) = @_;
-    my $new = $self->clone_all;
+    my $new       = $self->clone_all;
     my $other_new = $other->clone_all;
     foreach my $key ($other_new->keys) {
         unless ($new->get($key)) {
