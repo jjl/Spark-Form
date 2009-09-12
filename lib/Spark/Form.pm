@@ -353,6 +353,16 @@ sub clone_unless {
     );
 }
 
+sub compose {
+    my ($self, $other) = @_;
+    my $new = $self->clone_all;
+    foreach my $key ($other->keys) {
+        unless ( $new->get($key) ) {
+            $new->add( $other->get($key) );
+        }
+    }
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
@@ -515,6 +525,11 @@ Clones, removing items for which the sub returns false. Sub is passed (Id, Key, 
 =head2 clone_unless (SubRef[(Int, Str, Any) -> Bool]) :: Spark::Form
 
 Clones, removing items for which the sub returns true. Sub is passed (Id, Key, Value).
+
+=head2 compose (Spark::Form) :: Spark::Form
+
+Clones the current form object and copies fields from the supplied other form to the end of that form.
+Where names clash, items on the current form take priority.
 
 =head1 Docs?
 
