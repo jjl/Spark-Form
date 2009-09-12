@@ -4,6 +4,9 @@ package Spark::Form::Field;
 
 use Moose;
 use MooseX::AttributeHelpers;
+use MooseX::LazyRequire;
+
+with qw(MooseX::Clone);
 
 has name => (
     isa      => 'Str',
@@ -14,8 +17,9 @@ has name => (
 has form => (
     isa      => 'Spark::Form',
     is       => 'rw',
-    required => 1,
+    lazy_required => 1,
     weak_ref => 1, #De-circular-ref
+    traits => [qw(NoClone)], #Argh, what will it be set to?
 );
 
 has value => (
