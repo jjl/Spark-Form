@@ -292,13 +292,13 @@ sub clone_except_names {
 }
 
 sub _except {
-    my ($self, $left, $right) = @_;
+    my ($self, $input_list, $exclusion_list) = @_;
     my %d;
-    @d{@{$left}} = ();
+    @d{@{$input_list}} = ();
 
     return grep {
         !defined $d{$_}
-    } @{$right};
+    } @{$exclusion_list};
 }
 
 sub clone_only_names {
@@ -472,6 +472,10 @@ Returns the form field of that name
 =head2 get_at (Int)
 
 Returns the form field at that index (counting from 0)
+
+=head2 keys () :: Array
+
+Returns the field names
 
 =head2 field_couplet () :: Data::Couplet
 
