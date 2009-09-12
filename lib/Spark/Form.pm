@@ -155,14 +155,14 @@ sub fields {
 
 sub remove {
     my ($self, @keys) = @_;
-    $self->_fields->unset_key(@keys);
+    $self->_fields->unset_key( @keys );
     
     $self;
 }
 
 sub remove_at {
-    my ($self, $indices) = @_;
-    $self->_fields->unset_at(@indices)
+    my ($self, @indices) = @_;
+    $self->_fields->unset_at( @indices );
     
     $self;
 }
@@ -294,11 +294,11 @@ sub clone_except_names {
 sub _except {
     my ($self,$left,$right) = @_;
     my %d;
-    @d{@left} = ();
+    @d{@$left} = ();
     
     grep {
         !defined $d{$_}
-    } keys @right;
+    } @$right;
 }
 
 sub clone_only_names {
@@ -331,10 +331,10 @@ sub clone_if {
     $self->clone_except_ids (
         map {
             $_->[0]
-        } $self->grep {
+        } grep {
             $i++;
             ! $sub->( $i, @{$_} )
-        } @all;
+        } @all
     );
 }
 
@@ -346,10 +346,10 @@ sub clone_unless {
     $self->clone_except_ids (
         map {
             $_->[0]
-        } $self->grep {
+        } grep {
             $i++;
             ! $sub->( $i, @{$_} )
-        } @all;
+        } @all
     );
 }
 
