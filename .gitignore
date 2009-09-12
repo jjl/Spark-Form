@@ -1,6 +1,7 @@
 *~
 blib
 _build
+.build
 *.gz
 META.yml
 Build
