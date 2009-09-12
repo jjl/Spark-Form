@@ -324,6 +324,16 @@ sub compose {
     return $new;
 }
 
+sub compose {
+    my ($self, $other) = @_;
+    my $new = $self->clone_all;
+    foreach my $key ($other->keys) {
+        unless ( $new->get($key) ) {
+            $new->add( $other->get($key) );
+        }
+    }
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
