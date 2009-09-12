@@ -4,8 +4,10 @@ To be simply the best forms handling module on CPAN. To cope with the oddest sit
 
 COMING SOON
 
-1. Composition of forms (adding fields from one form to another)
-2. Splitting of forms (Partial cloning of forms)
+1. Tests. Tons of new functionality has been added, especially as regards cloning. We need more tests in the following areas:
+  - Cloning (including logic for partial cloning)
+  - Composition
+  - Removing items
 
 IDEAS
 
