@@ -346,9 +346,10 @@ sub clone_unless {
 sub compose {
     my ($self, $other) = @_;
     my $new = $self->clone_all;
-    foreach my $key ($other->keys) {
+    my $other_new = $other->clone_all;
+    foreach my $key ($other_new->keys) {
         unless ($new->get($key)) {
-            $new->add($other->get($key));
+            $new->add($other_new->get($key));
         }
     }
     return $new;
