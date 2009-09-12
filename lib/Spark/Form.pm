@@ -155,12 +155,16 @@ sub fields {
 
 sub remove {
     my ($self, $key) = @_;
-    return $self->_fields->unset_key($key);
+    $self->_fields->unset_key($key);
+    
+    $self;
 }
 
 sub remove_at {
     my ($self, $index) = @_;
-    return $self->_fields->unset_at($index)
+    $self->_fields->unset_at($index)
+    
+    $self;
 }
 
 sub validate {
