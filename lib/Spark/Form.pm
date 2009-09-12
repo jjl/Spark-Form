@@ -154,15 +154,15 @@ sub fields {
 }
 
 sub remove {
-    my ($self, $key) = @_;
-    $self->_fields->unset_key($key);
+    my ($self, @keys) = @_;
+    $self->_fields->unset_key(@keys);
     
     $self;
 }
 
 sub remove_at {
-    my ($self, $index) = @_;
-    $self->_fields->unset_at($index)
+    my ($self, $indices) = @_;
+    $self->_fields->unset_at(@indices)
     
     $self;
 }
@@ -393,6 +393,18 @@ Returns the form field of that name
 =head2 get_at (Int)
 
 Returns the form field at that index (counting from 0)
+
+=head2 field_couplet () :: Data::Couplet
+
+Returns the Data::Couplet used to store the fields. Try not to use this too much.
+
+=head2 remove (Array[Str]) :: Spark::Form
+
+Removes the field(s) bearing the given name(s) from the form object. Silently no-ops any that do not exist.
+
+=head2 remove_at (Array[Int]) :: Spark::Form
+
+Removes the field at the given ID(s) from the form object. Silently no-ops any that do not exist.
 
 =head1 Docs?
 
