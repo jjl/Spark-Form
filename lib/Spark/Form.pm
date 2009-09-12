@@ -406,6 +406,10 @@ Removes the field(s) bearing the given name(s) from the form object. Silently no
 
 Removes the field at the given ID(s) from the form object. Silently no-ops any that do not exist.
 
+WARNING: Things will get re-ordered when you do this. If you have a form with
+IDs 0..3 and you remove (1, 3), then (0, 2) will remain but they will now be
+(0, 1) as L<Data::Couplet> will move them to keep a consistent array.
+
 =head1 Docs?
 
 L<http://sparkengine.org/docs/forms/>
@@ -421,5 +425,6 @@ Thanks to the Django Project, whose forms module gave some inspiration.
 =head1 SEE ALSO
 
 The FAQ: L<Spark::Form::FAQ>
+L<Data::Couplet> used to hold the fields (see C<field_couplet>)
 
 =cut
