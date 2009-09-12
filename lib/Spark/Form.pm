@@ -271,8 +271,86 @@ sub _create_type {
     my ($self, $type, $name, %opts) = @_;
     my $mod = $self->_find_matching_mod($type) or Carp::croak("Could not find field mod: $type");
     eval qq{ use $mod; 1 } or Carp::croak("Could not load $mod, $@");
-    return $mod->new(name => $name, form => $self, %opts);
 
+    return $mod->new(name => $name, form => $self, %opts);
+}
+
+sub clone_all {
+    my ( $self )= @_;
+    my $new = $self->clone;
+    $_->form( $self ) foreach $new->fields;
+    
+    return $new;
+}
+
+sub clone_except_names {
+    my ($self,@fields) = @_;
+    my $new = $self->clone_all;
+    $new->remove($_) foreach @fields;
+    
+    return $new;
+}
+
+sub _except {
+    my ($self,$left,$right) = @_;
+    my %d;
+    @d{@left} = ();
+    
+    grep {
+        !defined $d{$_}
+    } keys @right;
+}
+
+sub clone_only_names {
+    my ($self,@fields) = @_;
+    my @all = $self->keys;
+
+    $self->clone_except_names( $self->_except( \@all, \@fields ) );
+}
+
+sub clone_except_ids {
+    my ($self,@ids) = @_;
+    my $new = $self->clone_all;
+    $new->remove_at( @ids );
+    
+    return $new;
+}
+
+sub clone_only_ids {
+    my ($self,@ids) = @_;
+    my @all = 0...$self->_fields->count;
+    
+    $self->clone_except_ids( $self->_except( \@all, \@ids ) );
+}
+
+sub clone_if {
+    my ($self,$sub) = @_;
+    my @all = $self->_fields->key_values_paired;
+    my $i = -1;
+    
+    $self->clone_except_ids (
+        map {
+            $_->[0]
+        } $self->grep {
+            $i++;
+            ! $sub->( $i, @{$_} )
+        } @all;
+    );
+}
+
+sub clone_unless {
+    my ($self,$sub) = @_;
+    my @all = $self->_fields->key_values_paired;
+    my $i = -1;
+    
+    $self->clone_except_ids (
+        map {
+            $_->[0]
+        } $self->grep {
+            $i++;
+            ! $sub->( $i, @{$_} )
+        } @all;
+    );
 }
 
 __PACKAGE__->meta->make_immutable;
