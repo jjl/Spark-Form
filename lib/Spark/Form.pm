@@ -155,16 +155,16 @@ sub fields {
 
 sub remove {
     my ($self, @keys) = @_;
-    $self->_fields->unset_key( @keys );
-    
-    $self;
+    $self->_fields->unset_key(@keys);
+
+    return $self;
 }
 
 sub remove_at {
     my ($self, @indices) = @_;
-    $self->_fields->unset_at( @indices );
-    
-    $self;
+    $self->_fields->unset_at(@indices);
+
+    return $self;
 }
 
 sub validate {
@@ -276,91 +276,82 @@ sub _create_type {
 }
 
 sub clone_all {
-    my ( $self )= @_;
+    my ($self) = @_;
     my $new = $self->clone;
-    $_->form( $self ) foreach $new->fields;
-    
+    $_->form($self) foreach $new->fields;
+
     return $new;
 }
 
 sub clone_except_names {
-    my ($self,@fields) = @_;
+    my ($self, @fields) = @_;
     my $new = $self->clone_all;
     $new->remove($_) foreach @fields;
-    
+
     return $new;
 }
 
 sub _except {
-    my ($self,$left,$right) = @_;
+    my ($self, $input_list, $exclusion_list) = @_;
     my %d;
-    @d{@$left} = ();
-    
-    grep {
+    @d{@{$input_list}} = ();
+
+    return grep {
         !defined $d{$_}
-    } @$right;
+    } @{$exclusion_list};
 }
 
 sub clone_only_names {
-    my ($self,@fields) = @_;
+    my ($self, @fields) = @_;
     my @all = $self->keys;
 
-    $self->clone_except_names( $self->_except( \@all, \@fields ) );
+    return $self->clone_except_names($self->_except(\@all, \@fields));
 }
 
 sub clone_except_ids {
-    my ($self,@ids) = @_;
+    my ($self, @ids) = @_;
     my $new = $self->clone_all;
-    $new->remove_at( @ids );
-    
+    $new->remove_at(@ids);
+
     return $new;
 }
 
 sub clone_only_ids {
-    my ($self,@ids) = @_;
-    my @all = 0...$self->_fields->count;
-    
-    $self->clone_except_ids( $self->_except( \@all, \@ids ) );
+    my ($self, @ids) = @_;
+    my @all = 0 ... $self->_fields->count;
+
+    return $self->clone_except_ids($self->_except(\@all, \@ids));
 }
 
 sub clone_if {
-    my ($self,$sub) = @_;
+    my ($self, $sub) = @_;
     my @all = $self->_fields->key_values_paired;
-    my $i = -1;
-    
-    $self->clone_except_ids (
-        map {
-            $_->[0]
-        } grep {
-            $i++;
-            ! $sub->( $i, @{$_} )
-        } @all
-    );
+    my $i   = 0 - 1;
+
+    @all = grep { $i++; !$sub->($i, @{$_}) } @all;
+
+    return $self->clone_except_ids(map { $_->[0] } @all);
 }
 
 sub clone_unless {
-    my ($self,$sub) = @_;
+    my ($self, $sub) = @_;
     my @all = $self->_fields->key_values_paired;
-    my $i = -1;
-    
-    $self->clone_except_ids (
-        map {
-            $_->[0]
-        } grep {
-            $i++;
-            ! $sub->( $i, @{$_} )
-        } @all
-    );
+    my $i   = 0 - 1;
+
+    @all = grep { $i++; !$sub->($i, @{$_}) } @all;
+
+    return $self->clone_except_ids(map { $_->[0] } @all);
 }
 
 sub compose {
     my ($self, $other) = @_;
     my $new = $self->clone_all;
     foreach my $key ($other->keys) {
-        unless ( $new->get($key) ) {
-            $new->add( $other->get($key) );
+        unless ($new->get($key)) {
+            $new->add($other->get($key));
         }
     }
+    return $new;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -481,6 +472,10 @@ Returns the form field of that name
 =head2 get_at (Int)
 
 Returns the form field at that index (counting from 0)
+
+=head2 keys () :: Array
+
+Returns the field names
 
 =head2 field_couplet () :: Data::Couplet
 
