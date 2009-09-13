@@ -163,7 +163,14 @@ Adds an error to the current field's list.
 
 =head1 SEE ALSO
 
-L<Spark::Form::Field::Role::Printable> - Fields that can be printed
-L<SparkX::Form::BasicValidators> - Set of validators to use creating fields
-L<SparkX::Form::BasicFields> - Ready to use fields
+=over 4
+
+=item L<Spark::Form::Field::Role::Printable> - Fields that can be printed
+
+=item L<SparkX::Form::BasicValidators> - Set of validators to use creating fields
+
+=item L<SparkX::Form::BasicFields> - Ready to use fields
+
+=back
+
 =cut

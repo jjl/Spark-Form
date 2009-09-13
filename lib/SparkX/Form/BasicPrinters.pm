@@ -7,8 +7,14 @@ __END__
 
 =head1 SEE ALSO
 
-L<SparkX::Form> - The forms module that started it all
-L<SparkX::Form::Printer> - The interface that printers must fulfil
-L<SparkX::Form::Printer::List> - A printer that prints a HTML list
+=over 4
+
+=item L<SparkX::Form> - The forms module that started it all
+
+=item L<SparkX::Form::Printer> - The interface that printers must fulfil
+
+=item L<SparkX::Form::Printer::List> - A printer that prints a HTML list
+
+=back
 
 =cut

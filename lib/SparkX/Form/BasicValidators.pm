@@ -10,7 +10,12 @@ __END__
 
 =head1 SEE ALSO
 
-L<Spark::Form> - The forms module that started it all
-L<Spark::Form::Manual> - Walk-through
+=over 4
+
+=item L<Spark::Form> - The forms module that started it all
+
+=item L<Spark::Form::Manual> - Walk-through
+
+=back
 
 =cut

@@ -13,13 +13,23 @@ This file is just explanatory. SEE ALSO for more interesting files.
 
 =head1 SEE ALSO
 
-L<Spark::Form> - The forms handling system itself
-L<SparkX::BasicValidators> - If you want to have validation of these fields
-L<SparkX::Form::Field::Text> - A text field
-L<SparkX::Form::Field::Checkbox> - A checkbox field
-L<SparkX::Form::Field::Radio> - A radio button set
-L<SparkX::Form::Field::Select> - A select button set
-L<SparkX::Form::Field::TextArea> - A textarea field
+=over 4
+
+=item L<Spark::Form> - The forms handling system itself
+
+=item L<SparkX::BasicValidators> - If you want to have validation of these fields
+
+=item L<SparkX::Form::Field::Text> - A text field
+
+=item L<SparkX::Form::Field::Checkbox> - A checkbox field
+
+=item L<SparkX::Form::Field::Radio> - A radio button set
+
+=item L<SparkX::Form::Field::Select> - A select button set
+
+=item L<SparkX::Form::Field::TextArea> - A textarea field
+
+=back
 
 =head1 ACKNOWLEDGEMENTS
 

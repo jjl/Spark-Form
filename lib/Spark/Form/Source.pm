@@ -11,6 +11,10 @@ __END__
 
 =head1 SEE ALSO
 
-L<Spark::Form> - What you were probably after
+=over 4
+
+=item L<Spark::Form> - What you were probably after
+
+=back
 
 =cut

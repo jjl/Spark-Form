@@ -32,6 +32,10 @@ This function should return a HTML string representing your control
 
 =head1 SEE ALSO
 
-L<Spark::Form::Field>
+=over 4
+
+=item L<Spark::Form::Field>
+
+=back
 
 =cut
