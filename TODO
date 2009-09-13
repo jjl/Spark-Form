@@ -21,3 +21,4 @@ We need ideas for the following:
 Minors:
 1. ::Reset ought not to have a value
 2. Debatable whether ::{File,Image} ought to have a value (not echoed, not validated but read)
+3. Migrate Attribute helpers to Moose 0.90 at some stage where relevant
