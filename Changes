@@ -6,6 +6,8 @@ Revision history for {{$dist->name}}
        Merged in SparkX::Form::BasicValidators
        Replaced fields_[ah] with 'fields' accessor and get{,_at} methods
        Migrated build system to Dist::Zilla, so version numbers work now.
+       Form now as multiple types of clone support.
+       Form now has composition support
 
 0.02    2009-07-21
         Added testing deps.
