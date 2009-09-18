@@ -22,9 +22,9 @@ coerce PluginNamespaceList, from Str, via { [$_] };
 
 coerce PluginNamespaceList, from Undef, via { [] };
 
-classtype SparkFormField, { class => 'Spark::Form::Field' };
+class_type SparkFormField, { class => 'Spark::Form::Field' };
 
-classtype SparkForm, { class => 'Spark::Form' };
+class_type SparkForm, { class => 'Spark::Form' };
 
 subtype LabelledObject, as Object, where {
   $_->can('label') and $_->label;
@@ -32,7 +32,7 @@ subtype LabelledObject, as Object, where {
 
 subtype NamedObject, as Object, where {
   $_->can('name') and $_->name;
-}
+};
 
 1;
 
