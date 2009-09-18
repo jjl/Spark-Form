@@ -76,14 +76,7 @@ has '_printer_meta' => (isa => 'Moose::Meta::Role', is => 'ro', lazy_build => 1,
 sub BUILD {
     my ($self) = @_;
     if ($self->_has_printer) {
-        my $printer = $self->_printer;
-        eval {
-
-            #Apply the role (failure will short circuit). Return 1 so the 'or' won't trigger
-
-            $self->_printer_meta->apply($self);
-            1
-        } or Carp::croak("Could not apply printer, $@");
+        $self->_printer_meta->apply($self);
     }
     return;
 }
