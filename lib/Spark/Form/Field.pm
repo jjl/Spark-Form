@@ -33,27 +33,9 @@ has valid => (
     default  => 0,
 );
 
-has _errors => (
-    isa      => 'ArrayRef[Str]',
-    is       => 'ro',
-    required => 0,
-    default  => sub { [] },
-    traits   => [qw( Array )],
-    handles  => {
-        '_add_error'    => 'push',
-        'errors'        => 'elements',
-        '_clear_errors' => 'clear',
-    },
-);
+# Has to go here to pick up the properties from 'valid'
 
-sub error {
-    my ($self, $error) = @_;
-
-    $self->valid(0);
-    $self->_add_error($error);
-
-    return $self;
-}
+with qw( Spark::Form::Role::ErrorStore );
 
 sub human_name {
     my ($self) = @_;
@@ -155,10 +137,6 @@ Returns the label if present, else the field name.
 =head2 validate
 
 Returns true always. Subclass and fill in C<_validate> to do proper validation. See the synopsis.
-
-=head2 error (Str)
-
-Adds an error to the current field's list.
 
 =head1 SEE ALSO
 

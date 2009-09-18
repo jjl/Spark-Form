@@ -1,8 +1,8 @@
 severity = 1
 
-exclude = RequireTidyCode RequirePodSections ProhibitPostfixControls RequireRcsKeywords RequireExplicitPackage ProhibitUnlessBlocks ProhibitBuiltinHomonyms RequireCleanNamespace RequireUseStrict RequireUseWarnings Variables::ProhibitPunctuationVars RegularExpressions::RequireDotMatchAnything RegularExpressions::RequireExtendedFormatting RegularExpressions::RequireLineBoundaryMatching RequirePodAtEnd
+exclude = RequireTidyCode RequirePodSections ProhibitPostfixControls RequireRcsKeywords RequireExplicitPackage ProhibitUnlessBlocks ProhibitBuiltinHomonyms RequireCleanNamespace RequireUseStrict RequireUseWarnings Variables::ProhibitPunctuationVars RegularExpressions::RequireDotMatchAnything RegularExpressions::RequireExtendedFormatting RegularExpressions::RequireLineBoundaryMatching RequirePodAtEnd Moose::ProhibitMultipleWiths
 
-include = Moose::ProhibitMultipleWiths Moose::ProhibitNewMethod Moose::RequireMakeImmutable CodeLayout::ProhibitTrailingWhitespace
+include = Moose::ProhibitNewMethod Moose::RequireMakeImmutable CodeLayout::ProhibitTrailingWhitespace
 
 color = 1
 verbose = 9

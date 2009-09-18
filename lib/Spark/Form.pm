@@ -24,25 +24,16 @@ has plugin_ns => (
     required => 0,
 );
 
-has _errors => (
-    isa      => 'ArrayRef',
-    is       => 'ro',
-    traits   => [qw( Array )],
-    required => 0,
-    default  => sub { [] },
-    handles  => {
-        '_add_error'    => 'push',
-        'errors'        => 'elements',
-        '_clear_errors' => 'clear',
-    },
-);
-
 has valid => (
     isa      => 'Bool',
     is       => 'rw',
     required => 0,
     default  => 0,
 );
+
+# Has to go here to pick up the 'valid()' method
+
+with qw(Spark::Form::Role::ErrorStore);
 
 has '_printer' => (
     isa      => 'Maybe[Str]',
@@ -88,15 +79,6 @@ sub BUILD {
         } or Carp::croak("Could not apply printer $printer, $@");
     }
     return;
-}
-
-sub _error {
-    my ($self, $error) = @_;
-
-    $self->valid(0);
-    $self->_add_error($error);
-
-    return $self;
 }
 
 sub field_couplet {
@@ -175,7 +157,7 @@ sub validate {
     foreach my $field ($self->fields) {
         $field->validate;
         unless ($field->valid) {
-            $self->_error($_) foreach $field->errors;
+            $self->error($_) foreach $field->errors;
         }
     }
     return $self->valid;
