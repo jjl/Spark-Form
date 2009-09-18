@@ -6,7 +6,9 @@ use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
 use MooseX::LazyRequire;
 
-with qw(MooseX::Clone);
+with 'MooseX::Clone';
+with 'Spark::Form::Role::Validity';
+with 'Spark::Form::Role::ErrorStore';
 
 has name => (
     isa      => Str,
@@ -26,17 +28,6 @@ has value => (
     is       => 'rw',
     required => 0,
 );
-
-has valid => (
-    isa      => Bool,
-    is       => 'rw',
-    required => 0,
-    default  => 0,
-);
-
-# Has to go here to pick up the properties from 'valid'
-
-with qw( Spark::Form::Role::ErrorStore );
 
 sub human_name {
     my ($self) = @_;

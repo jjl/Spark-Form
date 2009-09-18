@@ -4,19 +4,22 @@ package Spark::Form;
 
 use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
+use MooseX::LazyRequire;
 use List::MoreUtils 'all';
 use Data::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
 
-with qw(MooseX::Clone);
+with 'MooseX::Clone';
+with 'Spark::Form::Role::Validity';
+with 'Spark::Form::Role::ErrorStore';
 
 has _fields => (
     isa      => 'Data::Couplet',
     is       => 'ro',
     required => 0,
     default  => sub { Data::Couplet->new },
-    traits   => [qw(Clone)],
+    traits   => ['Clone',],
     reader   => 'field_couplet',
     handles  => {
         get       => 'value',
@@ -28,67 +31,90 @@ has _fields => (
     },
 );
 
+has _plugins => (
+    isa        => 'Module::Pluggable::Object',
+    is         => 'ro',
+    init_arg   => undef,
+    lazy_build => 1,
+    handles    => {
+        'field_mods' => 'plugins',
+    },
+);
+
 has plugin_ns => (
-    isa      => Str,
-    is       => 'ro',
-    required => 0,
+    isa       => Str,
+    is        => 'ro',
+    required  => 0,
+    predicate => 'has_plugin_ns',
 );
 
-has valid => (
-    isa      => Bool,
-    is       => 'rw',
-    required => 0,
-    default  => 0,
+# This is a generated list, combining our list, with your singular prefix.
+has _plugin_search_path => (isa => ArrayRef [Str], is => 'ro', init_arg => undef, lazy_build => 1,);
+
+# Places We, as upstream, think you should look for plugins
+has _default_plugin_search_path => (
+    isa => ArrayRef [Str],
+    is => 'bare',
+    init_arg => undef,
+    default  => sub { ['SparkX::Form::Field'] },
+    traits   => ['Array',],
+    handles  => {
+        _default_plugin_search_path => 'elements',
+    },
 );
-
-# Has to go here to pick up the 'valid()' method
-
-with qw(Spark::Form::Role::ErrorStore);
 
 has '_printer' => (
-    isa      => 'Maybe[Str]',
-    required => 0,
-    is       => 'ro',
-    init_arg => 'printer',
+    isa => Str, is => 'ro',
+    lazy_required => 1,
+    init_arg      => 'printer',
+    predicate     => '_has_printer',
 );
+has '_printer_class' => (isa => RoleName, is => 'ro', lazy_build => 1, init_arg => undef,);
+has '_printer_meta' => (isa => 'Moose::Meta::Role', is => 'ro', lazy_build => 1, init_arg => undef,);
 
 sub BUILD {
     my ($self) = @_;
-    my @search_path = (
-
-        #This will load anything from SparkX::Form::Field
-        'SparkX::Form::Field',
-    );
-    if ($self->plugin_ns) {
-        unshift @search_path, ($self->plugin_ns);
-    }
-
-    require Module::Pluggable;
-    eval {
-        Module::Pluggable->import(
-            search_path => \@search_path,
-            sub_name    => 'field_mods',
-            required    => 1,
-        );
-    } or Carp::croak("Spark::Form: Could not instantiate Module::Pluggable, $@");
-
-    if (defined $self->_printer) {
-
+    if ($self->_has_printer) {
         my $printer = $self->_printer;
-
         eval {
 
-            #Load the module, else short circuit.
-            #There were strange antics with qq{} and this is tidier than the alternative
-            eval "require $printer; 1" or Carp::croak("Require of $printer failed, $@");
-
             #Apply the role (failure will short circuit). Return 1 so the 'or' won't trigger
-            $self->_printer->meta->apply($self);
 
+            $self->_printer_meta->apply($self);
             1
-        } or Carp::croak("Could not apply printer $printer, $@");
+        } or Carp::croak("Could not apply printer, $@");
     }
     return;
+}
+
+sub _build__plugins {
+    my ($self) = @_;
+    require Module::Pluggable::Object;
+    return Module::Pluggable::Object->new(
+        search_path => $self->_plugin_search_path,
+        required    => 1,
+    );
+}
+
+sub _build__plugin_search_path {
+    my ($self, @rest) = @_;
+    my @path = $self->_default_plugin_search_path();
+    if ($self->has_plugin_ns) {
+        unshift @path, $self->plugin_ns;
+    }
+    return \@path;
+}
+
+sub _build__printer_class {
+    my ($self, @rest) = @_;
+    my $printer = $self->_printer;
+    eval "require $printer; 1" or Carp::croak("Require of $printer failed, $@");
+    return $printer;
+}
+
+sub _build__printer_meta {
+    my ($self, @rest) = @_;
+    return $self->_printer_class->meta;
 }
 
 sub add {

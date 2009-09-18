@@ -5,6 +5,8 @@ Revision history for {{$dist->name}}
   Refactored some of the error handling code.
   Refactored some of the form methods to be handlers.
   +MX::Types
+  Refactored some of the validity code out.
+  Refactored to use Module::Pluggable::Object instead of BUILD/eval nasties.
 
 0.2102    2009-09-13 21:50:33 UTC
   Tweaked Some wacky POD
