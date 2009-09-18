@@ -3,6 +3,7 @@ package Spark::Form;
 # ABSTRACT: A simple yet powerful forms validation system that promotes reuse.
 
 use Moose 0.90;
+use MooseX::Types::Moose qw( :all );
 use List::MoreUtils 'all';
 use Data::Couplet ();
 use Carp          ();
@@ -28,13 +29,13 @@ has _fields => (
 );
 
 has plugin_ns => (
-    isa      => 'Str',
+    isa      => Str,
     is       => 'ro',
     required => 0,
 );
 
 has valid => (
-    isa      => 'Bool',
+    isa      => Bool,
     is       => 'rw',
     required => 0,
     default  => 0,

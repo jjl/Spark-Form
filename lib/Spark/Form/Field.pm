@@ -3,12 +3,13 @@ package Spark::Form::Field;
 # ABSTRACT: Superclass for all Form Fields
 
 use Moose 0.90;
+use MooseX::Types::Moose qw( :all );
 use MooseX::LazyRequire;
 
 with qw(MooseX::Clone);
 
 has name => (
-    isa      => 'Str',
+    isa      => Str,
     is       => 'ro',
     required => 1,
 );
@@ -27,7 +28,7 @@ has value => (
 );
 
 has valid => (
-    isa      => 'Bool',
+    isa      => Bool,
     is       => 'rw',
     required => 0,
     default  => 0,
