@@ -64,7 +64,8 @@ has plugin_default_ns => (
 );
 
 has '_printer' => (
-    isa => Str, is => 'ro',
+    isa           => Str,
+    is            => 'ro',
     lazy_required => 1,
     init_arg      => 'printer',
     predicate     => '_has_printer',
@@ -114,20 +115,20 @@ sub add {
     #Dispatch to the appropriate handler sub
 
     #1. Regular String. Should have a name and any optional args
-    unless (ref $item) {
+    if (is_Str($item)) {
         Carp::croak('->add expects [Scalar, List where { items > 0 }] or [Ref].') unless (scalar @args);
         $self->_add_by_type($item, @args);
         return $self;
     }
 
     #2. Array - loop. This will spectacularly fall over if you are using string-based creation as there's no way to pass multiple names yet
-    if (ref $item eq 'ARRAY') {
+    if (is_ArrayRef($item)) {
         $self->add($_, @args) for @{$item};
         return $self;
     }
 
     #3. Custom field. Just takes any optional args
-    if ($self->_valid_custom_field($item)) {
+    if (is_FormField($item)) {
         $self->_add_custom_field($item, @args);
         return $self;
     }
@@ -160,13 +161,6 @@ sub data {
     }
 
     return $self;
-}
-
-sub _valid_custom_field {
-    my ($self, $thing) = @_;
-    return eval {
-        $thing->isa('Spark::Form::Field')
-    } or 0;
 }
 
 sub _add_custom_field {
