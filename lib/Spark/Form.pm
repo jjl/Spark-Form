@@ -16,6 +16,15 @@ has _fields => (
     required => 0,
     default  => sub { Data::Couplet->new },
     traits   => [qw(Clone)],
+    reader   => 'field_couplet',
+    handles  => {
+        get       => 'value',
+        get_at    => 'value_at',
+        keys      => 'keys',
+        fields    => 'values',
+        remove    => 'unset_key',
+        remove_at => 'unset_at',
+    },
 );
 
 has plugin_ns => (
@@ -81,11 +90,6 @@ sub BUILD {
     return;
 }
 
-sub field_couplet {
-    my ($self) = @_;
-    return $self->_fields;
-}
-
 sub add {
     my ($self, $item, @args) = @_;
 
@@ -114,40 +118,6 @@ sub add {
     Carp::croak(q(Spark::Form: Don\'t know what to do with a ) . ref $item . q(/) . (blessed $item|| q()));
 }
 
-sub get {
-    my ($self, $key) = @_;
-    return $self->_fields->value($key);
-}
-
-sub get_at {
-    my ($self, $index) = @_;
-    return $self->_fields->value_at($index);
-}
-
-sub keys {
-    my ($self) = @_;
-    return $self->_fields->keys();
-}
-
-sub fields {
-    my ($self) = @_;
-    return $self->_fields->values;
-}
-
-sub remove {
-    my ($self, @keys) = @_;
-    $self->_fields->unset_key(@keys);
-
-    return $self;
-}
-
-sub remove_at {
-    my ($self, @indices) = @_;
-    $self->_fields->unset_at(@indices);
-
-    return $self;
-}
-
 sub validate {
     my ($self) = @_;
 
@@ -166,8 +136,8 @@ sub validate {
 sub data {
     my ($self, $fields) = @_;
     while (my ($k, $v) = each %{$fields}) {
-        if ($self->_fields->value($k)) {
-            $self->_fields->value($k)->value($v);
+        if ($self->get($k)) {
+            $self->get($k)->value($v);
         }
     }
 
@@ -205,10 +175,10 @@ sub _add_by_type {
 sub _add {
     my ($self, $field, $name) = @_;
 
-    Carp::croak("Field name $name exists in form.") if $self->_fields->value($name);
+    Carp::croak("Field name $name exists in form.") if $self->get($name);
 
     #Add it onto the ArrayRef
-    $self->_fields->set($name, $field);
+    $self->field_couplet->set($name, $field);
 
     return 1;
 }
@@ -303,14 +273,14 @@ sub clone_except_ids {
 
 sub clone_only_ids {
     my ($self, @ids) = @_;
-    my @all = $self->_fields->indices;
+    my @all = $self->field_couplet->indices;
 
     return $self->clone_except_ids($self->_except(\@all, \@ids));
 }
 
 sub clone_if {
     my ($self, $sub) = @_;
-    my (@all) = ($self->_fields->key_values_paired);
+    my (@all) = ($self->field_couplet->key_values_paired);
     my $i = 0 - 1;
 
     # Filter out items that match
@@ -325,7 +295,7 @@ sub clone_if {
 
 sub clone_unless {
     my ($self, $sub) = @_;
-    my (@all) = $self->_fields->key_values_paired;
+    my (@all) = $self->field_couplet->key_values_paired;
     my $i = 0 - 1;
 
     # Filter out items that match
