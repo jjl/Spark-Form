@@ -2,8 +2,7 @@ package Spark::Form::Field;
 
 # ABSTRACT: Superclass for all Form Fields
 
-use Moose;
-use MooseX::AttributeHelpers;
+use Moose 0.90;
 use MooseX::LazyRequire;
 
 with qw(MooseX::Clone);
@@ -15,11 +14,11 @@ has name => (
 );
 
 has form => (
-    isa      => 'Spark::Form',
-    is       => 'rw',
+    isa           => 'Spark::Form',
+    is            => 'rw',
     lazy_required => 1,
-    weak_ref => 1, #De-circular-ref
-    traits => [qw(NoClone)], #Argh, what will it be set to?
+    weak_ref      => 1,                #De-circular-ref
+    traits        => [qw(NoClone)],    #Argh, what will it be set to?
 );
 
 has value => (
@@ -35,15 +34,15 @@ has valid => (
 );
 
 has _errors => (
-    metaclass => 'Collection::Array',
-    isa       => 'ArrayRef[Str]',
-    is        => 'ro',
-    required  => 0,
-    default   => sub { [] },
-    provides  => {
-        push     => '_add_error',
-        elements => 'errors',
-        clear    => '_clear_errors',
+    isa      => 'ArrayRef[Str]',
+    is       => 'ro',
+    required => 0,
+    default  => sub { [] },
+    traits   => [qw( Array )],
+    handles  => {
+        '_add_error'    => 'push',
+        'errors'        => 'elements',
+        '_clear_errors' => 'clear',
     },
 );
 

@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  Moved to Moose 0.90 Attribute Helpers
 
 0.2102    2009-09-13 21:50:33 UTC
   Tweaked Some wacky POD
