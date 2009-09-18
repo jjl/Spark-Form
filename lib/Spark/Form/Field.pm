@@ -4,6 +4,7 @@ package Spark::Form::Field;
 
 use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
+use Spark::Form::Types qw( :all );
 use MooseX::LazyRequire;
 
 with 'MooseX::Clone';
@@ -17,11 +18,11 @@ has name => (
 );
 
 has form => (
-    isa           => 'Spark::Form',
+    isa           => SparkForm,
     is            => 'rw',
     lazy_required => 1,
-    weak_ref      => 1,                #De-circular-ref
-    traits        => [qw(NoClone)],    #Argh, what will it be set to?
+    weak_ref      => 1,              #De-circular-ref
+    traits        => ['NoClone'],    #Argh, what will it be set to?
 );
 
 has value => (
@@ -32,11 +33,11 @@ has value => (
 sub human_name {
     my ($self) = @_;
 
-    if ($self->can('label')) {
-        return $self->label if $self->label;
+    if (is_LabelledObject($self)) {
+        return $self->label;
     }
-    if ($self->can('name')) {
-        return $self->name if $self->name;
+    if (is_NamedObject($self)) {
+        return $self->name;
     }
     return q();
 }

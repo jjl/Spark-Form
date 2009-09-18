@@ -42,6 +42,8 @@ has _plugins => (
     },
 );
 
+# Extra-orinary user-defined search spaces
+
 has plugin_ns => (
     isa     => PluginNamespaceList,
     coerce  => 1,
@@ -52,6 +54,8 @@ has plugin_ns => (
         '_plugin_nses' => 'elements',
     },
 );
+
+# Our search domains that are used everywhere
 has plugin_default_ns => (
     isa      => PluginNamespaceList,
     init_arg => undef,
@@ -121,7 +125,7 @@ sub add {
     }
 
     #3. Custom field. Just takes any optional args
-    if (is_FormField($item)) {
+    if (is_SparkFormField($item)) {
         $self->_add_custom_field($item, @args);
         return $self;
     }
