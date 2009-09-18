@@ -5,6 +5,7 @@ package Spark::Form;
 use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
 use MooseX::LazyRequire;
+use Spark::Form::Types qw( :all );
 use List::MoreUtils 'all';
 use Data::Couplet ();
 use Carp          ();
@@ -42,24 +43,23 @@ has _plugins => (
 );
 
 has plugin_ns => (
-    isa       => Str,
-    is        => 'ro',
-    required  => 0,
-    predicate => 'has_plugin_ns',
+    isa     => PluginNamespaceList,
+    coerce  => 1,
+    is      => 'ro',
+    default => sub { [] },
+    traits  => ['Array'],
+    handles => {
+        '_plugin_nses' => 'elements',
+    },
 );
-
-# This is a generated list, combining our list, with your singular prefix.
-has _plugin_search_path => (isa => ArrayRef [Str], is => 'ro', init_arg => undef, lazy_build => 1,);
-
-# Places We, as upstream, think you should look for plugins
-has _default_plugin_search_path => (
-    isa => ArrayRef [Str],
-    is => 'bare',
+has plugin_default_ns => (
+    isa      => PluginNamespaceList,
     init_arg => undef,
-    default  => sub { ['SparkX::Form::Field'] },
-    traits   => ['Array',],
+    is       => 'ro',
+    default  => sub { ['SparkX::Form::Field', 'Spark::Form::Field'] },
+    traits   => ['Array'],
     handles  => {
-        _default_plugin_search_path => 'elements',
+        '_plugin_default_nses' => 'elements',
     },
 );
 
@@ -91,18 +91,9 @@ sub _build__plugins {
     my ($self) = @_;
     require Module::Pluggable::Object;
     return Module::Pluggable::Object->new(
-        search_path => $self->_plugin_search_path,
-        required    => 1,
+        search_path => [$self->_plugin_nses, $self->_plugin_default_nses],
+        required => 1,
     );
-}
-
-sub _build__plugin_search_path {
-    my ($self, @rest) = @_;
-    my @path = $self->_default_plugin_search_path();
-    if ($self->has_plugin_ns) {
-        unshift @path, $self->plugin_ns;
-    }
-    return \@path;
 }
 
 sub _build__printer_class {
@@ -215,14 +206,8 @@ sub _mangle_modname {
 
     #Strip one or the other. This is the cleanest way.
     #It also doesn't matter that class may be null
-    my @namespaces = (
-        'SparkX::Form::Field',
-        'Spark::Form::Field',
-    );
 
-    push @namespaces, $self->plugin_ns if $self->plugin_ns;
-
-    foreach my $ns (@namespaces) {
+    foreach my $ns ($self->_plugin_default_nses, $self->_plugin_nses) {
         last if $mod =~ s/^${ns}:://;
     }
 
