@@ -3,7 +3,6 @@ package Spark::Form::Field;
 # ABSTRACT: Superclass for all Form Fields
 
 use Moose;
-use MooseX::AttributeHelpers;
 use MooseX::LazyRequire;
 
 with qw(MooseX::Clone);
@@ -35,15 +34,15 @@ has valid => (
 );
 
 has _errors => (
-    metaclass => 'Collection::Array',
+    traits    => ['Array'],
     isa       => 'ArrayRef[Str]',
     is        => 'ro',
     required  => 0,
     default   => sub { [] },
-    provides  => {
-        push     => '_add_error',
-        elements => 'errors',
-        clear    => '_clear_errors',
+    handles   => {
+        '_add_error' => 'push',
+        'errors' => 'elements',
+        '_clear_errors' => 'clear',
     },
 );
 
