@@ -49,7 +49,9 @@ sub validate {
 
     #Set a default of the empty string, suppresses a warning
     $self->value($self->value || q());
-    return $self->_validate;
+    $self->_validate;
+    # This for moose roles interaction
+    return $self->valid;
 }
 
 sub _validate { return 1 }
