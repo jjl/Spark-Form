@@ -308,20 +308,7 @@ sub clone_unless {
         $i++;
         $sub->($i, @{$_});
     } @all;
-
     return $self->clone_except_names(map { $_->[0] } @all);
-}
-
-sub compose {
-    my ($self, $other) = @_;
-    my $new       = $self->clone_all;
-    my $other_new = $other->clone_all;
-    foreach my $key ($other_new->keys) {
-        unless ($new->get($key)) {
-            $new->add($other_new->get($key));
-        }
-    }
-    return $new;
 }
 
 sub compose {
@@ -329,10 +316,10 @@ sub compose {
     my $new = $self->clone_all;
     my $other_new = $other->clone_all;
     foreach my $key ($other_new->keys) {
-        unless ( $new->get($key) ) {
+
             $new->add($other_new->get($key));
-        }
     }
+    return $new;
 }
 
 __PACKAGE__->meta->make_immutable;
