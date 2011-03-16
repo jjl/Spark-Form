@@ -185,7 +185,7 @@ sub _add_by_type {
 sub _add {
     my ($self, $field, $name) = @_;
 
-    Carp::croak("Field name $name exists in form.") if $self->get($name);
+    Carp::carp("Field name $name exists in form.") if $self->_fields->value($name);
 
     #Add it onto the ArrayRef
     $self->field_couplet->set($name, $field);
