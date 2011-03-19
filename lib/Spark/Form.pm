@@ -277,7 +277,7 @@ sub clone_except_ids {
 
 sub clone_only_ids {
     my ($self, @ids) = @_;
-    my @all = $self->field_couplet->indices;
+    my @all = 0 .. $self->field_couplet->last_index;
 
     return $self->clone_except_ids($self->_except(\@all, \@ids));
 }
