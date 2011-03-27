@@ -8,7 +8,7 @@ use MooseX::Types::Moose qw( :all );
 use MooseX::LazyRequire;
 use Spark::Form::Types qw( :all );
 use List::MoreUtils 'all';
-use Data::Couplet ();
+use Spark::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
 
@@ -17,10 +17,10 @@ with 'Spark::Form::Role::Validity';
 with 'Spark::Form::Role::ErrorStore';
 
 has _fields => (
-    isa      => 'Data::Couplet',
+    isa      => 'Spark::Couplet',
     is       => 'ro',
     required => 0,
-    default  => sub { Data::Couplet->new },
+    default  => sub { Spark::Couplet->new },
     traits   => ['Clone',],
     reader   => 'field_couplet',
     handles  => {
