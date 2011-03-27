@@ -4,17 +4,17 @@ package Spark::Form;
 
 use Moose;
 use List::MoreUtils 'all';
-use Data::Couplet ();
+use Spark::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
 
 with qw(MooseX::Clone);
 
 has _fields => (
-    isa      => 'Data::Couplet',
+    isa      => 'Spark::Couplet',
     is       => 'ro',
     required => 0,
-    default  => sub { Data::Couplet->new },
+    default  => sub { Spark::Couplet->new },
     traits   => [qw(Clone)],
 );
 
