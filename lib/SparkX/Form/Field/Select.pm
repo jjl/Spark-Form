@@ -5,6 +5,7 @@ package SparkX::Form::Field::Select;
 
 use Moose;
 use HTML::Tiny;
+use Spark::Types qw(SCouplet);
 
 extends 'Spark::Form::Field';
 with 'Spark::Form::Field::Role::Printable::HTML',
@@ -15,11 +16,15 @@ has '+value' => (
 );
 
 has options => (
-    isa      => 'ArrayRef',
+    isa      => SCouplet,
     is       => 'rw',
+    coerce => 1,
     required => 0,
     lazy     => 1,
     default  => sub { return shift->value },
+    handles => {
+        options_kv => 'key_values_paired',
+    },
 );
 
 sub to_html {
@@ -31,17 +36,21 @@ sub to_xhtml {
 }
 
 sub _render_element {
-    my ($self, $html, $option) = @_;
+    my ($self, $html, $text, $value) = @_;
     return $html->option({
-            value => $option,
-            (($self->value eq $option) ? (selected => 'selected') : ()),
-    }, $option);
+            value => $value,
+            (($self->value eq $value) ? (selected => 'selected') : ()),
+    }, $text);
 }
 
 sub _render {
     my ($self, $html) = @_;
-    my @options = map { $self->_render_element($html, $_) } @{$self->options};
-
+    my @options = map {
+        $self->_render_element(
+            $html, # HTML::Tiny,
+            @{$_}, # Text, Value
+        )
+    } $self->options_kv;
     return $html->select(
         {name => $self->name}, join q{ }, @options
     );

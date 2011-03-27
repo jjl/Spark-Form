@@ -8,8 +8,12 @@ use SparkX::Form::Field::Select;
 my $form = Spark::Form->new;
 my $b = SparkX::Form::Field::Select->new(
     name => 'test', form => $form,
-    options => ['test-1','test-2','test-3'],
+    options => [
+        'Option 1' => 'o1',
+        'Option 2' => 'o2',
+        'Option 3' => 'o3',
+    ],
     value => 'test-2',
 );
 
-is($b->to_xhtml,'<select name="test"><option value="test-1">test-1</option> <option selected="selected" value="test-2">test-2</option> <option value="test-3">test-3</option></select>','Test xhtml representation');
+is($b->to_xhtml,'<select name="test"><option value="o1">Option 1</option> <option value="o2">Option 2</option> <option value="o3">Option 3</option></select>','Test xhtml representation');
