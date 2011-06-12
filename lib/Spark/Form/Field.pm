@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Field;
 
 # ABSTRACT: Superclass for all Form Fields

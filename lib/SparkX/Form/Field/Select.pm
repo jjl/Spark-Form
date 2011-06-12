@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Select;
 
 # ABSTRACT:  A select drop-down field for SparkX::Form

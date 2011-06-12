@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Hidden;
 
 # ABSTRACT: A hidden field for SparkX::Form

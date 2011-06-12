@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::BasicPrinters;
 
 # ABSTRACT: A selection of basic form printers for printing a C<SparkX::Form>.

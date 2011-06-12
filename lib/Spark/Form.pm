@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form;
 
 # ABSTRACT: A simple yet powerful forms validation system that promotes reuse.

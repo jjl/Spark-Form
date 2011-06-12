@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Textarea;
 
 # ABSTRACT: A Textarea field for SparkX::Form

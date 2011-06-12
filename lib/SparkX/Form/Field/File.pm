@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::File;
 
 # ABSTRACT: A File upload field for SparkX::Form

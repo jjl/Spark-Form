@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Role::ErrorStore;
 
 # ABSTRACT: A mix-in for adding an internal error storage mechanism.

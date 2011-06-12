@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Field::Role::Printable::XHTML;
 
 # ABSTRACT: a XHTML1-printable form field role

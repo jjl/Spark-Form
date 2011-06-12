@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Printer::XHTML;
 
 # ABSTRACT: the interface an XHTML-printing form printer needs to implement

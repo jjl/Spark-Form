@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Validator::Regex;
 
 # ABSTRACT: Validates a field matches a regular expression
