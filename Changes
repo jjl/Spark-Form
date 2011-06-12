@@ -3,12 +3,11 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
  - A Trial release to show that this project is still alive. 
 
- [Packaging]
- - Overhauled the dist.ini to be more 2011 and less 2009.
-
  [Modules]
- - Removed Field::Role::Validateable. Its been warning for 2 years now, hopefully thats enough.
- - Added Form::Role::ErrorStore and Form::Role::Validity to commonise some shared code.
+ - Removed Field::Role::Validateable. Its been warning for 2 years now,
+   hopefully thats enough.
+ - Added Form::Role::ErrorStore and Form::Role::Validity to commonise some
+   shared code.
  - Added Form::Types for various type constraints.
 
  [Other]
@@ -19,6 +18,9 @@ Revision history for {{$dist->name}}
  - Refactored some of the validity code out.
  - Refactored to use Module::Pluggable::Object instead of BUILD/eval
    nasties.
+
+ [Packaging]
+ - Overhauled the dist.ini to be more 2011 and less 2009.
 
 0.2102 2009-09-13T21:50:33Z
  - Tweaked Some wacky POD
