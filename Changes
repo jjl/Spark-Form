@@ -1,6 +1,17 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ - A Trial release to show that this project is still alive. 
+
+ [Packaging]
+ - Overhauled the dist.ini to be more 2011 and less 2009.
+
+ [Modules]
+ - Removed Field::Role::Validateable. Its been warning for 2 years now, hopefully thats enough.
+ - Added Form::Role::ErrorStore and Form::Role::Validity to commonise some shared code.
+ - Added Form::Types for various type constraints.
+
+ [Other]
  - Moved to Moose 0.90 Attribute Helpers
  - Refactored some of the error handling code.
  - Refactored some of the form methods to be handlers.
