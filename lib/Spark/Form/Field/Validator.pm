@@ -1,17 +1,18 @@
 package Spark::Form::Field::Validator;
 
 use Moose;
-use Carp;
 
 has field => (
-    isa => 'Spark::Form::Field',
-    is => 'rw',
+    isa      => 'Spark::Form::Field',
+    is       => 'rw',
     required => 1,
     weak_ref => 1,
 );
 
 sub validate {
-    carp("Spark::Form::Field::Validator must be subclassed, not used directly");
+    require Carp;
+    Carp::carp('Spark::Form::Field::Validator must be subclassed, not used directly');
+    return;
 }
 
 __PACKAGE__->meta->make_immutable;
