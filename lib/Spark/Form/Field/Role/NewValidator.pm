@@ -22,6 +22,5 @@ after _validate => sub {
     $_->validate for $self->validators;
 };
 
-__PACKAGE__->meta->make_immutable;
 1;
 __END__
