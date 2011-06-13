@@ -1,5 +1,7 @@
 package Spark::Couplet::Plugin::ArrayRef;
 
+# ABSTRACT: A plugin giving an easy way to aggregate items based on a key name.
+
 use Moose::Role;
 with 'Data::Couplet::Role::Plugin';
 

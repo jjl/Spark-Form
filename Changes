@@ -1,6 +1,21 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ [Modules::New]
+ - Spark::Couplet, A Spark-Specific subclass of Data::Couplet
+ - Spark::Couplet::Plugin::ArrayRef, A plugin giving an easy way to aggregate items based on a key name.
+ - Spark::Form::Field::Role::NewValidator,
+ - Spark::Form::Field::Validator,
+ - Spark::Form::Loader,
+ - Spark::Types,
+ - SparkX::Form::Field::RadioGroup,
+
+ [Tests::New]
+ - t/30-radiogroup.t
+
+ [Dependencies::Runtime::New]
+ - Data::Couplet::Extension
+ - Data::Couplet::Role::Plugin
 
 0.2103 2011-06-12T22:29:43Z
  - A Trial release to show that this project is still alive. 
