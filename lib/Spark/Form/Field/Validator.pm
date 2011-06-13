@@ -14,6 +14,7 @@ sub validate {
     carp("Spark::Form::Field::Validator must be subclassed, not used directly");
 }
 
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 
@@ -26,7 +27,7 @@ Spark::Form::Field::Validator - Base class for field validator objects
  package MyApp::Validator::Numeric;
  use Moose;
  extends 'Spark::Form::Field::Validator';
- 
+
  sub validate {
    my $self = shift;
    unless ($self->field =~ /^[0-9]+$/) {

@@ -11,4 +11,5 @@ has namespaces => (
         add_ns => 'push',
     },
 );
-
+__PACKAGE__->meta->make_immutable;
+1;
