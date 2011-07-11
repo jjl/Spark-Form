@@ -45,6 +45,7 @@ sub human_name {
 
 sub validate {
     my ($self) = @_;
+    my $result = Spark::Form::Field::Result->new;
     $self->_clear_errors;
     $self->valid(1);
 
