@@ -3,7 +3,6 @@ package SparkX::Form::Field::Dummy;
 # ABSTRACT: A Dummy field for SparkX::Form
 
 use Moose;
-use HTML::Tiny;
 
 extends 'Spark::Form::Field';
 
