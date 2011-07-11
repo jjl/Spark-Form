@@ -8,7 +8,7 @@ has results => (
     required => 1,
     traits => ['Array'],
     handles => {
-        push_r => 'push',
+        push => 'push',
         first_r => 'first',
         grep_r => 'grep',
     }
