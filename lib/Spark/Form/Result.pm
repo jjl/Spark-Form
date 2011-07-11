@@ -5,7 +5,7 @@ use Moose;
 has results => (
     isa => 'ArrayRef[Spark::Form::Field::Result]',
     is => 'ro',
-    required => 1,
+    default => sub { [] },
     traits => ['Array'],
     handles => {
         push => 'push',
