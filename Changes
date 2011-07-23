@@ -15,6 +15,10 @@ Revision history for {{$dist->name}}
  - Spark::Types,
  - SparkX::Form::Field::RadioGroup,
 
+ [Packaging]
+ - Bugs/Issues now go to Github Issues
+ - Some urls SSL-ified.
+
  [Tests::New]
  - t/30-radiogroup.t
 
