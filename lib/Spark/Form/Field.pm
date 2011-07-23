@@ -7,6 +7,7 @@ use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
 use Spark::Form::Types qw( :all );
 use MooseX::LazyRequire;
+use Spark::Form::Field::Result;
 
 with 'MooseX::Clone';
 with 'Spark::Form::Role::Validity';
