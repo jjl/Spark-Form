@@ -84,6 +84,9 @@ sub get_one {
 #
 # Lol. Needs More Crack -- kentnl
 
+__PACKAGE__->meta->make_immutable;
+no Moose;
+
 1;
 __END__
 
