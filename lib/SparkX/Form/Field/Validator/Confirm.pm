@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Validator::Confirm;
 
 # ABSTRACT: Validates whether or not the user confirmed some choice.

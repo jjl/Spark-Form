@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Text;
 
 # ABSTRACT: A Text field for SparkX::Form
@@ -48,7 +49,12 @@ Validates the field. Before composition with validators, always returns 1.
 
 =head1 SEE ALSO
 
-L<SparkX::Form> - The forms module this is to be used with
-L<SparkX::Form::BasicFields> - A collection of fields for use with C<Spark::Form>
+=over 4
+
+=item L<SparkX::Form> - The forms module this is to be used with
+
+=item L<SparkX::Form::BasicFields> - A collection of fields for use with C<Spark::Form>
+
+=back
 
 =cut

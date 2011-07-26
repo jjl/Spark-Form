@@ -1,25 +1,30 @@
+use strict;
 package Spark::Form::Field;
 
 # ABSTRACT: Superclass for all Form Fields
 
-use Moose;
+use Moose 0.90;
+use MooseX::Types::Moose qw( :all );
+use Spark::Form::Types qw( :all );
 use MooseX::LazyRequire;
 use Spark::Util qw(field_result field_validator_result);
 
-with qw(MooseX::Clone);
+with 'MooseX::Clone';
+with 'Spark::Form::Role::Validity';
+with 'Spark::Form::Role::ErrorStore';
 
 has name => (
-    isa      => 'Str',
+    isa      => Str,
     is       => 'ro',
     required => 1,
 );
 
 has form => (
-    isa      => 'Spark::Form',
-    is       => 'rw',
+    isa           => SparkForm,
+    is            => 'rw',
     lazy_required => 1,
-    weak_ref => 1, #De-circular-ref
-    traits => [qw(NoClone)], #Argh, what will it be set to?
+    weak_ref      => 1,              #De-circular-ref
+    traits        => ['NoClone'],    #Argh, what will it be set to?
 );
 
 has _validators => (
@@ -31,15 +36,15 @@ has _validators => (
         'validators' => 'elements',
     }
 );
-    
+
 sub human_name {
     my ($self) = @_;
 
-    if ($self->can('label')) {
-        return $self->label if $self->label;
+    if (is_LabelledObject($self)) {
+        return $self->label;
     }
-    if ($self->can('name')) {
-        return $self->name if $self->name;
+    if (is_NamedObject($self)) {
+        return $self->name;
     }
     return q();
 }
@@ -133,13 +138,16 @@ Returns the label if present, else the field name.
 
 Returns true always. Subclass and fill in C<_validate> to do proper validation. See the synopsis.
 
-=head2 error (Str)
-
-Adds an error to the current field's list.
-
 =head1 SEE ALSO
 
-L<Spark::Form::Field::Role::Printable> - Fields that can be printed
-L<SparkX::Form::BasicValidators> - Set of validators to use creating fields
-L<SparkX::Form::BasicFields> - Ready to use fields
+=over 4
+
+=item L<Spark::Form::Field::Role::Printable> - Fields that can be printed
+
+=item L<SparkX::Form::BasicValidators> - Set of validators to use creating fields
+
+=item L<SparkX::Form::BasicFields> - Ready to use fields
+
+=back
+
 =cut

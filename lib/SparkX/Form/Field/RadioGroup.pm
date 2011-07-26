@@ -16,11 +16,11 @@ has '+value' => (
 has options => (
     isa      => SCouplet,
     is       => 'rw',
-    coerce => 1,
+    coerce   => 1,
     required => 0,
     lazy     => 1,
     default  => sub { return shift->value },
-    handles => {
+    handles  => {
         options_kv => 'key_values_paired',
     },
 );
@@ -35,27 +35,27 @@ sub to_xhtml {
 
 sub _render_element {
     my ($self, $html, $name, $value, $count) = @_;
-    my $id = join('-' => ($self->name, $count));
+    my $id = (join q{-}, $self->name, $count);
     my $label = $html->label({for => $id}, $name);
     my $input = $html->input({
-        type => 'radio',
-        value => $value,
-        id => $id,
+            type  => 'radio',
+            value => $value,
+            id    => $id,
     });
-    return join("\n" => ($label, $input));
+    return (join qq{\n}, $label, $input);
 }
 
 sub _render {
     my ($self, $html) = @_;
-    my $count; # We use this to generate unique IDs for the labels
+    my $count;    # We use this to generate unique IDs for the labels
     my @options = map {
         $self->_render_element(
-            $html, # HTML::Tiny
-            @{$_}, # Key, Value strings
-            ++$count, # Uniquifier
+            $html,       # HTML::Tiny
+            @{$_},       # Key, Value strings
+            ++$count,    # Uniquifier
         );
     } $self->options_kv;
-    return join "\n",@options;
+    return join "\n", @options;
 }
 __PACKAGE__->meta->make_immutable;
 1;

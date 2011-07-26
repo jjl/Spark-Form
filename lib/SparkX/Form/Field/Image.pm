@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Field::Image;
 
 # ABSTRACT: An image field for SparkX::Form
@@ -13,17 +14,15 @@ has '+value' => (
     isa => 'Str',
 );
 
-## no critic (ProhibitMagicNumbers)
 has 'names' => (
-    lazy => 1,
-    (Moose->VERSION >= 0.84) ? (is => 'bare') : (),
+    lazy    => 1,
+    is      => 'bare',
     default => sub {
         my $self = shift;
 
         return [$self->name . '.x', $self->name . '.y'];
     },
 );
-## use critic
 
 sub to_html {
     return shift->_render(HTML::Tiny->new(mode => 'html'));
@@ -63,7 +62,12 @@ Validates the field. Before composition with validators, always returns 1.
 
 =head1 SEE ALSO
 
-L<SparkX::Form> - The forms module this is to be used with
-L<SparkX::Form::BasicFields> - A collection of fields for use with C<Spark::Form>
+=over 4
+
+=item L<SparkX::Form> - The forms module this is to be used with
+
+=item L<SparkX::Form::BasicFields> - A collection of fields for use with C<Spark::Form>
+
+=back
 
 =cut

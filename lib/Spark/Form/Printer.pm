@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Printer;
 
 # ABSTRACT: interface for form printers for C<Spark::Form>
@@ -8,7 +9,12 @@ __END__
 
 =head1 SEE ALSO
 
-L<Spark::Form> - the forms module that started it all
-L<Spark::Form::BasicPrinters> - set of pre-canned printers for your forms
+=over 4
+
+=item L<Spark::Form> - the forms module that started it all
+
+=item L<Spark::Form::BasicPrinters> - set of pre-canned printers for your forms
+
+=back
 
 =cut

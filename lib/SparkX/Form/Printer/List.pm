@@ -1,3 +1,4 @@
+use strict;
 package SparkX::Form::Printer::List;
 
 # ABSTRACT: A list-printer for SparkX::Form. Spouts out form elements in a (X)HTML list.
