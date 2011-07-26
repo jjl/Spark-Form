@@ -4,7 +4,7 @@ package Spark::Form::Field;
 
 use Moose;
 use MooseX::LazyRequire;
-use Spark::Util 'field_result';
+use Spark::Util qw(field_result field_validator_result);
 
 with qw(MooseX::Clone);
 
