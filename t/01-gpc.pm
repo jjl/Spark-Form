@@ -4,5 +4,5 @@ use Spark::GPC;
 
 # Cock. Can't we just steal the tests from Data::Couplet?
 
-ok(1):
+ok(1);
 done_testing;

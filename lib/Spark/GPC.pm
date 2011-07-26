@@ -36,7 +36,7 @@ sub pairwise {
 
     # Roughly equivalent to smalltalk's inject.
     # even iterations are keys, odd are values
-    my ($i, $k);
+    my ($i, $k, $last);
     for my $v (@values) {
         $self->push($last, $v) if $i++ % 2;
         $last = $v;
