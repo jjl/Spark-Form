@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::FAQ;
 
 # ABSTRACT: Frequently Asked Questions about Spark::Form

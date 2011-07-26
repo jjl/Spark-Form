@@ -1,107 +1,110 @@
+use strict;
 package Spark::Form;
 
 # ABSTRACT: A simple yet powerful forms validation system that promotes reuse.
 
-use Moose;
+use Moose 0.90;
+use MooseX::Types::Moose qw( :all );
+use MooseX::LazyRequire;
+use Spark::Form::Types qw( :all );
 use List::MoreUtils 'all';
 use Spark::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
 
-with qw(MooseX::Clone);
+with 'MooseX::Clone';
+with 'Spark::Form::Role::Validity';
+with 'Spark::Form::Role::ErrorStore';
 
 has _fields => (
     isa      => 'Spark::Couplet',
     is       => 'ro',
     required => 0,
     default  => sub { Spark::Couplet->new },
-    traits   => [qw(Clone)],
-);
-
-has plugin_ns => (
-    isa      => 'Str',
-    is       => 'ro',
-    required => 0,
-);
-
-has _errors => (
-    traits    => ['Array'],
-    isa       => 'ArrayRef',
-    is        => 'ro',
-    required  => 0,
-    default   => sub { [] },
-    handles   => {
-        '_add_error' => 'push',
-        'errors' => 'elements',
-        '_clear_errors' => 'clear',
+    traits   => ['Clone',],
+    reader   => 'field_couplet',
+    handles  => {
+        get       => 'value',
+        get_at    => 'value_at',
+        keys      => 'keys',
+        fields    => 'values',
+        remove    => 'unset_key',
+        remove_at => 'unset_at',
     },
 );
 
-has valid => (
-    isa      => 'Bool',
-    is       => 'rw',
-    required => 0,
-    default  => 0,
+has _plugins => (
+    isa        => 'Module::Pluggable::Object',
+    is         => 'ro',
+    init_arg   => undef,
+    lazy_build => 1,
+    handles    => {
+        'field_mods' => 'plugins',
+    },
+);
+
+# Extra-orinary user-defined search spaces
+
+has plugin_ns => (
+    isa     => PluginNamespaceList,
+    coerce  => 1,
+    is      => 'ro',
+    default => sub { [] },
+    traits  => ['Array'],
+    handles => {
+        '_plugin_nses' => 'elements',
+    },
+);
+
+# Our search domains that are used everywhere
+has plugin_default_ns => (
+    isa      => PluginNamespaceList,
+    init_arg => undef,
+    is       => 'ro',
+    default  => sub { ['SparkX::Form::Field', 'Spark::Form::Field'] },
+    traits   => ['Array'],
+    handles  => {
+        '_plugin_default_nses' => 'elements',
+    },
 );
 
 has '_printer' => (
-    isa      => 'Maybe[Str]',
-    required => 0,
-    is       => 'ro',
-    init_arg => 'printer',
+    isa           => Str,
+    is            => 'ro',
+    lazy_required => 1,
+    init_arg      => 'printer',
+    predicate     => '_has_printer',
 );
+has '_printer_class' => (isa => RoleName, is => 'ro', lazy_build => 1, init_arg => undef,);
+has '_printer_meta' => (isa => 'Moose::Meta::Role', is => 'ro', lazy_build => 1, init_arg => undef,);
 
 sub BUILD {
     my ($self) = @_;
-    my @search_path = (
-
-        #This will load anything from SparkX::Form::Field
-        'SparkX::Form::Field',
-    );
-    if ($self->plugin_ns) {
-        unshift @search_path, ($self->plugin_ns);
-    }
-
-    require Module::Pluggable;
-    eval {
-        Module::Pluggable->import(
-            search_path => \@search_path,
-            sub_name    => 'field_mods',
-            required    => 1,
-        );
-    } or Carp::croak("Spark::Form: Could not instantiate Module::Pluggable, $@");
-
-    if (defined $self->_printer) {
-
-        my $printer = $self->_printer;
-
-        eval {
-
-            #Load the module, else short circuit.
-            #There were strange antics with qq{} and this is tidier than the alternative
-            eval "require $printer; 1" or Carp::croak("Require of $printer failed, $@");
-
-            #Apply the role (failure will short circuit). Return 1 so the 'or' won't trigger
-            $self->_printer->meta->apply($self);
-
-            1
-        } or Carp::croak("Could not apply printer $printer, $@");
+    if ($self->_has_printer) {
+        $self->_printer_meta->apply($self);
     }
     return;
 }
 
-sub _error {
-    my ($self, $error) = @_;
-
-    $self->valid(0);
-    $self->_add_error($error);
-
-    return $self;
+sub _build__plugins {
+    my ($self) = @_;
+    require Module::Pluggable::Object;
+    return Module::Pluggable::Object->new(
+        search_path => [$self->_plugin_nses, $self->_plugin_default_nses],
+        required => 1,
+    );
 }
 
-sub field_couplet {
-    my ($self) = @_;
-    return $self->_fields;
+sub _build__printer_class {
+    my ($self, @rest) = @_;
+    my $printer = $self->_printer;
+    eval "require $printer; 1" or Carp::croak("Require of $printer failed, $@");
+    return $printer;
+}
+
+sub _build__printer_meta {
+    my ($self, @rest) = @_;
+    return $self->_printer_class->meta;
 }
 
 sub add {
@@ -110,60 +113,26 @@ sub add {
     #Dispatch to the appropriate handler sub
 
     #1. Regular String. Should have a name and any optional args
-    unless (ref $item) {
+    if (is_Str($item)) {
         Carp::croak('->add expects [Scalar, List where { items > 0 }] or [Ref].') unless (scalar @args);
         $self->_add_by_type($item, @args);
         return $self;
     }
 
     #2. Array - loop. This will spectacularly fall over if you are using string-based creation as there's no way to pass multiple names yet
-    if (ref $item eq 'ARRAY') {
+    if (is_ArrayRef($item)) {
         $self->add($_, @args) for @{$item};
         return $self;
     }
 
     #3. Custom field. Just takes any optional args
-    if ($self->_valid_custom_field($item)) {
+    if (is_SparkFormField($item)) {
         $self->_add_custom_field($item, @args);
         return $self;
     }
 
     #Unknown thing
     Carp::croak(q(Spark::Form: Don\'t know what to do with a ) . ref $item . q(/) . (blessed $item|| q()));
-}
-
-sub get {
-    my ($self, $key) = @_;
-    return $self->_fields->value($key);
-}
-
-sub get_at {
-    my ($self, $index) = @_;
-    return $self->_fields->value_at($index);
-}
-
-sub keys {
-    my ($self) = @_;
-    return $self->_fields->keys();
-}
-
-sub fields {
-    my ($self) = @_;
-    return $self->_fields->values;
-}
-
-sub remove {
-    my ($self, @keys) = @_;
-    $self->_fields->unset_key(@keys);
-
-    return $self;
-}
-
-sub remove_at {
-    my ($self, @indices) = @_;
-    $self->_fields->unset_at(@indices);
-
-    return $self;
 }
 
 sub validate {
@@ -175,7 +144,7 @@ sub validate {
     foreach my $field ($self->fields) {
         $field->validate;
         unless ($field->valid) {
-            $self->_error($_) foreach $field->errors;
+            $self->error($_) foreach $field->errors;
         }
     }
     return $self->valid;
@@ -184,19 +153,12 @@ sub validate {
 sub data {
     my ($self, $fields) = @_;
     while (my ($k, $v) = each %{$fields}) {
-        if ($self->_fields->value($k)) {
-            $self->_fields->value($k)->value($v);
+        if ($self->get($k)) {
+            $self->get($k)->value($v);
         }
     }
 
     return $self;
-}
-
-sub _valid_custom_field {
-    my ($self, $thing) = @_;
-    return eval {
-        $thing->isa('Spark::Form::Field')
-    } or 0;
 }
 
 sub _add_custom_field {
@@ -223,10 +185,10 @@ sub _add_by_type {
 sub _add {
     my ($self, $field, $name) = @_;
 
-    Carp::carp("Field name $name exists in form.") if $self->_fields->value($name);
+    Carp::carp("Field name $name exists in form.") if $self->field_couplet->value($name);
 
     #Add it onto the ArrayRef
-    $self->_fields->set($name, $field);
+    $self->field_couplet->set($name, $field);
 
     return 1;
 }
@@ -236,14 +198,8 @@ sub _mangle_modname {
 
     #Strip one or the other. This is the cleanest way.
     #It also doesn't matter that class may be null
-    my @namespaces = (
-        'SparkX::Form::Field',
-        'Spark::Form::Field',
-    );
 
-    push @namespaces, $self->plugin_ns if $self->plugin_ns;
-
-    foreach my $ns (@namespaces) {
+    foreach my $ns ($self->_plugin_default_nses, $self->_plugin_nses) {
         last if $mod =~ s/^${ns}:://;
     }
 
@@ -321,14 +277,14 @@ sub clone_except_ids {
 
 sub clone_only_ids {
     my ($self, @ids) = @_;
-    my @all = 0 .. $self->_fields->last_index;
+    my @all = 0 .. $self->field_couplet->last_index;
 
     return $self->clone_except_ids($self->_except(\@all, \@ids));
 }
 
 sub clone_if {
     my ($self, $sub) = @_;
-    my (@all) = ($self->_fields->key_values_paired);
+    my (@all) = ($self->field_couplet->key_values_paired);
     my $i = 0 - 1;
 
     # Filter out items that match
@@ -343,7 +299,7 @@ sub clone_if {
 
 sub clone_unless {
     my ($self, $sub) = @_;
-    my (@all) = $self->_fields->key_values_paired;
+    my (@all) = $self->field_couplet->key_values_paired;
     my $i = 0 - 1;
 
     # Filter out items that match

@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Field::Role::Printable;
 
 # ABSTRACT: Printability for form fields
@@ -38,7 +39,12 @@ A label that will be printed next to said field in the printed out version
 
 =head1 SEE ALSO
 
-L<Spark::Form::Field::Printable::HTML> - Role for being printable under HTML4
-L<Spark::Form::Field::Printable::XHTML> - Role for being printable under XHTML1
+=over 4
+
+=item L<Spark::Form::Field::Printable::HTML> - Role for being printable under HTML4
+
+=item L<Spark::Form::Field::Printable::XHTML> - Role for being printable under XHTML1
+
+=back
 
 =cut

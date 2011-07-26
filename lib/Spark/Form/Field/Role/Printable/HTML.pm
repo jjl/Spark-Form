@@ -1,3 +1,4 @@
+use strict;
 package Spark::Form::Field::Role::Printable::HTML;
 
 # ABSTRACT: a HTML4-printable form field role
@@ -32,6 +33,10 @@ This function should return a HTML string representing your control
 
 =head1 SEE ALSO
 
-L<Spark::Form::Field>
+=over 4
+
+=item L<Spark::Form::Field>
+
+=back
 
 =cut
