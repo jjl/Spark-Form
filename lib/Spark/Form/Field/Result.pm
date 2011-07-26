@@ -2,12 +2,13 @@ package Spark::Form::Field::Result;
 
 use Moose;
 
-has results => (
+has _results => (
     isa     => 'ArrayRef[Spark::Form::Field::Validator::Result]',
     is      => 'ro',
     default => sub { [] },
     traits  => ['Array'],
     handles => {
+        results => 'elements',
         push    => 'push',
         first_r => 'first',
         grep_r  => 'grep',

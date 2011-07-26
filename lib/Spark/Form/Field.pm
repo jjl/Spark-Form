@@ -7,7 +7,7 @@ use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
 use Spark::Form::Types qw( :all );
 use MooseX::LazyRequire;
-use Spark::Form::Field::Result;
+use Spark::Util 'field_result';
 
 with 'MooseX::Clone';
 with 'Spark::Form::Role::Validity';
@@ -27,9 +27,14 @@ has form => (
     traits        => ['NoClone'],    #Argh, what will it be set to?
 );
 
-has value => (
-    is       => 'rw',
-    required => 0,
+has _validators => (
+    isa => 'ArrayRef[Spark::Form::Field::Validator]',
+    is => 'rw',
+    default => sub { [] },
+    traits => ['Array'],
+    handles => {
+        'validators' => 'elements',
+    }
 );
 
 sub human_name {
@@ -45,19 +50,19 @@ sub human_name {
 }
 
 sub validate {
-    my ($self) = @_;
+    my ($self,$gpc) = @_;
     my $result = Spark::Form::Field::Result->new;
-    $self->_clear_errors;
-    $self->valid(1);
+    if ($self->can('_validate')) {
+        my @ret = $self->_validate($gpc);
+	$result->push(field_result(@ret));
+    }
+    foreach my $v (@{$self->validators}) {
+        my @ret = $v->validate($self,$gpc);
+        $result->push(field_validator_result(@ret));
+    }
 
-    #Set a default of the empty string, suppresses a warning
-    $self->value($self->value || q());
-    $self->_validate;
-    # This for moose roles interaction
-    return $self->valid;
+    return $return;
 }
-
-sub _validate { return 1 }
 
 __PACKAGE__->meta->make_immutable;
 1;
@@ -77,19 +82,16 @@ Field superclass. Must subclass this to be considered a field.
  with 'Spark::Form::Field::Role::Printable::XHTML';
 
  sub _validate {
-     my $self = shift;
+     my ($self,$result,$value) = @_;
 
-     #validate existence of data
-     if ($self->value) {
-         #If we're valid, we should say so
-         $self->valid(1);
-     } else {
-         #error will call $self->valid(0) and also set an error.
-         $self->error('no value')
+     # Really simple validation...
+     # Implicit result is success, so ignore that case
+     if (!$value) {
+         $result->fail('no value');
      }
 
-     #And we should return boolean validity
-     $self->valid
+     #And return the result object
+     return $result;
  }
 
  sub to_xhtml {
