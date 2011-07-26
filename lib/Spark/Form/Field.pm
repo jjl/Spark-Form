@@ -7,7 +7,7 @@ use Moose 0.90;
 use MooseX::Types::Moose qw( :all );
 use Spark::Form::Types qw( :all );
 use MooseX::LazyRequire;
-use Spark::Util qw(field_result field_validator_result);
+use Spark::Util qw(field_result);
 
 with 'MooseX::Clone';
 with 'Spark::Form::Role::Validity';
@@ -58,7 +58,7 @@ sub validate {
     }
     foreach my $v (@{$self->validators}) {
         my @ret = $v->validate($self,$gpc);
-        $result->push(field_validator_result(@ret));
+        $result->push(field_result(@ret));
     }
 
     return $return;

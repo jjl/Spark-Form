@@ -11,7 +11,7 @@ use List::MoreUtils 'all';
 use Spark::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
-use Spark::Util qw(form_result form_validator_result);
+use Spark::Util qw(form_result);
 
 with 'MooseX::Clone';
 with 'Spark::Form::Role::Validity';
@@ -149,7 +149,7 @@ sub validate {
     }
     foreach my $v (@{$self->validators}) {
         my @ret = $v->validate($self,$gpc);
-        $result->push(form_validator_result(@ret));
+        $result->push(form_result(@ret));
     }
 
     return $result;
