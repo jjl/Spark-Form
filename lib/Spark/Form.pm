@@ -337,6 +337,7 @@ __END__
 =head1 SYNOPSIS
 
  use Spark::Form;
+ use Spark::GPC;
  use CGI; #Because it makes for a quick and oversimplistic example
  use Third::Party::Field;
  $form = Spark::Form->new(plugin_ns => 'MyApp::Field');
@@ -348,13 +349,15 @@ __END__
       ->add('username','username')
       # And this shows how you can use a third party field of any class name
       ->add(Third::Party::Field->new(name => 'blah'));
- #Pass in a HashRef of params to populate the virtual form with data
- $form->data(CGI->new->params);
+ #Give it data to validate against
+ my $gpc = Spark::Form::GPC->new;
+ $gpc->pairwise(CGI->new->params);
  #And do the actual validation
- if ($form->validate) {
+ my $result = $form->validate($gpc);
+ if ($result->valid) {
      print "You are now registered";
  } else {
-     print join "\n", $form->errors;
+     print join "\n", $result->errors;
  }
 
 and over in MyApp/Field/Username.pm...
@@ -363,17 +366,15 @@ and over in MyApp/Field/Username.pm...
  use base Spark::Form::Field;
 
  sub _validate {
-
-   my ($self,$v) = @_;
-
+   my ($self,$gpc) = @_;
+   # Grab the value from the gpc structure
+   my $v = $gpc->get_one($self->name);
+   # Return something to raise an error
    if (length $v < 6 or length $v > 12) {
-     $self->error("Usernames must be 6-12 characters long");
+     return "Usernames must be 6-12 characters long";
    } elsif ($v =~ /[^a-zA-Z0-9_-]/) {
-     $self->error("Usernames may contain only a-z,A-Z,0-9, _ and -");
-   } else {
-     $self->error(undef);
+     return "Usernames may contain only a-z,A-Z,0-9, _ and -";
    }
-   $self->valid(!!$self->error());
  }
 
 =head1 INSTABILITY
