@@ -144,7 +144,7 @@ sub validate {
 	$result->push(form_result(@ret));
     }
     foreach my $f (@{$self->fields}) {
-        my $ret = $v->validate($self,$gpc);
+        my $ret = $f->validate($self,$gpc);
         $result->push($ret);
     }
     foreach my $v (@{$self->validators}) {
@@ -322,8 +322,7 @@ sub compose {
     my $new = $self->clone_all;
     my $other_new = $other->clone_all;
     foreach my $key ($other_new->keys) {
-
-            $new->add($other_new->get($key));
+        $new->add($other_new->get($key));
     }
     return $new;
 }

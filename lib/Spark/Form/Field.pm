@@ -61,7 +61,7 @@ sub validate {
         $result->push(field_result(@ret));
     }
 
-    return $return;
+    return $result;
 }
 
 __PACKAGE__->meta->make_immutable;
