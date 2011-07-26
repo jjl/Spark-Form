@@ -7,6 +7,7 @@ use List::MoreUtils 'all';
 use Spark::Couplet ();
 use Carp          ();
 use Scalar::Util qw( blessed );
+use Spark::Util qw(form_result form_validator_result);
 
 with qw(MooseX::Clone);
 
@@ -22,26 +23,6 @@ has plugin_ns => (
     isa      => 'Str',
     is       => 'ro',
     required => 0,
-);
-
-has _errors => (
-    traits    => ['Array'],
-    isa       => 'ArrayRef',
-    is        => 'ro',
-    required  => 0,
-    default   => sub { [] },
-    handles   => {
-        '_add_error' => 'push',
-        'errors' => 'elements',
-        '_clear_errors' => 'clear',
-    },
-);
-
-has valid => (
-    isa      => 'Bool',
-    is       => 'rw',
-    required => 0,
-    default  => 0,
 );
 
 has '_printer' => (
@@ -88,15 +69,6 @@ sub BUILD {
         } or Carp::croak("Could not apply printer $printer, $@");
     }
     return;
-}
-
-sub _error {
-    my ($self, $error) = @_;
-
-    $self->valid(0);
-    $self->_add_error($error);
-
-    return $self;
 }
 
 sub field_couplet {
@@ -167,18 +139,22 @@ sub remove_at {
 }
 
 sub validate {
-    my ($self) = @_;
-
-    #Clear out
-    $self->valid(1);
-    $self->_clear_errors();
-    foreach my $field ($self->fields) {
-        $field->validate;
-        unless ($field->valid) {
-            $self->_error($_) foreach $field->errors;
-        }
+    my ($self,$gpc) = @_;
+    my $result = Spark::Form::Result->new;
+    if ($self->can('_validate')) {
+        my @ret = $self->_validate($gpc);
+	$result->push(form_result(@ret));
     }
-    return $self->valid;
+    foreach my $f (@{$self->fields}) {
+        my $ret = $v->validate($self,$gpc);
+        $result->push($ret);
+    }
+    foreach my $v (@{$self->validators}) {
+        my @ret = $v->validate($self,$gpc);
+        $result->push(form_validator_result(@ret));
+    }
+
+    return $result;
 }
 
 sub data {
