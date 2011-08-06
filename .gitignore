@@ -8,3 +8,4 @@ Build
 Makefile.PL
 *.bak
 Spark-Form-*
+.DS_Store
